@@ -37,8 +37,21 @@ def generate_all_pool(List,nbactors):
     for roll in product(List, repeat=nbactors):
         L.append(roll)
     return L
+    
+    
+def generate(nbactors):
+    L = list(range(nbactors))
+    L1 = generate_all_actors([],L)
+    L2 = splitList(nbactors,L1)
+    return generate_all_pool(L2,nbactors)
 
 
-L = generate_all_actors([],[0,1,2])
-L2 = splitList(3,L)
-print(len(generate_all_pool(L2,3)))
+
+if __name__ == "__main__":
+    print(len( generate(4)))
+
+
+
+
+
+

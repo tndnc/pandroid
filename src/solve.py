@@ -1,4 +1,4 @@
-from gen import generate
+from gen import generate, generate_random_instance
 from ipdb import set_trace
 from random import choice
 
@@ -93,9 +93,10 @@ def pprint_instance(instance, allocation=None):
     
     
 if __name__ == "__main__":
-    instances = generate(3)
-    for _ in range(10):
-        instance = choice(instances)
+    number_of_tries = 10
+    number_of_agents = 4
+
+    for _ in range(number_of_tries):
+        instance = generate_random_instance(number_of_agents)
         alloc = solve_backtrack(instance)
         pprint_instance(instance, allocation=alloc)
-    # instance = [[0, 1, 2], [1, 0, 2], [2, 0, 1]]

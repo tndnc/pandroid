@@ -112,7 +112,7 @@ def save_to_file(n_agents, values):
     
 if __name__ == "__main__":
     number_of_tries = 20
-    number_of_agents = 7
+    number_of_agents = 10
 
     res = list()
 
@@ -127,7 +127,7 @@ if __name__ == "__main__":
         print(".", end="", flush=True)
 
         elapsed = (end-start) * 1000 # convert to microseconds
-        res.append((instance, alloc, end-start, niter))
+        res.append((instance, alloc, elapsed, niter))
 
     print()
     

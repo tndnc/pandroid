@@ -1,10 +1,11 @@
 from gen import generate, generate_random_instance
 from ipdb import set_trace
-from random import choice
+# from random import choice
+import time
 
 
 def solve_backtrack(instance):
-    """Try to find a Localy Envy Free allocation for the given instance with a 
+    """Try to find a Locally Envy Free allocation for the given instance with a 
     backtracking algorithm.
 
     Args:
@@ -27,6 +28,7 @@ def solve_backtrack(instance):
     
     # set_trace()
     
+    niter = 0
     # As long as the last agent has not been allocated a resources, the problem
     # has not been solved.
     while not alloc[len(instance)-1] != None:
@@ -39,6 +41,7 @@ def solve_backtrack(instance):
         # try to allocate one of the available resources
         allocation_happened = False
         for r in available:
+            niter += 1
             # no constraints for first actor, pick first available resource
             if ca_idx == 0:
                 alloc[ca_idx] = r
@@ -74,29 +77,61 @@ def solve_backtrack(instance):
 
         if ca_idx == 0 and len(impossible_alloc[ca_idx]) == len(instance):
             # unsolvable instance
-            return False
+            return False, niter
             
-    return alloc
+    return alloc, niter
 
 
 def pprint_instance(instance, allocation=None):
     if not allocation: allocation = dict()
     n = len(instance)
     
-    print("\n")
+    # print("\n")
+    buffer = ""
     for i in range(n):
-        buffer = "\t"
         for a in range(n):
             obj = instance[a][i]
             buffer += "{}{}\t".format("*" if obj == allocation.get(a) else " ", obj)
-        print(buffer)
+        buffer += "\n"
+        # print(buffer)
+
+    return buffer
+
+
+def save_to_file(n_agents, values):
+    with open('../output/alloc_{}.txt'.format(n_agents), 'w') as f:
+
+        for v in values:
+            f.write("Resolution time: {}microseconds.\nNumber of iterations: {}.\n".format(v[2], v[3]))
+            f.write("Solution {}found.\n".format("" if v[1] else "not "))
+            f.write(pprint_instance(v[0], v[1]))
+            f.write("\n")
+
+        # f.write("Mean time: {}ms".format(mean(values, key=lambda x: x[2])))
     
     
 if __name__ == "__main__":
-    number_of_tries = 10
-    number_of_agents = 4
+    number_of_tries = 20
+    number_of_agents = 7
 
+    res = list()
+
+    print("Solving {} instances of {} agents by backtrack.".format(number_of_tries, number_of_agents))
     for _ in range(number_of_tries):
         instance = generate_random_instance(number_of_agents)
-        alloc = solve_backtrack(instance)
-        pprint_instance(instance, allocation=alloc)
+
+        # track time
+        start = time.time()
+        alloc, niter = solve_backtrack(instance)
+        end = time.time()
+        print(".", end="", flush=True)
+
+        elapsed = (end-start) * 1000 # convert to microseconds
+        res.append((instance, alloc, end-start, niter))
+
+    print()
+    
+    save_to_file(number_of_agents, res)
+
+
+

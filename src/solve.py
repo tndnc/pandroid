@@ -1,7 +1,8 @@
 from gen import generate, generate_random_instance
-from ipdb import set_trace
+#from ipdb import set_trace
 # from random import choice
 import time
+import numpy as np
 
 
 def solve_backtrack(instance):
@@ -24,7 +25,9 @@ def solve_backtrack(instance):
     # the problem.
     impossible_alloc = {a: list() for a in range(len(instance))}  
     # List of currently allocated resources for the current allocation.
-    allocated_resources = list()    
+    allocated_resources = list() 
+    
+    hotspots = np.zeros((len(instance),len(instance)),dtype=int)
     
     # set_trace()
     
@@ -70,16 +73,22 @@ def solve_backtrack(instance):
                 break
             
         if not allocation_happened:
+            impossible_alloc[ca_idx] = list()
             ca_idx -= 1
             impossible_alloc[ca_idx].append(alloc[ca_idx])
             allocated_resources.remove(alloc[ca_idx])
+            hotspots[instance[ca_idx].index(alloc[ca_idx])][ca_idx] += 1
             alloc[ca_idx] = None
+            
+             
 
         if ca_idx == 0 and len(impossible_alloc[ca_idx]) == len(instance):
             # unsolvable instance
-            return False, niter
-            
-    return alloc, niter
+            return False, niter, hotspots
+        
+    
+           
+    return alloc, niter, hotspots
 
 
 def pprint_instance(instance, allocation=None):
@@ -111,7 +120,7 @@ def save_to_file(n_agents, values):
     
     
 if __name__ == "__main__":
-    number_of_tries = 20
+    number_of_tries = 1
     number_of_agents = 10
 
     res = list()
@@ -122,7 +131,8 @@ if __name__ == "__main__":
 
         # track time
         start = time.time()
-        alloc, niter = solve_backtrack(instance)
+        alloc, niter, hotspots = solve_backtrack(instance)
+        print(hotspots)
         end = time.time()
         print(".", end="", flush=True)
 

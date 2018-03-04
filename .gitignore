@@ -1,2 +1,15 @@
+## Python
 __pycache__/
 *.pyc
+
+## latex
+*.acn
+*.aux
+*.fdb_latexmk
+*.fls
+*.glo
+*.ist
+*.log
+*.out
+*.synctex.gz
+*.toc

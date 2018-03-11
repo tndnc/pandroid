@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">equity</string>
+    <string name="title_activity_main_menu">equity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="title_activity_level_select">levelSelectActivity</string>
+    <string name="button_Reset">Reset</string>
+    <string name="button_Back">Back</string>
+    <string name="action_settings">Settings</string>
+</resources>

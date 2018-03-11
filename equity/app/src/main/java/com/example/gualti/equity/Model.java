@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.cert.TrustAnchor;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -163,6 +164,37 @@ public class Model{
         return Pieces[id].getPos().getCol();
     }
 
+
+    //checking if p2c is jealous of P1
+    public boolean isJealous(Preference[] P1,Preference[] P2){
+        if (P1[0] == null){
+            System.out.println("first step");
+            return false;
+        }
+        Preference P2pref = null;
+        Preference P1pref = null;
+        for (Preference pref:P1){
+            System.out.println("id1 : "+pref.getId());
+            if(pref.getSelectedby() != -1){
+                P1pref = pref;
+            }
+        }
+        for(Preference pref:P2){
+            System.out.println("id2 : "+pref.getId());
+            if(pref.getSelectedby() != -1){
+                P2pref = pref;
+            }
+        }
+        for(Preference pref:P2){
+            if(pref.getValue() == P1pref.getValue()){
+                if(pref.getPos().getCol() > P2pref.getPos().getCol()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     //win every time is 4 pieces are selected
     public boolean endOfGame(){
         int cpt = 0;
@@ -173,8 +205,31 @@ public class Model{
                     cpt++;
                 }
             }
-        }if(cpt == 4){
-            return true;
+        }if(cpt == nbActors){
+            boolean arejealous = false;
+            for(int j =nbActors;j<=Pieces.length-nbActors;j++){
+                if(j % nbActors == 0 ){
+                    Preference[] beforePiece = new Preference[nbActors];
+                    Preference[] tmpPiece = new Preference[nbActors];
+                    Preference[] afterPiece = new Preference[nbActors];
+
+                    for(int k = 0;k<nbActors;k++){
+                        if(j >= nbActors*2){
+                            System.out.println("t");
+                            beforePiece[k] = (Preference) Pieces[j-(k)];
+                        }
+                        if (j <= Pieces.length-nbActors){
+                            afterPiece[k] = (Preference)Pieces[j+(k)];
+                        }
+                        tmpPiece[k] = (Preference) Pieces[j+k];
+                        System.out.println("j");
+                    }
+                    arejealous = arejealous || isJealous(beforePiece,tmpPiece) || isJealous(afterPiece,tmpPiece);
+
+                }
+            }
+            System.out.println(arejealous);
+            return !arejealous;
         }
         return false;
     }

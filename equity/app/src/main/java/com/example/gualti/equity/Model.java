@@ -10,6 +10,7 @@ import org.w3c.dom.NodeList;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.cert.TrustAnchor;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -165,29 +166,30 @@ public class Model{
     }
 
 
-    //checking if p2c is jealous of P1
+    //checking if p2 is jealous of P1
     public boolean isJealous(Preference[] P1,Preference[] P2){
         if (P1[0] == null){
-            System.out.println("first step");
             return false;
         }
         Preference P2pref = null;
         Preference P1pref = null;
         for (Preference pref:P1){
-            System.out.println("id1 : "+pref.getId());
+            System.out.print(" id1 : "+pref.getId());
             if(pref.getSelectedby() != -1){
                 P1pref = pref;
             }
         }
+        System.out.println();
         for(Preference pref:P2){
-            System.out.println("id2 : "+pref.getId());
+            System.out.print(" id2 : "+pref.getId());
             if(pref.getSelectedby() != -1){
                 P2pref = pref;
             }
         }
+        System.out.println();
         for(Preference pref:P2){
             if(pref.getValue() == P1pref.getValue()){
-                if(pref.getPos().getCol() > P2pref.getPos().getCol()){
+                if(pref.getPos().getCol() >= P2pref.getPos().getCol()){
                     return true;
                 }
             }
@@ -198,10 +200,15 @@ public class Model{
     //win every time is 4 pieces are selected
     public boolean endOfGame(){
         int cpt = 0;
+        ArrayList<Integer> results = new ArrayList<>();
         for(int i = 0; i<Pieces.length;i++){
             if(Pieces[i]instanceof Preference){
                 Preference pref =(Preference) Pieces[i];
                 if(pref.getSelectedby() != -1){
+                    if(results.contains(pref.getValue())){
+                        return false;
+                    }
+                    results.add(pref.getValue());
                     cpt++;
                 }
             }
@@ -215,15 +222,15 @@ public class Model{
 
                     for(int k = 0;k<nbActors;k++){
                         if(j >= nbActors*2){
-                            System.out.println("t");
-                            beforePiece[k] = (Preference) Pieces[j-(k)];
+                            beforePiece[k] = (Preference) Pieces[j-(nbActors - k)];
                         }
-                        if (j <= Pieces.length-nbActors){
-                            afterPiece[k] = (Preference)Pieces[j+(k)];
+                        if (j <= Pieces.length-(nbActors*2)){
+                            afterPiece[k] = (Preference)Pieces[j+(nbActors)+k];
                         }
                         tmpPiece[k] = (Preference) Pieces[j+k];
-                        System.out.println("j");
                     }
+                    System.out.println("before : "+isJealous(beforePiece,tmpPiece));
+                    System.out.println("after : "+isJealous(beforePiece,tmpPiece));
                     arejealous = arejealous || isJealous(beforePiece,tmpPiece) || isJealous(afterPiece,tmpPiece);
 
                 }

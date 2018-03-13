@@ -1,0 +1,110 @@
+\documentclass[a4paper, 10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage[french]{babel}
+\usepackage[small, center]{titlesec}
+\usepackage{listings}
+\usepackage{amsmath, amsthm, amssymb, mathtools}
+\usepackage{xcolor}
+\usepackage{subcaption}
+
+\newcommand{\y}[1]{\colorbox{yellow}{#1}}
+
+\begin{document}
+	\begin{center}
+		\textbf{Projet ANDROIDE. Étude.}\\
+		\textbf{Difficulté de résolution ressentie par l'humain pour le problème d'optimisation LEF.}\\[0.5cm]
+	\end{center}
+	
+	\section*{Objectifs de l'étude}
+	
+	Dans le cadre du projet \texttt{PANDROIDE}, le problème d'optimisation LEF est étudié et en particulier la difficulté de résolution pour une instance donnée. Ce projet donne lieu au développement d'une application permettant à l'humain de résoudre des instances "à la main" et on s'intéresse donc aux méthodes de résolution employées par des personnes non familières avec le problème.\\
+	
+	L'hypothèse à vérifier ici est que l'humain utilise par défaut une forme de \textit{retour sur trace} pour résoudre le problème. Ainsi un algorithme utilisant cette méthode est utilisé pour évaluer la difficulté d'une instance; le nombre d'étapes nécessaires pour trouver une solution ainsi que le "regret" associé seront utilisés pour construire une heuristique de difficulté.
+	
+	\paragraph{Exemple sur des instances à 7 agents}{Les préférences pour chaque agent sont triées (le plut haut le préféré) et les objets correspondants aux solutions trouvées sont colorés.
+	
+	\begin{figure}[h!]
+		\centering
+		\begin{subfigure}[h]{0.45\textwidth}
+		\centering
+		\begin{tabular}{|c c c c c c c|}
+			\hline
+			 7	& 7	& 5	& 5	& 7	& 6	& 5	\\
+			 2	& 1	& 7	&\y{3}	&\y{4}	& 3	& \y{7}	\\
+			 4	& 3	& 1	& 2	& 1	& \y{1}	& 6	\\
+			 \y{5}	& 4	&\y{2}	& 1	& 3	& 7	& 2	\\
+			 6	&\y{6}	& 3	& 4	& 6	& 2	& 1	\\
+			 3	& 2	& 6	& 7	& 5	& 4	& 4	\\
+			 1	& 5	& 4	& 6	& 2	& 5	& 3 \\
+			\hline
+		\end{tabular}
+		\caption{Nombre d'étapes: 129}
+		\label{tab:ex1}
+		\end{subfigure}~
+		\begin{subfigure}[h]{0.45\textwidth}
+		\centering
+		\begin{tabular}{|c c c c c c c|}
+			\hline
+			 \y{1}	& \y{6}	& \y{7}	&  6	&  1	&  6	& \y{4}	\\ 
+ 				4	&  1	&  5	&  4	& \y{5}	&  7	&  1	\\ 
+			    3	&  3	&  4	&  1	&  6	& \y{3}	&  3	\\ 
+			    2	&  7	&  1	& \y{2}	&  3	&  2	&  2	\\ 
+			    5	&  2	&  6	&  5	&  4	&  5	&  7	\\ 
+			    6	&  5	&  2	&  3	&  2	&  1	&  5	\\ 
+			    7	&  4	&  3	&  7	&  7	&  4	&  6    \\ 
+			\hline
+		\end{tabular}
+		\caption{Nombre d'étapes: 17}
+		\label{tab:ex2}
+		\end{subfigure}
+	\end{figure}
+	
+	L'heuristique devra évaluer l'instance~\ref{tab:ex1} comme plus difficile que l'instance~\ref{tab:ex2} car le nombre d'étapes est plus important et la mesure de regret devrait l'être également (davantage d'agents se voient attribuer des objets pour lesquels leur niveau de préférence est bas dans l'instance~\ref{tab:ex1}).
+	}\\
+	
+	Une première version de l'application mobile sera développée dans l'optique de proposer un certain nombre d'instance à des utilisateurs et vérifier si l'heuristique correspond bien à la difficultée ressentie.
+	
+	\section*{Construction de l'heuristique}
+	
+	\paragraph{Définition du regret}{Soit $o_i$ l'objet alloué à l'agent $i$ et $ind(.)$ la fonction qui associe à un objet son index dans la liste de préférence de son agent. Il est de plus intéressant de donner plus de poids au regret lorsque les agents affectés sont nombreux et on notera donc $m$ le nombre d'agent non satisfaits (c'est-à-dire qui ne se voient pas allouer leur top préférence). On peut alors définir le regret global $R$ associé à une solution:
+	\begin{equation*}
+		R = m \times \sum_{i=1}^n ind(o_i)
+	\end{equation*}	
+	Notre heuristique consiste alors en la simple somme $h = R + N$ avec $N$ le nombre d'étapes nécessaires pour trouver la solution. Ce qui donne pour les exemples cités plus haut, $h(\ref{tab:ex1}) = 283$ et $h(\ref{tab:ex2}) = 56$.
+	}
+	
+	\section*{Procédure}
+	
+	Pour vérifier les hypothèses énoncées, l'application, chargée avec une vingtaine de niveaux, sera partagée parmi les participants. On leur demandera de résoudre autant d'instance que possible en les informant des informations qui seront enregistrées.
+	
+	Pour chaque instance résolue, les informations suivantes seront sauvegardées:
+	\begin{itemize}
+		\item Profil du participant (age, formation),
+		\item Temps de résolution,
+		\item Nombre d'actions (définie comme une affectation ou désaffectation d'un objet),
+		\item Évaluation de la difficulté selon le participant.
+	\end{itemize}
+	
+	Pour certain couple d'instances proches selon $h$, il sera demandé aux participants d'indiquer quelle instance leur a posé le plus de difficulté. Enfin, la valeur de l'heuristique $h$ ne sera pas communiquée pour éviter tout biais de la part des participants. 
+	
+	\section*{Instances choisies}
+	
+	L'application proposera plusieurs tailles allant de trois à sept agents, réparties sur une vingtaine d'instance. Pour chaque taille, les instances choisies auront des profils différents selon notre algorithme de résolution (la forme du backtrack par exemple) et des difficultés différentes selon l'heuristique de difficulté décrite plus haut.
+	
+	(...)
+	
+	\section*{Public visé}
+	
+	L'application finale ne présumera rien sur le profil des joueurs et on souhaite donc avoir une mesure de difficulté indépendante du public du jeu. L'ensemble des participants retenus pour cette étude se doit donc d'être hétérogène selon deux critères: l'âge et la formation. Un court questionnaire sera montré au lancement de l'application pour se renseigner sur ses informations.
+	
+	\section*{Utilisation des résultats}
+	
+	(...)
+	
+	Par la suite, ces résultats pourront être comparés avec d'autres heuristiques.
+	
+\end{document}

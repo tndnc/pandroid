@@ -9,8 +9,8 @@ import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.cert.TrustAnchor;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,42 +19,9 @@ public class Model{
     private Grid grid;
     private int nbActors;
     private IPiece Pieces[];
+    private int nbmoves;
+    private long gameTime;
 
-    public Model() {
-        Pieces = new IPiece[21];
-        nbActors =4;
-        grid = new Grid(nbActors);
-        Pieces[0] = new Actor(0, 0,0);
-        Pieces[1] = new Actor(1, 0,1);
-        Pieces[2] = new Actor(2, 0,2);
-        Pieces[3] = new Actor(3, 0,3);
-
-        Pieces[4] =  new Preference(4,1,0,2);
-        Pieces[5] =  new Preference(5,2,0,3);
-        Pieces[6] = new Preference(6,3,0,1);
-        Pieces[7] = new Preference(7,4,0,4);
-
-        Pieces[8] = new Preference(8,1,1,2);
-        Pieces[9] = new Preference(9,2,1,3);
-        Pieces[10] = new Preference(10,3,1,4);
-        Pieces[11] = new Preference(11,4,1,1);
-
-        Pieces[12] = new Preference(12,1,2,3);
-        Pieces[13] = new Preference(13,2,2,2);
-        Pieces[14] = new Preference(14,3,2,1);
-        Pieces[15] = new Preference(15,4,2,4);
-
-        Pieces[16] = new Preference(16,1,3,4);
-        Pieces[17] = new Preference(17,2,3,3);
-        Pieces[18] = new Preference(18,3,3,2);
-        Pieces[19] = new Preference(19,4,3,1);
-
-
-        for(int i = 0;i<20;i++){
-            grid.set(Pieces[i].getPos(), i);
-        }
-
-    }
 
     public IPiece getPiece(int i){
         return Pieces[i];
@@ -76,6 +43,7 @@ public class Model{
                 if(pref.getId() == idPreference){
                     if(pref.getSelectedby() == -1){
                         pref.setSelectedby(idActor);
+                        nbmoves ++;
                     }else{
                         pref.setSelectedby(-1);
                     }
@@ -102,8 +70,13 @@ public class Model{
     }
 
 
+    public int getGameTime(){
+        return (int) ((Calendar.getInstance().getTimeInMillis()- gameTime)/1000);
+    }
+
     public Model(int i, GameApplication app) {
         System.out.println("model Start");
+        gameTime = Calendar.getInstance().getTimeInMillis();
         String fname = "levels.xml";
         AssetManager ass = app.getAssets();
         try {
@@ -157,15 +130,6 @@ public class Model{
         return nbActors;
     }
 
-    public Integer getLig(int id) {
-        return Pieces[id].getPos().getLig();
-    }
-
-    public Integer getCol(int id) {
-        return Pieces[id].getPos().getCol();
-    }
-
-
     //checking if p2 is jealous of P1
     public boolean isJealous(Preference[] P1,Preference[] P2){
         if (P1[0] == null){
@@ -189,7 +153,7 @@ public class Model{
         System.out.println();
         for(Preference pref:P2){
             if(pref.getValue() == P1pref.getValue()){
-                if(pref.getPos().getCol() >= P2pref.getPos().getCol()){
+                if(pref.getPos().getCol() < P2pref.getPos().getCol()){
                     return true;
                 }
             }
@@ -239,5 +203,13 @@ public class Model{
             return !arejealous;
         }
         return false;
+    }
+
+    public int getNbmoves() {
+        return nbmoves;
+    }
+
+    public void setNbmoves(int nbmoves) {
+        this.nbmoves = nbmoves;
     }
 }

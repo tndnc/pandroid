@@ -6,7 +6,6 @@ import android.app.Application;
 public class GameApplication extends Application {
     private Model theGame;
     public int i;
-    public int nbmove = 0;
 
     public Model getGameModel() {
         return theGame;
@@ -14,7 +13,6 @@ public class GameApplication extends Application {
 
     @Override
     public void onCreate() {
-        System.out.println("i : "+i);
         super.onCreate();
         theGame = new Model(i, this);
 
@@ -24,6 +22,7 @@ public class GameApplication extends Application {
         System.out.println("i : "+i);
         this.i = part;
         theGame = new Model(i, this);
+        theGame.setNbmoves(0);
     }
 
 }

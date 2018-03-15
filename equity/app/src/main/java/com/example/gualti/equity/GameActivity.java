@@ -27,7 +27,7 @@ public class GameActivity extends AppCompatActivity {
     public void onWin() {
         if (app.getGameModel().endOfGame()) {
             AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-            myAlert.setMessage("Well Played :D\n\nYou finished the level in "+ app.nbmove +" moves.")
+            myAlert.setMessage("You finished the level with "+ app.getGameModel().getNbmoves() +" moves in "+ app.getGameModel().getGameTime()+ " seconds")
                     .setTitle("Level " + nextLevel + " Accomplished")
                     .setNeutralButton("Select Level", new DialogInterface.OnClickListener() {
                         @Override
@@ -47,7 +47,7 @@ public class GameActivity extends AppCompatActivity {
                 myAlert.setPositiveButton("Next Level", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        app.nbmove = 0;
+                        app.getGameModel().setNbmoves(0);
                         app.setPartie(nextLevel);
                         nextLevel++;
 

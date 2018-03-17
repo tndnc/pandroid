@@ -13,3 +13,7 @@ __pycache__/
 *.out
 *.synctex.gz
 *.toc
+
+## GoogleSheetSecret
+
+google-sheets-client-secret.json

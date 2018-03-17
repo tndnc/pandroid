@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -27,7 +28,9 @@ public class GameActivity extends AppCompatActivity {
     public void onWin() {
         if (app.getGameModel().endOfGame()) {
             AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-            myAlert.setMessage("You finished the level with "+ app.getGameModel().getNbmoves() +" moves in "+ app.getGameModel().getGameTime()+ " seconds")
+            LayoutInflater inflater = this.getLayoutInflater();
+            myAlert.setView(inflater.inflate(R.layout.popup_start_rating, null));
+            myAlert.setMessage("You finished the level with "+ app.getGameModel().getNbmoves() +" moves in "+ app.getGameModel().getGameTime()+ " seconds, please rate this level difficulty")
                     .setTitle("Level " + nextLevel + " Accomplished")
                     .setNeutralButton("Select Level", new DialogInterface.OnClickListener() {
                         @Override

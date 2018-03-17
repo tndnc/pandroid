@@ -77,8 +77,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
         Paint paint = new Paint();
         Model gameModel = app.getGameModel();
-        pieceSize = c.getWidth() /(gameModel.getNbActors()+1);
-        gridTop = c.getHeight()/2 -pieceSize*gameModel.getNbActors()/2;
+        int nbActor = gameModel.getNbActors();
+        pieceSize = c.getWidth() /(nbActor+1);
+        gridTop = c.getHeight()/2 -pieceSize*nbActor/2;
 
         //Dessin des Pieces
         while (gameModel.getPiece(i) != null) {
@@ -102,7 +103,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                 right = pieceSize + pieceSize * currentCol;
                 bottom = gridTop + pieceSize + pieceSize * currentLig;
                 paint.setColor(Color.BLUE + (pref.getValue()*30000));
-                c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,100,paint);
+                c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*5),paint);
 
                 if(!(pref.getSelectedby()== -1)){
                     Position posAgent = new Position( 0,currentLig);
@@ -122,8 +123,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
     public boolean onTouchEvent(MotionEvent event) {
         Model gameModel = app.getGameModel();
-        int pos_x = cw /(gameModel.getNbActors()+1);
-        int pos_y = cw /(gameModel.getNbActors()+1);
+        int nbActor = gameModel.getNbActors();
+        int pos_x = cw /(nbActor+1);
+        int pos_y = cw /(nbActor+1);
         int x = (int) event.getX();
         int y = (int) event.getY()-gridTop;
         int i = x / pos_x;
@@ -133,7 +135,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                if( y > 0 && y < pieceSize*gameModel.getNbActors() ){
+                if( y > 0 && y < pieceSize*nbActor ){
                     if (gameModel.getIdByPos(pos) != null) {
                         int selectedPrefId = gameModel.getIdByPos(pos);
                         if(gameModel.getPiece(selectedPrefId) instanceof Preference){

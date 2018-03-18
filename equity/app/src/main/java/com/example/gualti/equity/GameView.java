@@ -9,24 +9,19 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-/**
- * Created by gualti on 16/02/2018.
- */
+import android.widget.RatingBar;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
-
-    GameViewThread th;
-    GameApplication app;
-    int ch, cw;
-    Integer pieceselect = null;
-    int tempx, tempy;
-    int xdebut, ydebut;
-    int deltaX, deltaY;
-    int min, max;
-    int pieceSize;
-    int gridTop;
+    private GameViewThread th;
+    private GameApplication app;
+    private int ch, cw;
+    private Integer pieceselect = null;
+    private int tempx, tempy;
+    private int xdebut, ydebut;
+    private int deltaX, deltaY;
+    private int min, max;
+    private int pieceSize,gridTop;
 
 
     Rect dst = new Rect();
@@ -65,8 +60,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
     public void draw(Canvas c) {
         super.draw(c);
-
-
 
         IPiece currentPiece;
         int currentCol;
@@ -110,7 +103,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                     paint.setColor(Color.RED + gameModel.getIdByPos(posAgent)*10000);
                     paint.setStyle(Paint.Style.STROKE);
                     paint.setStrokeWidth(20);
-                    c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,100,paint);
+                    c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*3 ),paint);
                     paint.setStyle(Paint.Style.FILL);
                 }
 

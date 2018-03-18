@@ -21,7 +21,11 @@ public class Model{
     private IPiece Pieces[];
     private int nbmoves;
     private long gameTime;
+    private String moveSequence;
 
+    public String getMoveSequence(){
+        return moveSequence;
+    }
 
     public IPiece getPiece(int i){
         return Pieces[i];
@@ -43,6 +47,7 @@ public class Model{
                 if(pref.getId() == idPreference){
                     if(pref.getSelectedby() == -1){
                         pref.setSelectedby(idActor);
+                        moveSequence += idActor+",";
                         nbmoves ++;
                     }else{
                         pref.setSelectedby(-1);
@@ -75,6 +80,7 @@ public class Model{
     }
 
     public Model(int i, GameApplication app) {
+        moveSequence = "";
         System.out.println("model Start");
         gameTime = Calendar.getInstance().getTimeInMillis();
         String fname = "levels.xml";

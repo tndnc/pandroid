@@ -1,11 +1,9 @@
-from gen import generate, generate_random_instance
-#from ipdb import set_trace
-# from random import choice
+from package.modules.generation import generate_random_instance
+from package.modules.utils import save_to_file, draw_hotspots
 import time
-import numpy as np
 
 
-def solve_backtrack(instance):
+def solve_by_backtrack(instance):
     """Try to find a Locally Envy Free allocation for the given instance with a 
     backtracking algorithm.
 
@@ -27,9 +25,8 @@ def solve_backtrack(instance):
     # List of currently allocated resources for the current allocation.
     allocated_resources = list() 
     
-    hotspots = np.zeros((len(instance),len(instance)),dtype=int)
-    
-    # set_trace()
+    hotspots = [[0 for _ in range(len(instance))] for _ in range(len(instance))]
+    # hotspots = np.zeros((len(instance),len(instance)),dtype=int)
     
     niter = 0
     # As long as the last agent has not been allocated a resources, the problem
@@ -80,68 +77,35 @@ def solve_backtrack(instance):
             hotspots[instance[ca_idx].index(alloc[ca_idx])][ca_idx] += 1
             alloc[ca_idx] = None
             
-             
-
         if ca_idx == 0 and len(impossible_alloc[ca_idx]) == len(instance):
             # unsolvable instance
             return False, niter, hotspots
         
-    
-           
     return alloc, niter, hotspots
 
 
-def pprint_instance(instance, allocation=None):
-    if not allocation: allocation = dict()
-    n = len(instance)
-    
-    # print("\n")
-    buffer = ""
-    for i in range(n):
-        for a in range(n):
-            obj = instance[a][i]
-            buffer += "{}{}\t".format("*" if obj == allocation.get(a) else " ", obj)
-        buffer += "\n"
-        # print(buffer)
-
-    return buffer
-
-
-def save_to_file(n_agents, values):
-    with open('../output/alloc_{}.txt'.format(n_agents), 'w') as f:
-
-        for v in values:
-            f.write("Resolution time: {}microseconds.\nNumber of iterations: {}.\n".format(v[2], v[3]))
-            f.write("Solution {}found.\n".format("" if v[1] else "not "))
-            f.write(pprint_instance(v[0], v[1]))
-            f.write("\n")
-
-        # f.write("Mean time: {}ms".format(mean(values, key=lambda x: x[2])))
-    
-    
 if __name__ == "__main__":
-    number_of_tries = 1
-    number_of_agents = 10
+    number_of_tries = 20
+    number_of_agents = 3
 
     res = list()
 
     print("Solving {} instances of {} agents by backtrack.".format(number_of_tries, number_of_agents))
-    for _ in range(number_of_tries):
+    for i in range(number_of_tries):
         instance = generate_random_instance(number_of_agents)
 
         # track time
         start = time.time()
-        alloc, niter, hotspots = solve_backtrack(instance)
-        print(hotspots)
+        alloc, niter, hotspots = solve_by_backtrack(instance)
         end = time.time()
         print(".", end="", flush=True)
 
         elapsed = (end-start) * 1000 # convert to microseconds
         res.append((instance, alloc, elapsed, niter))
 
+        # print hotspots
+        # draw_hotspots(hotspots, instance, alloc, "{}-{}_hotspots".format(number_of_agents, i+1))
+
     print()
     
     save_to_file(number_of_agents, res)
-
-
-

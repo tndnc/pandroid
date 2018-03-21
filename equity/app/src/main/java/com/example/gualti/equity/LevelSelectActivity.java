@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import java.util.Random;
 
 public class LevelSelectActivity extends AppCompatActivity {
 
@@ -22,25 +23,30 @@ public class LevelSelectActivity extends AppCompatActivity {
         Intent GameActivity = new Intent(this, GameActivity.class);
         Bundle bundle = new Bundle();
         app = (GameApplication) this.getApplication();
+        Random randomgen = new Random();
+        int val = 0;
 
         switch (Levelbutton.getId()) {
             case R.id.button1:
-                bundle.putInt("ActualXMLLevel", 0);
+                val = randomgen.nextInt(7)+1;
+                bundle.putInt("ActualXMLLevel", val);
                 GameActivity.putExtras(bundle);
                 startActivity(GameActivity);
-                app.setPartie(1);
+                app.setPartie(val);
                 break;
             case R.id.button2:
-                bundle.putInt("ActualXMLLevel", 1);
+                val = randomgen.nextInt(7)+7;
+                bundle.putInt("ActualXMLLevel", val);
                 GameActivity.putExtras(bundle);
                 startActivity(GameActivity);
-                app.setPartie(0);
+                app.setPartie(val);
                 break;
             case R.id.button3:
-                bundle.putInt("ActualXMLLevel", 2);
+                val = randomgen.nextInt(7)+14;
+                bundle.putInt("ActualXMLLevel", val);
                 GameActivity.putExtras(bundle);
                 startActivity(GameActivity);
-                app.setPartie(2);
+                app.setPartie(val);
                 break;
             default:
                 break;

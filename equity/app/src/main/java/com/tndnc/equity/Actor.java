@@ -1,9 +1,5 @@
 package com.tndnc.equity;
 
-/**
- * Created by gualti on 24/02/2018.
- */
-
 public class Actor implements IPiece {
     private int id;
     private Position pos;

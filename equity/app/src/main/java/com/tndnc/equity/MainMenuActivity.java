@@ -31,7 +31,7 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
-    public void levelSelect(View startimage){
+    public void levelSelect(View _){
         Intent levelSelect = new Intent(this, LevelSelectActivity.class);
         startActivity(levelSelect);
     }

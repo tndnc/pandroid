@@ -10,4 +10,7 @@
     <string name="age">Age</string>
     <string name="formation">Formation</string>
 
+    <string name="button_play">Play</string>
+    <string name="button_options">Options</string>
+    <string name="button_about">About</string>
 </resources>

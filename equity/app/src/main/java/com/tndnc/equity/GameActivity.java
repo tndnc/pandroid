@@ -36,7 +36,8 @@ public class GameActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater inflater = this.getLayoutInflater();
             builder.setView(inflater.inflate(R.layout.popup_start_rating, null));
-            builder.setMessage("You finished the level with "+ gameModel.getNbmoves() +" moves in "+ gameModel.getGameTime()+ " seconds, please rate this level difficulty");
+            builder.setMessage("You finished the level with "+ gameModel.getNbmoves() +" moves in "
+                    + gameModel.getGameTime()+ " seconds, please rate this level difficulty");
             builder.setTitle("Level " + nextLevel + " Accomplished");
             builder.setNeutralButton("back", new DialogInterface.OnClickListener() {
                  public void onClick(DialogInterface dialog, int which) {

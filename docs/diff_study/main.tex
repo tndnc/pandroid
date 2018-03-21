@@ -12,10 +12,11 @@
 \usepackage{subcaption}
 
 \newcommand{\y}[1]{\colorbox{yellow}{#1}}
+\newcommand{\bb}[1]{\colorbox{blue!30}{#1}}
 
 \begin{document}
 	\begin{center}
-		\textbf{Projet ANDROIDE. Étude.}\\
+		\textbf{Projet ANDROIDE. Étude statistique.}\\
 		\textbf{Difficulté de résolution ressentie par l'humain pour le problème d'optimisation LEF.}\\[0.5cm]
 	\end{center}
 	
@@ -75,11 +76,13 @@
 		R = m \times \sum_{i=1}^n ind(o_i)
 	\end{equation*}	
 	Notre heuristique consiste alors en la simple somme $h = R + N$ avec $N$ le nombre d'étapes nécessaires pour trouver la solution. Ce qui donne pour les exemples cités plus haut, $h(\ref{tab:ex1}) = 283$ et $h(\ref{tab:ex2}) = 56$.
-	}
+	}\\
+	
+	Pour chaque taille d'instance on pourra ainsi définir les niveaux de difficultés suivants:
 	
 	\section*{Procédure}
 	
-	Pour vérifier les hypothèses énoncées, l'application, chargée avec une vingtaine de niveaux, sera partagée parmi les participants. On leur demandera de résoudre autant d'instance que possible en les informant des informations qui seront enregistrées.
+	Pour vérifier les hypothèses énoncées, l'application, chargée avec une vingtaine de niveaux, sera partagée parmi les participants. On leur demandera de résoudre autant d'instances que possible en les informant des données qui seront enregistrées.
 	
 	Pour chaque instance résolue, les informations suivantes seront sauvegardées:
 	\begin{itemize}
@@ -96,6 +99,325 @@
 	L'application proposera plusieurs tailles allant de trois à sept agents, réparties sur une vingtaine d'instance. Pour chaque taille, les instances choisies auront des profils différents selon notre algorithme de résolution (la forme du backtrack par exemple) et des difficultés différentes selon l'heuristique de difficulté décrite plus haut.
 	
 	(...)
+	
+\begin{figure}[h]
+	\centering
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 3 AGENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c|}
+		\hline
+		\bb{1} & \bb{3} & \bb{2} \\
+		2 & 1 & 1 \\
+		3 & 2 & 3 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 3, $h = (3.0, 0.0, 1)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c|}
+		\hline
+		\bb{2} & \bb{3} & 2 \\
+		1 & 1 & \bb{1} \\
+		3 & 2 & 3 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 3, $h = (3.0, 1.0, 2)$}
+\end{subfigure}
+\caption{Instances à 3 agents}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 4 AGENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h]
+\centering
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c|}
+		\hline
+		1 & \bb{2} & 3 & 3 \\
+		\bb{3} & 3 & \bb{4} & \bb{1} \\
+		4 & 1 & 1 & 4 \\
+		2 & 4 & 2 & 2 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 14, $h = (14.0, 3.0, 1)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c|}
+		\hline
+		4 & \bb{1} & \bb{4} & 3 \\
+		\bb{3} & 3 & 1 & 1 \\
+		2 & 2 & 2 & \bb{2} \\
+		1 & 4 & 3 & 4 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 16, $h = (10.0, 2.5, 2)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c|}
+		\hline
+		3 & 3 & \bb{4} & \bb{3} \\
+		4 & \bb{2} & 2 & 2 \\
+		\bb{1} & 1 & 3 & 1 \\
+		2 & 4 & 1 & 4 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 19, $h = (19.0, 3.0, 1)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c|}
+		\hline
+		\bb{4} & \bb{3} & 4 & 3 \\
+		3 & 1 & \bb{2} & \bb{1} \\
+		2 & 2 & 3 & 4 \\
+		1 & 4 & 1 & 2 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 4, $h = (4.0, 2.3, 3)$}
+\end{subfigure}
+\caption{Instances à 4 agents}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 5 AGENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h]
+\centering
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c|}
+		\hline
+		\bb{1} & \bb{3} & \bb{2} & 3 & 2 \\
+		5 & 1 & 4 & 1 & \bb{4} \\
+		4 & 5 & 5 & \bb{5} & 5 \\
+		3 & 4 & 1 & 4 & 1 \\
+		2 & 2 & 3 & 2 & 3 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 5, $h = (8.25, 3.0, 4)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c|}
+		\hline
+		2 & 1 & 1 & \bb{2} & 4 \\
+		\bb{4} & \bb{3} & \bb{5} & 3 & 3 \\
+		1 & 5 & 4 & 1 & \bb{1} \\
+		5 & 2 & 2 & 4 & 5 \\
+		3 & 4 & 3 & 5 & 2 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 32, $h = (32.0, 5.0, 1)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c|}
+		\hline
+		\bb{5} & \bb{1} & 5 & \bb{4} & \bb{2} \\
+		2 & 5 & \bb{3} & 1 & 4 \\
+		4 & 3 & 1 & 5 & 1 \\
+		1 & 4 & 4 & 3 & 3 \\
+		3 & 2 & 2 & 2 & 5 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 5, $h = (5.0, 1.0, 1)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c|}
+		\hline
+		\bb{3} & \bb{2} & \bb{5} & 3 & \bb{4} \\
+		4 & 1 & 4 & 2 & 3 \\
+		2 & 4 & 3 & \bb{1} & 2 \\
+		5 & 5 & 2 & 5 & 5 \\
+		1 & 3 & 1 & 4 & 1 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 5, $h = (9.0, 2.0, 2)$}
+\end{subfigure}
+\caption{Instances à 5 agents}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 6 AGENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h]
+\centering
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c c|}
+		\hline
+		\bb{1} & \bb{2} & \bb{3} & 2 & 3 & 1 \\
+		6 & 5 & 5 & \bb{5} & 2 & \bb{4} \\
+		2 & 1 & 2 & 4 & \bb{6} & 2 \\
+		5 & 4 & 1 & 3 & 1 & 6 \\
+		4 & 3 & 6 & 6 & 5 & 3 \\
+		3 & 6 & 4 & 1 & 4 & 5 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 6, $h = (6.0, 4.0, 1)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c c|}
+		\hline
+		\bb{6} & \bb{2} & \bb{4} & \bb{3} & \bb{1} & 3 \\
+		5 & 3 & 2 & 5 & 5 & \bb{5} \\
+		4 & 4 & 6 & 1 & 2 & 4 \\
+		2 & 6 & 3 & 2 & 3 & 6 \\
+		3 & 5 & 1 & 6 & 4 & 2 \\
+		1 & 1 & 5 & 4 & 6 & 1 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 6, $h = (6.0, 1.0, 2)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c c|}
+		\hline
+		5 & 5 & 4 & 2 & 1 & \bb{6} \\
+		\bb{4} & \bb{2} & \bb{1} & 4 & \bb{5} & 3 \\
+		3 & 6 & 2 & \bb{3} & 2 & 5 \\
+		2 & 1 & 3 & 6 & 4 & 4 \\
+		1 & 3 & 6 & 5 & 3 & 1 \\
+		6 & 4 & 5 & 1 & 6 & 2 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 13, $h = (16.6, 6.0, 3)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c c|}
+		\hline
+		4 & 4 & 6 & 1 & \bb{5} & 4 \\
+		6 & \bb{2} & 1 & \bb{4} & 2 & \bb{6} \\
+		5 & 6 & 5 & 6 & 1 & 2 \\
+		\bb{1} & 1 & \bb{3} & 2 & 4 & 5 \\
+		2 & 5 & 2 & 3 & 3 & 3 \\
+		3 & 3 & 4 & 5 & 6 & 1 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 92, $h = (92.0, 9.0, 1)$}
+\end{subfigure}
+\caption{Instances à 6 agents}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 7 AGENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h]
+\centering
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c c c|}
+		\hline
+		7 & 7 & \bb{5} & \bb{1} & \bb{3} & \bb{7} & 4 \\
+		\bb{6} & \bb{4} & 2 & 5 & 2 & 2 & \bb{2} \\
+		3 & 2 & 6 & 3 & 1 & 3 & 1 \\
+		1 & 5 & 7 & 6 & 6 & 6 & 6 \\
+		2 & 3 & 3 & 7 & 4 & 1 & 7 \\
+		4 & 1 & 1 & 2 & 7 & 4 & 5 \\
+		5 & 6 & 4 & 4 & 5 & 5 & 3 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 15, $h = (11.0, 3.0, 2)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c c c|}
+		\hline
+		\bb{5} & \bb{3} & \bb{1} & \bb{2} & \bb{6} & 2 & \bb{4} \\
+		3 & 6 & 2 & 3 & 5 & \bb{7} & 1 \\
+		7 & 4 & 4 & 4 & 2 & 1 & 6 \\
+		6 & 1 & 5 & 1 & 4 & 3 & 7 \\
+		1 & 7 & 6 & 7 & 7 & 4 & 3 \\
+		4 & 5 & 7 & 6 & 3 & 5 & 5 \\
+		2 & 2 & 3 & 5 & 1 & 6 & 2 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 7, $h = (27.5, 4.25, 4)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c c c|}
+		\hline
+		\bb{2} & 1 & 1 & \bb{6} & 7 & 2 & 6 \\
+		6 & \bb{3} & \bb{7} & 2 & \bb{1} & \bb{4} & 3 \\
+		1 & 5 & 3 & 3 & 2 & 1 & \bb{5} \\
+		4 & 6 & 2 & 7 & 4 & 7 & 7 \\
+		3 & 2 & 6 & 5 & 5 & 5 & 4 \\
+		7 & 7 & 5 & 4 & 6 & 3 & 2 \\
+		5 & 4 & 4 & 1 & 3 & 6 & 1 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 14, $h = (39.8, 8.2, 6)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c c c|}
+		\hline
+		\bb{7} & \bb{6} & 5 & \bb{2} & \bb{1} & 7 & 4 \\
+		3 & 1 & \bb{4} & 6 & 6 & 6 & 1 \\
+		5 & 4 & 2 & 5 & 2 & 2 & 6 \\
+		6 & 3 & 1 & 7 & 5 & 4 & 7 \\
+		1 & 2 & 7 & 4 & 7 & \bb{5} & 2 \\
+		2 & 7 & 3 & 3 & 3 & 3 & \bb{3} \\
+		4 & 5 & 6 & 1 & 4 & 1 & 5 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 19, $h = (24.3, 5.0, 3)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c c c|}
+		\hline
+		\bb{6} & 3 & \bb{7} & 6 & 5 & 6 & 2 \\
+		7 & 4 & 4 & 3 & \bb{2} & 5 & 5 \\
+		5 & \bb{5} & 3 & 1 & 1 & \bb{1} & 7 \\
+		4 & 2 & 5 & \bb{4} & 3 & 3 & \bb{3} \\
+		1 & 6 & 2 & 5 & 4 & 4 & 1 \\
+		2 & 1 & 6 & 7 & 6 & 7 & 6 \\
+		3 & 7 & 1 & 2 & 7 & 2 & 4 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 102, $h = (32.8, 7.8, 6)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c c c|}
+		\hline
+		1 & \bb{7} & \bb{6} & 7 & 2 & 6 & 6 \\
+		\bb{2} & 2 & 7 & \bb{4} & \bb{1} & 2 & 1 \\
+		5 & 4 & 1 & 1 & 7 & \bb{5} & 7 \\
+		3 & 1 & 5 & 3 & 6 & 7 & 4 \\
+		6 & 3 & 4 & 6 & 5 & 4 & \bb{3} \\
+		4 & 5 & 2 & 5 & 4 & 3 & 5 \\
+		7 & 6 & 3 & 2 & 3 & 1 & 2 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 122, $h = (122.0, 9.0, 1)$}
+\end{subfigure}
+\begin{subfigure}[h]{0.45\textwidth}
+	\centering
+	\begin{tabular}{|c c c c c c c|}
+		\hline
+		5 & 6 & 1 & 1 & 7 & \bb{6} & 3 \\
+		6 & \bb{7} & \bb{3} & \bb{5} & \bb{2} & 5 & \bb{4} \\
+		4 & 1 & 5 & 3 & 3 & 1 & 6 \\
+		\bb{1} & 2 & 2 & 2 & 1 & 4 & 1 \\
+		2 & 3 & 6 & 7 & 5 & 3 & 7 \\
+		3 & 4 & 7 & 4 & 6 & 7 & 2 \\
+		7 & 5 & 4 & 6 & 4 & 2 & 5 \\
+		\hline
+	\end{tabular}
+	\caption{Nombre d'étapes: 154, $h = (154.0, 8.0, 1)$}
+\end{subfigure}
+\caption{Instances à 7 agents}
+\end{figure}
 	
 	\section*{Public visé}
 	

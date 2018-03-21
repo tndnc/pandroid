@@ -3,7 +3,7 @@ import seaborn as sns
 import numpy as np
 
 
-def pprint_instance(instance, allocation=None):
+def pprint_instance(instance, allocation=None, indices=None):
     if not allocation: allocation = dict()
     n = len(instance)
     
@@ -12,7 +12,10 @@ def pprint_instance(instance, allocation=None):
     for i in range(n):
         for a in range(n):
             obj = instance[a][i]
-            buffer += "{}{}\t".format("*" if obj == allocation.get(a) else " ", obj)
+            if indices:
+                buffer += "{}\t".format(strobj_fromid(instance, a, i, indices[a]))
+            else:
+                buffer += "{}{}\t".format("*" if obj == allocation.get(a) else " ", obj)
         buffer += "\n"
         # print(buffer)
 
@@ -34,6 +37,10 @@ def strobj(instance, a, x, alloc):
         instance[a][x])
 
 
+def strobj_fromid(instance, a, x, ind):
+    return "{}{}".format("*" if ind == x else "", instance[a][x])
+
+
 def draw_hotspots(hotspots, instance, alloc, figname):
     if not alloc: alloc = dict()
     f = figure()
@@ -43,3 +50,12 @@ def draw_hotspots(hotspots, instance, alloc, figname):
     ax = sns.heatmap(hotspots, annot=annotations, fmt="s")
     # grid(True)
     savefig('../output/{}.png'.format(figname))
+
+
+def show_average_heatmap(hotspots_list, instance):
+    f = figure()
+    annotations = np.asarray([[instance[a][x] for a in range(len(instance))] \
+        for x in range(len(instance))])
+    average_heatmap = np.mean(hotspots_list, axis=0)
+    ax = sns.heatmap(average_heatmap, annot=annotations, fmt="d")
+    f.show()

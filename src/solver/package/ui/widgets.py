@@ -26,3 +26,25 @@ class InstanceView(QWidget):
 				self.layout.addWidget(label, i, j)
 
 		self.setLayout(self.layout)
+
+
+class AllSolutionsView(QWidget):
+
+	def __init__(self, instances):
+		super().__init__()
+		self.layout = QGridLayout()
+		self.resize(500, 500)
+
+		MAX_PER_ROW = 4
+
+		for i in range(len(instances)):
+			instance = instances[i]['instance']
+			alloc = instances[i]['alloc']
+			instanceview = InstanceView()
+			instanceview.setInstance(instance, alloc)
+			y = i // MAX_PER_ROW
+			x = i % MAX_PER_ROW
+			self.layout.addWidget(instanceview, y, x)
+
+		self.setLayout(self.layout)
+		self.show()

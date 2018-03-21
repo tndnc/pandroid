@@ -1,4 +1,4 @@
-package com.example.gualti.equity;
+package com.tndnc.equity;
 
 /**
  * Created by gualti on 24/02/2018.
@@ -19,11 +19,7 @@ public class Grid {
     }
 
     public boolean isEmpty(Position pos) {
-        if (grid[pos.getCol()][pos.getLig()] == null) {
-            return true;
-        } else {
-            return false;
-        }
+        return grid[pos.getCol()][pos.getLig()] == null;
     }
 
     public Integer getPieceGridID(Position pos) {

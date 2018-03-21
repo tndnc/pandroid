@@ -1,4 +1,4 @@
-package com.example.gualti.equity;
+package com.tndnc.equity;
 
 public class Position{
     private int ncol;

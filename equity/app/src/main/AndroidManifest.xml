@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.gualti.equity">
+    package="com.tndnc.equity">
 
     <application
-        android:name=".GameApplication"
+        android:name="com.tndnc.equity.GameApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="equity"
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".MainMenuActivity"
+            android:name="com.tndnc.equity.MainMenuActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_main_menu"
             >
@@ -21,10 +21,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LevelSelectActivity"
+            android:name="com.tndnc.equity.LevelSelectActivity"
             android:label="@string/title_activity_level_select"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GameActivity"/>
+        <activity android:name="com.tndnc.equity.GameActivity"/>
     </application>
 
 </manifest>

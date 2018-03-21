@@ -1,7 +1,6 @@
-package com.example.gualti.equity;
+package com.tndnc.equity;
 
 import android.app.AlertDialog;
-import android.app.Application;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;

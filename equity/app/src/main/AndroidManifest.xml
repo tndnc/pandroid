@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name="com.tndnc.equity.MainMenuActivity"
+            android:name="com.tndnc.equity.activities.MainMenuActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_main_menu"
             >
@@ -21,10 +21,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.tndnc.equity.LevelSelectActivity"
+            android:name="com.tndnc.equity.activities.LevelSelectActivity"
             android:label="@string/title_activity_level_select"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.tndnc.equity.GameActivity"/>
+        <activity android:name="com.tndnc.equity.activities.GameActivity"/>
     </application>
 
 </manifest>

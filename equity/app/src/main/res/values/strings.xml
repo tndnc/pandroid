@@ -10,7 +10,10 @@
     <string name="age">Age</string>
     <string name="formation">Formation</string>
 
+    <!-- Main Menu -->
     <string name="button_play">Play</string>
     <string name="button_options">Options</string>
     <string name="button_about">About</string>
+    <!-- Level Select -->
+    <string name="levelselect_3">3 agents</string>
 </resources>

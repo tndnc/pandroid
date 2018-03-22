@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.tndnc.equity.LevelSelectActivity">
+    android:background="@color/colorPrimary"
+    tools:context="com.tndnc.equity.activities.LevelSelectActivity">
 
 
     <ScrollView
@@ -17,25 +18,36 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="StartGame"
-                android:text="First Level" />
+                android:text="@string/levelselect_3"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_marginVertical="5dp"
+                android:textSize="20sp"
+                />
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="StartGame"
-                android:text="Mid Level" />
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="StartGame"
-                android:text="Last Level" />
+            <!--<Button-->
+                <!--android:id="@+id/button1"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="StartGame"-->
+                <!--android:text="First Level" />-->
+
+            <!--<Button-->
+                <!--android:id="@+id/button2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="StartGame"-->
+                <!--android:text="Mid Level" />-->
+            <!--<Button-->
+                <!--android:id="@+id/button3"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="StartGame"-->
+                <!--android:text="Last Level" />-->
 
 
         </LinearLayout>

@@ -1,4 +1,4 @@
-package com.tndnc.equity;
+package com.tndnc.equity.activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -10,6 +10,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import com.tndnc.equity.GameApplication;
+import com.tndnc.equity.R;
+import com.tndnc.equity.utils.LevelLoader;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -29,6 +33,8 @@ public class MainMenuActivity extends AppCompatActivity {
             ageTextView = alert.findViewById(R.id.age);
             formationTextView = alert.findViewById(R.id.formation);
         }
+
+//        LevelLoader.loadAllLevels();
     }
 
     public void levelSelect(View _){

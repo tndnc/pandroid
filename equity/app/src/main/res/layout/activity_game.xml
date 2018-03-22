@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tndnc.equity.GameActivity">
+    tools:context="com.tndnc.equity.activities.GameActivity">
 
     <com.tndnc.equity.GameView
         android:id="@+id/surfaceView2"

@@ -1,4 +1,4 @@
-package com.tndnc.equity;
+package com.tndnc.equity.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RatingBar;
+
+import com.tndnc.equity.GameApplication;
+import com.tndnc.equity.Model;
+import com.tndnc.equity.R;
 
 public class GameActivity extends AppCompatActivity {
 

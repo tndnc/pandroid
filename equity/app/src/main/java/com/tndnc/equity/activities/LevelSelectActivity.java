@@ -1,9 +1,12 @@
-package com.tndnc.equity;
+package com.tndnc.equity.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.tndnc.equity.GameApplication;
+import com.tndnc.equity.R;
 
 import java.util.Random;
 

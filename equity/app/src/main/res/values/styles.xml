@@ -34,7 +34,7 @@
     </style>
 
     <style name="AppTheme.RoundedBorderedButton" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:background">@drawable/rounded_border_button</item>
+        <item name="android:background">@drawable/level_button_background</item>
     </style>
 
 </resources>

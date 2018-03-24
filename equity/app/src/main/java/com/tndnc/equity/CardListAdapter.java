@@ -53,6 +53,8 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
         TextView pageNumberView = (TextView) rootLayout.getChildAt(2);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(app, 2);
+//        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+//        params.set
         levelListView.setLayoutManager(mLayoutManager);
 
         return new ViewHolder(cardView, levelSizeView, levelListView, pageNumberView);

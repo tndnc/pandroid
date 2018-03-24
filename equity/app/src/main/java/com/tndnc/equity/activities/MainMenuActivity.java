@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.tndnc.equity.GameApplication;
 import com.tndnc.equity.R;
-import com.tndnc.equity.utils.LevelLoader;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -33,11 +32,9 @@ public class MainMenuActivity extends AppCompatActivity {
             ageTextView = alert.findViewById(R.id.age);
             formationTextView = alert.findViewById(R.id.formation);
         }
-
-//        LevelLoader.loadAllLevels();
     }
 
-    public void levelSelect(View _){
+    public void levelSelect(View v){
         Intent levelSelect = new Intent(this, LevelSelectActivity.class);
         startActivity(levelSelect);
     }

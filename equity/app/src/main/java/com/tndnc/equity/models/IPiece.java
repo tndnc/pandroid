@@ -1,4 +1,4 @@
-package com.tndnc.equity;
+package com.tndnc.equity.models;
 
 /**
  * Created by gualti on 24/02/2018.

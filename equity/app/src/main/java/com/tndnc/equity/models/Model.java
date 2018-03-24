@@ -1,6 +1,8 @@
-package com.tndnc.equity;
+package com.tndnc.equity.models;
 
 import android.content.res.AssetManager;
+
+import com.tndnc.equity.GameApplication;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -79,65 +82,91 @@ public class Model{
         return (int) ((Calendar.getInstance().getTimeInMillis()- gameTime)/1000);
     }
 
-    public Model(int i, GameApplication app) {
-        moveSequence = "";
-        System.out.println("model Start");
-        gameTime = Calendar.getInstance().getTimeInMillis();
-        String fname = "levels.xml";
-        AssetManager ass = app.getAssets();
-        try {
-            String[] strings = app.getAssets().list("");
-            for(String s : strings){
-                System.out.println(s);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public Model(Level l) {
+        this.nbActors = l.getSize();
+        this.grid = new Grid(this.nbActors);
+        Pieces = new IPiece[this.nbActors * (this.nbActors+1) +1];
+        for (int j = 0; j < this.nbActors; j++) {
+            Pieces[j] = new Actor(j, 0, j);
         }
-        try {
-            Document document = readXMLFile(ass.open(fname));
 
-            Element racine = document.getDocumentElement();
-            NodeList racineNoeuds = racine.getChildNodes();
-            Node noeud = racineNoeuds.item(i); //le niveau que l'on recupere . noeud =level
-            int size = Integer.parseInt(noeud.getAttributes().getNamedItem("size").getNodeValue());
-            nbActors = size;
-            grid = new Grid(size);
-            System.out.println(size);
-            Pieces = new IPiece[size*(size+1)+1];
-            for(int j =0;j<size;j++){
-                Pieces[j] =  new Actor(j, 0,j);
-                System.out.println("added actor");
-            }
-            NodeList pieceNoeuds = noeud.getChildNodes();
-            for (int k = 0; k < pieceNoeuds.getLength(); k++) {
-                String line = pieceNoeuds.item(k).getAttributes().getNamedItem("line").getNodeValue();
-                String order = pieceNoeuds.item(k).getAttributes().getNamedItem("order").getNodeValue();
-                char [] orderAschar = order.toCharArray();
-                for(int l = 0;l<orderAschar.length;l++){
-                    Pieces[l+(k+1)*size] = new Preference(l+(k+1)*size,l+1,Integer.parseInt(line)-1,orderAschar[l]);
-                    //int id, int ncol, int nlig,int value
-                    System.out.println("added Pref");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        for(IPiece p : Pieces){
-            if(p instanceof Preference){
-                System.out.println(p.getId()+","+p.getPos().getCol()+","+p.getPos().getLig());
+        List<List<Integer>> allprefs = l.getPreferences();
+        for (int i = 0; i < allprefs.size(); i++) {
+            List<Integer> prefs = allprefs.get(i);
+
+            for (int j = 0; j < prefs.size(); j++) {
+                Pieces[j+(i+1)*this.nbActors] = new Preference(j+(i+1)*this.nbActors,
+                        j+1, i, prefs.get(j));
             }
         }
+
         for(int y = 0;y<nbActors*(nbActors+1);y++){
             grid.set(Pieces[y].getPos(), y);
         }
+
+        this.nbmoves = 0;
+        gameTime = Calendar.getInstance().getTimeInMillis();
     }
+
+//    public Model(int i, GameApplication app) {
+//        moveSequence = "";
+//        System.out.println("model Start");
+//        gameTime = Calendar.getInstance().getTimeInMillis();
+//        String fname = "levels.xml";
+//        AssetManager ass = app.getAssets();
+//        try {
+//            String[] strings = app.getAssets().list("");
+//            for(String s : strings){
+//                System.out.println(s);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            Document document = readXMLFile(ass.open(fname));
+//
+//            Element racine = document.getDocumentElement();
+//            NodeList racineNoeuds = racine.getChildNodes();
+//            Node noeud = racineNoeuds.item(i); //le niveau que l'on recupere . noeud =level
+//            int size = Integer.parseInt(noeud.getAttributes().getNamedItem("size").getNodeValue());
+//            nbActors = size;
+//            grid = new Grid(size);
+//            System.out.println(size);
+//            Pieces = new IPiece[size*(size+1)+1];
+//            for(int j =0;j<size;j++){
+//                Pieces[j] =  new Actor(j, 0,j);
+//                System.out.println("added actor");
+//            }
+//            NodeList pieceNoeuds = noeud.getChildNodes();
+//            for (int k = 0; k < pieceNoeuds.getLength(); k++) {
+//                String line = pieceNoeuds.item(k).getAttributes().getNamedItem("line").getNodeValue();
+//                String order = pieceNoeuds.item(k).getAttributes().getNamedItem("order").getNodeValue();
+//                char [] orderAschar = order.toCharArray();
+//                for(int l = 0;l<orderAschar.length;l++){
+//                    Pieces[l+(k+1)*size] = new Preference(l+(k+1)*size,l+1,Integer.parseInt(line)-1,orderAschar[l]);
+//                    //int id, int ncol, int nlig,int value
+//                    System.out.println("added Pref");
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        for(IPiece p : Pieces){
+//            if(p instanceof Preference){
+//                System.out.println(p.getId()+","+p.getPos().getCol()+","+p.getPos().getLig());
+//            }
+//        }
+//        for(int y = 0;y<nbActors*(nbActors+1);y++){
+//            grid.set(Pieces[y].getPos(), y);
+//        }
+//    }
 
     public int getNbActors() {
         return nbActors;
     }
 
     //checking if p2 is jealous of P1
-    public boolean isJealous(Preference[] P1,Preference[] P2){
+    private boolean isJealous(Preference[] P1,Preference[] P2){
         if (P1[0] == null){
             return false;
         }
@@ -215,7 +244,7 @@ public class Model{
         return nbmoves;
     }
 
-    public void setNbmoves(int nbmoves) {
-        this.nbmoves = nbmoves;
-    }
+//    public void setNbmoves(int nbmoves) {
+//        this.nbmoves = nbmoves;
+//    }
 }

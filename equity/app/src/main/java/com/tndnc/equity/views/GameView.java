@@ -1,4 +1,4 @@
-package com.tndnc.equity;
+package com.tndnc.equity.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,7 +10,14 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.tndnc.equity.GameApplication;
+import com.tndnc.equity.GameViewThread;
 import com.tndnc.equity.activities.GameActivity;
+import com.tndnc.equity.models.Actor;
+import com.tndnc.equity.models.IPiece;
+import com.tndnc.equity.models.Model;
+import com.tndnc.equity.models.Position;
+import com.tndnc.equity.models.Preference;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 

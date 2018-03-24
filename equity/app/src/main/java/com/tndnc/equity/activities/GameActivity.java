@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.RatingBar;
 
 import com.tndnc.equity.GameApplication;
-import com.tndnc.equity.Model;
+import com.tndnc.equity.models.Model;
 import com.tndnc.equity.R;
 
 public class GameActivity extends AppCompatActivity {
@@ -29,8 +29,8 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
         intentExtras = getIntent();
         app = (GameApplication) this.getApplication();
-        actualLevel = intentExtras.getIntExtra("ActualXMLLevel", 0);
-        nextLevel = actualLevel + 1;
+//        actualLevel = intentExtras.getIntExtra("ActualXMLLevel", 0);
+//        nextLevel = actualLevel + 1;
         onWin();
     }
 

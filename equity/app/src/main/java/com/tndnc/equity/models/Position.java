@@ -1,4 +1,4 @@
-package com.tndnc.equity;
+package com.tndnc.equity.models;
 
 public class Position{
     private int ncol;

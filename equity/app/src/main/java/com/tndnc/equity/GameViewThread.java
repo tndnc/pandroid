@@ -3,6 +3,8 @@ package com.tndnc.equity;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
+import com.tndnc.equity.views.GameView;
+
 /**
  * Created by gualti on 24/02/2018.
  */

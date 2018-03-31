@@ -1,10 +1,14 @@
 package com.tndnc.equity.views;
 
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -12,12 +16,16 @@ import android.view.SurfaceView;
 
 import com.tndnc.equity.GameApplication;
 import com.tndnc.equity.GameViewThread;
+import com.tndnc.equity.R;
 import com.tndnc.equity.activities.GameActivity;
 import com.tndnc.equity.models.Actor;
 import com.tndnc.equity.models.IPiece;
 import com.tndnc.equity.models.Model;
 import com.tndnc.equity.models.Position;
 import com.tndnc.equity.models.Preference;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
@@ -30,6 +38,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     private int deltaX, deltaY;
     private int min, max;
     private int pieceSize,gridTop;
+    private Bitmap fire,oil,water,uranium,plant,gold,power;
 
 
     Rect dst = new Rect();
@@ -39,6 +48,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         super(context, attrs);
         getHolder().addCallback(this);
         app = (GameApplication) (context.getApplicationContext());
+        fire = BitmapFactory.decodeResource(getResources(), R.drawable.fire);
+        oil = BitmapFactory.decodeResource(getResources(), R.drawable.oil);
+        water = BitmapFactory.decodeResource(getResources(), R.drawable.water_drop);
+        uranium = BitmapFactory.decodeResource(getResources(), R.drawable.radioactive);
+        plant = BitmapFactory.decodeResource(getResources(), R.drawable.green_herb);
+        power = BitmapFactory.decodeResource(getResources(), R.drawable.power_bolt);
+        gold = BitmapFactory.decodeResource(getResources(), R.drawable.gold_bar);
+
+        if(fire == null){
+            System.err.println("FAIL");
+        }
+
     }
 
 
@@ -68,7 +89,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
     public void draw(Canvas c) {
         super.draw(c);
-
+        Paint paint = new Paint();
+        paint.setColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+        c.drawRect(0,0,getRight(),getBottom(),paint);
         IPiece currentPiece;
         int currentCol;
         int currentLig;
@@ -76,7 +99,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         int i = 0;
         int left ,right ,top ,bottom;
 
-        Paint paint = new Paint();
         Model gameModel = app.getGameModel();
         int nbActor = gameModel.getNbActors();
         pieceSize = c.getWidth() /(nbActor+1);
@@ -95,7 +117,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
             if (currentPiece instanceof Actor) {
                 right =  pieceSize + pieceSize * currentCol;
                 bottom = gridTop + pieceSize + pieceSize * currentLig;
-
                 dst.set(left + 20, top + 20, right - 20, bottom - 20);
                 paint.setColor(Color.RED + currentPiece.getId()*10000);
                 c.drawRect(dst,paint);
@@ -103,8 +124,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                 Preference pref = (Preference) currentPiece;
                 right = pieceSize + pieceSize * currentCol;
                 bottom = gridTop + pieceSize + pieceSize * currentLig;
-                paint.setColor(Color.BLUE + (pref.getValue()*30000));
-                c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*5),paint);
+                paint.setColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryLight));
+                c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*3),paint);
+                dst.set(left, top, right, bottom);
+                //System.out.println(((Preference) currentPiece).getValue());
+                switch (((Preference) currentPiece).getValue()){
+                    case 1:c.drawBitmap(power,null,dst,null);
+                        break;
+                    case 2:c.drawBitmap(water,null,dst,null);
+                        break;
+                    case 3:c.drawBitmap(plant,null,dst,null);
+                        break;
+                    case 4:c.drawBitmap(uranium,null,dst,null);
+                        break;
+                    case 5:c.drawBitmap(fire,null,dst,null);
+                        break;
+                    case 6:c.drawBitmap(oil,null,dst,null);
+                        break;
+                    case 7:c.drawBitmap(gold,null,dst,null);
+                        break;
+                }
 
                 if(!(pref.getSelectedby()== -1)){
                     Position posAgent = new Position( 0,currentLig);

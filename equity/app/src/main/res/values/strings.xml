@@ -11,9 +11,10 @@
     <string name="formation">Formation</string>
 
     <!-- Main Menu -->
-    <string name="button_play">Play</string>
+    <string name="button_play_main">New game</string>
     <string name="button_options">Options</string>
     <string name="button_about">About</string>
     <!-- Level Select -->
-    <string name="levelselect_3">3 agents</string>
+    <string name="level_select_title">Pick a level</string>
+    <string name="button_play">Play</string>
 </resources>

@@ -22,8 +22,8 @@
         </activity>
         <activity
             android:name="com.tndnc.equity.activities.LevelSelectActivity"
-            android:label="@string/title_activity_level_select"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/level_select_title"
+            android:theme="@style/AppTheme" />
         <activity android:name="com.tndnc.equity.activities.GameActivity"/>
     </application>
 

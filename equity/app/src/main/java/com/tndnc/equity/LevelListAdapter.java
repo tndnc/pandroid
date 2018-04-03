@@ -1,9 +1,11 @@
 package com.tndnc.equity;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.tndnc.equity.models.Level;
 import com.tndnc.equity.views.LevelButtonView;
@@ -15,10 +17,11 @@ public class LevelListAdapter extends RecyclerView.Adapter<LevelListAdapter.View
     private List<Level> levels;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data is a card that holds a list of levels of a given size.
         LevelButtonView buttonView;
-        ViewHolder(LevelButtonView v) {
-            super(v);
+        TextView levelName;
+        ViewHolder(ConstraintLayout root, TextView l, LevelButtonView v) {
+            super(root);
+            levelName = l;
             buttonView = v;
         }
     }
@@ -29,17 +32,22 @@ public class LevelListAdapter extends RecyclerView.Adapter<LevelListAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LevelButtonView buttonView = (LevelButtonView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.level_button_view, parent, false);
+        ConstraintLayout rootLayout = (ConstraintLayout) LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.level_item, parent, false);
 
-        return new ViewHolder(buttonView);
+        TextView levelName = (TextView) rootLayout.getChildAt(0);
+        LevelButtonView buttonView = (LevelButtonView) rootLayout.getChildAt(1);
+
+
+        return new ViewHolder(rootLayout, levelName, buttonView);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Level l = this.levels.get(position);
-        holder.buttonView.setText(String.valueOf(position+1));
+//        holder.buttonView.setText(String.valueOf(position+1));
         holder.buttonView.setLevel(l);
+        holder.levelName.setText("Level " + String.valueOf(position+1));
     }
 
     @Override

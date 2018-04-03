@@ -27,4 +27,13 @@
     <string name="user_profile_disc_2">The app also records data about your play style: \n
         • the time spent solving the puzzles,  \n
         • and the number of moves until a solution is found.</string>
+    <!-- About -->
+    <string name="about_title">About us</string>
+    <string name="about_text">This application is developed as a Master\'s project at the science
+        faculty of Sorbonne Université. One focus is the study of a combinatorial optimization problem
+        named Locally-Envy-Free (LEF) and we want to evaluate the difficulty of a given instance for a resolution by a person.</string>
+    <string name="about_text_2">This prototype presents the problem as a puzzle game and allows us to
+        collect resolution data for a set of preselected instances. This data will be used to study the
+        correlation between instance features and human evaluated difficulty.</string>
+    <string name="authors">Hans Thirunavukarasu\nGualtiero Mottola\nAlexandre Bontems</string>
 </resources>

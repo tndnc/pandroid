@@ -59,8 +59,8 @@ public class GameActivity extends AppCompatActivity {
 
     public void writeGoogledocs(){
         System.out.println(app.getUniqueId());
-        System.out.println(app.getUserAge());
-        System.out.println(app.getUserFormation());
+//        System.out.println(app.getUserAge());
+//        System.out.println(app.getUserFormation());
         System.out.println(app.getGameModel().getGameTime());
         System.out.println(app.getGameModel().getNbmoves());
         System.out.println(app.getGameModel().getMoveSequence());

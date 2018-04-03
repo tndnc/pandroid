@@ -1,6 +1,7 @@
 package com.tndnc.equity;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.SparseArray;
 
@@ -15,26 +16,25 @@ import java.util.UUID;
 
 public class GameApplication extends Application {
     private Model theGame;
-    private int i;
     private String uniqueId;
-    private String userAge;
-    private String userFormation;
+//    private String userAge;
+//    private String userFormation;
 
     private SparseArray<List<Level>> levels;
     private SparseArray<LevelListAdapter> cardAdapters;
 
     @Override
     public void onCreate() {
-        SharedPreferences mPrefs = getSharedPreferences("unique_id_f",0);
-        String mString = mPrefs.getString("uniqueId", "0");
-        if(mString.equals("0")){
-            uniqueId = UUID.randomUUID().toString();
-            SharedPreferences.Editor mEditor = mPrefs.edit();
-            mEditor.putString("tag", uniqueId).apply();
-        }
         super.onCreate();
-//        theGame = new Model(i, this);
-        System.err.println(uniqueId);
+
+        SharedPreferences userProfile = getSharedPreferences("user_profile", Context.MODE_PRIVATE);
+        boolean userProfileSaved = userProfile.getBoolean("user_profile_saved", false);
+        if (!userProfileSaved) {
+            uniqueId = UUID.randomUUID().toString();
+            SharedPreferences.Editor mEditor = userProfile.edit();
+            mEditor.putString("uuid", uniqueId).apply();
+        }
+
 
         // init levels container
         this.levels = new SparseArray<>();
@@ -50,12 +50,6 @@ public class GameApplication extends Application {
         }
     }
 
-//    public void setPartie(int part) {
-//        System.out.println("i : "+i);
-//        this.i = part;
-//        theGame = new Model(i, this);
-//        theGame.setNbmoves(0);
-//    }
     public void setPartie(Model m) {
         theGame = m;
     }
@@ -65,20 +59,6 @@ public class GameApplication extends Application {
 
     public String getUniqueId(){
         return uniqueId;
-    }
-
-    public String getUserAge(){
-        return userAge;
-    }
-    public String getUserFormation(){
-        return userFormation;
-    }
-
-    public void setUserAge(String userAge){
-        this.userAge = userAge;
-    }
-    public void setUserFormation(String userFormation){
-        this.userFormation = userFormation;
     }
 
     public SparseArray<List<Level>> getLevels() {

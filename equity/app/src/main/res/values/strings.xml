@@ -17,4 +17,10 @@
     <!-- Level Select -->
     <string name="level_select_title">Pick a level</string>
     <string name="button_play">Play</string>
+    <!-- User profile -->
+    <string name="user_profile_title">Please input user data</string>
+    <string name="user_profile_age">Age</string>
+    <string name="user_profile_formation">Formation</string>
+    <string name="button_user_profile">Save</string>
+    <string name="user_profile_disclaimer">This data will be used by the developers.</string>
 </resources>

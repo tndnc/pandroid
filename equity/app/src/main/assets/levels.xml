@@ -23,11 +23,6 @@
         <preferences line="2" order="312"/>
         <preferences line="3" order="213"/>
     </level>
-    <level name="grid_5" size="3">
-        <preferences line="1" order="123"/>
-        <preferences line="2" order="312"/>
-        <preferences line="3" order="213"/>
-    </level>
     <level name="grid_6" size="4">
         <preferences line="1" order="1342"/>
         <preferences line="2" order="2314"/>

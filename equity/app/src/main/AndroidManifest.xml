@@ -25,6 +25,7 @@
             android:label="@string/level_select_title"
             android:theme="@style/AppTheme" />
         <activity android:name="com.tndnc.equity.activities.GameActivity"/>
+        <activity android:name="com.tndnc.equity.activities.UserProfileActivity"/>
     </application>
 
 </manifest>

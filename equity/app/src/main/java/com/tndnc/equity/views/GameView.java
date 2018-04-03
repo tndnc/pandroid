@@ -1,12 +1,11 @@
 package com.tndnc.equity.views;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -23,9 +22,6 @@ import com.tndnc.equity.models.IPiece;
 import com.tndnc.equity.models.Model;
 import com.tndnc.equity.models.Position;
 import com.tndnc.equity.models.Preference;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 

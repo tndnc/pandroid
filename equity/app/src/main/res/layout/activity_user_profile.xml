@@ -52,6 +52,19 @@
         android:layout_marginBottom="5dp"
         android:text="@string/user_profile_disclaimer"
         android:textColor="@color/white2"
+        app:layout_constraintBottom_toTopOf="@+id/disclaimer"
+        />
+
+    <TextView
+        android:id="@+id/disclaimer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/user_profile_disc_2"
+        android:textColor="@color/white2"
         app:layout_constraintBottom_toTopOf="@+id/submit_button"
         />
     

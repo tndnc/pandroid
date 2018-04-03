@@ -22,8 +22,7 @@ public class MainMenuActivity extends AppCompatActivity {
         boolean userProfileSaved = prefs.getBoolean("user_profile_saved", false);
 
         if (!userProfileSaved) {
-            Intent userProfileIntent = new Intent(this, UserProfileActivity.class);
-            startActivity(userProfileIntent);
+            startUserProfile(null);
         }
 
     }
@@ -31,6 +30,11 @@ public class MainMenuActivity extends AppCompatActivity {
     public void levelSelect(View v){
         Intent levelSelect = new Intent(this, LevelSelectActivity.class);
         startActivity(levelSelect);
+    }
+
+    public void startUserProfile(View v) {
+        Intent userProfile = new Intent(this, UserProfileActivity.class);
+        startActivity(userProfile);
     }
 
 }

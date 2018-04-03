@@ -6,16 +6,6 @@
     android:background="@color/colorPrimary"
     tools:context="com.tndnc.equity.activities.MainMenuActivity">
 
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/imageView4"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--app:srcCompat="@mipmap/ic_launcher"-->
-        <!--android:onClick="levelSelect"/>-->
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,11 +38,23 @@
             app:layout_constraintRight_toRightOf="parent"/>
 
         <Button
+            android:id="@+id/button_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/button_profile"
+            app:layout_constraintTop_toBottomOf="@+id/button_options"
+            android:layout_marginStart="80dp"
+            android:layout_marginEnd="80dp"
+            android:onClick="startUserProfile"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <Button
             android:id="@+id/button_about"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/button_about"
-            app:layout_constraintTop_toBottomOf="@+id/button_options"
+            app:layout_constraintTop_toBottomOf="@+id/button_profile"
             android:layout_marginStart="80dp"
             android:layout_marginEnd="80dp"
             app:layout_constraintLeft_toLeftOf="parent"

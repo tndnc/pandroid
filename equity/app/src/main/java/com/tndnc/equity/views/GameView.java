@@ -5,8 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Shader;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -33,11 +36,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     private int xdebut, ydebut;
     private int deltaX, deltaY;
     private int min, max;
-    private int pieceSize,gridTop;
+    private int pieceSize,gridTop,gridBottom;
     private Bitmap fire,oil,water,uranium,plant,gold,power;
 
 
     Rect dst = new Rect();
+    RectF dstf = new RectF();
 
 
     public GameView(Context context, AttributeSet attrs) {
@@ -97,8 +101,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
         Model gameModel = app.getGameModel();
         int nbActor = gameModel.getNbActors();
-        pieceSize = c.getWidth() /(nbActor+1);
-        gridTop = c.getHeight()/2 -pieceSize*nbActor/2;
+        pieceSize = c.getWidth() /(nbActor);
+        gridTop = c.getHeight()/2 -pieceSize*(nbActor+1)/2;
+        gridBottom = gridTop + (nbActor+1)*pieceSize;
+
 
         //Dessin des Pieces
         while (gameModel.getPiece(i) != null) {
@@ -107,23 +113,36 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
             currentCol = currentPiece.getPos().getCol();
             currentLig = currentPiece.getPos().getLig();
 
-            left = pieceSize * currentCol;
-            top = gridTop + pieceSize * currentLig;
+            left = pieceSize * currentLig; //switched
+            top = gridTop + pieceSize * currentCol;//switched
 
             if (currentPiece instanceof Actor) {
-                right =  pieceSize + pieceSize * currentCol;
-                bottom = gridTop + pieceSize + pieceSize * currentLig;
-                dst.set(left + 20, top + 20, right - 20, bottom - 20);
-                paint.setColor(Color.RED + currentPiece.getId()*10000);
-                c.drawRect(dst,paint);
+
+                right =  pieceSize + pieceSize * currentLig;//switched
+                bottom = gridTop + pieceSize + pieceSize * currentCol;//switched
+                float pad = this.getWidth()/(nbActor*14);
+                dstf.set(left + pad*3, top + pad, right - pad*3, gridBottom+pad*3);
+                paint.setShader(new LinearGradient(0, 0, 0, getHeight(), (ContextCompat.getColor(getContext(),R.color.colorPrimaryDarker)), Color.BLACK, Shader.TileMode.MIRROR));
+                c.drawRoundRect(dstf,this.getWidth()/(nbActor*2),this.getWidth()/(nbActor*5),paint);
+                paint.setShader(null);
+                dstf.set(left + pad, top + pad, right - pad, bottom - pad);
+                paint.setColor((ContextCompat.getColor(getContext(),R.color.colorPrimaryDarker)));
+                c.drawRoundRect(dstf,this.getWidth()/(nbActor*2),this.getWidth()/(nbActor*5),paint);
+
+
             } else {
                 Preference pref = (Preference) currentPiece;
-                right = pieceSize + pieceSize * currentCol;
-                bottom = gridTop + pieceSize + pieceSize * currentLig;
-                paint.setColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryLight));
-                c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*3),paint);
-                dst.set(left, top, right, bottom);
-                //System.out.println(((Preference) currentPiece).getValue());
+                right = pieceSize + pieceSize * currentLig;//switched
+                bottom = gridTop + pieceSize + pieceSize * currentCol; //switched
+                if(!(pref.getSelectedby()== -1)){
+                    paint.setColor((ContextCompat.getColor(getContext(),R.color.colorAccent)));
+                    c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*2),paint);
+                    paint.setStyle(Paint.Style.FILL);
+                }else {
+                    paint.setColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryLight));
+                    c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*3),paint);
+                }
+                dst.set(left+this.getWidth()/(nbActor*6), top+this.getWidth()/(nbActor*6), right-this.getWidth()/(nbActor*6), bottom-this.getWidth()/(nbActor*6));
                 switch (((Preference) currentPiece).getValue()){
                     case 1:c.drawBitmap(power,null,dst,null);
                         break;
@@ -141,14 +160,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                         break;
                 }
 
-                if(!(pref.getSelectedby()== -1)){
-                    Position posAgent = new Position( 0,currentLig);
-                    paint.setColor(Color.RED + gameModel.getIdByPos(posAgent)*10000);
-                    paint.setStyle(Paint.Style.STROKE);
-                    paint.setStrokeWidth(20);
-                    c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*3 ),paint);
-                    paint.setStyle(Paint.Style.FILL);
-                }
+
 
             }
 
@@ -160,18 +172,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     public boolean onTouchEvent(MotionEvent event) {
         Model gameModel = app.getGameModel();
         int nbActor = gameModel.getNbActors();
-        int pos_x = cw /(nbActor+1);
-        int pos_y = cw /(nbActor+1);
+        int pos_x = cw /(nbActor);
+        int pos_y = cw /(nbActor);
         int x = (int) event.getX();
-        int y = (int) event.getY()-gridTop;
+        int y = (int) event.getY()-(gridTop);
         int i = x / pos_x;
         int j = y / pos_y;
-        Position pos = new Position(i, j);
-        Position posAgent = new Position( 0,j);
+
+        Position pos = new Position(j, i);
+        Position posAgent = new Position( 0,i);
+        System.out.println(posAgent.getLig());
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                if( y > 0 && y < pieceSize*nbActor ){
+                if( y > 0 && y < (pieceSize*(nbActor+1))){
                     if (gameModel.getIdByPos(pos) != null) {
                         int selectedPrefId = gameModel.getIdByPos(pos);
                         if(gameModel.getPiece(selectedPrefId) instanceof Preference){

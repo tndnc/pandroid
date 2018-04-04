@@ -53,6 +53,8 @@ public class GameApplication extends Application {
     public void setPartie(Model m) {
         theGame = m;
     }
+
+
     public Model getGameModel() {
         return theGame;
     }

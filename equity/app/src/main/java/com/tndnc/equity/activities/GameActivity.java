@@ -17,8 +17,6 @@ public class GameActivity extends AppCompatActivity {
 
     GameApplication app;
     Intent intentExtras;
-    int actualLevel;
-    int nextLevel;
     private RatingBar ratingBar;
     private float levelrating;
 
@@ -29,8 +27,8 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
         intentExtras = getIntent();
         app = (GameApplication) this.getApplication();
-//        actualLevel = intentExtras.getIntExtra("ActualXMLLevel", 0);
-//        nextLevel = actualLevel + 1;
+        //actualLevel = intentExtras.getIntExtra("ActualXMLLevel", 0);
+        //nextLevel = actualLevel + 1;
         onWin();
     }
 
@@ -42,13 +40,15 @@ public class GameActivity extends AppCompatActivity {
             builder.setView(inflater.inflate(R.layout.popup_start_rating, null));
             builder.setMessage("You finished the level with "+ gameModel.getNbmoves() +" moves in "
                     + gameModel.getGameTime()+ " seconds, please rate this level difficulty");
-            builder.setTitle("Level " + nextLevel + " Accomplished");
-            builder.setNeutralButton("back", new DialogInterface.OnClickListener() {
+            builder.setTitle("Level Accomplished");
+            builder.setNeutralButton("level menu", new DialogInterface.OnClickListener() {
                  public void onClick(DialogInterface dialog, int which) {
+                     rateMe();
                      finish();
                  }});
-            builder.setNegativeButton("Ok..", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("next level", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    rateMe();
                     dialog.dismiss();
                 }});
             AlertDialog alert = builder.create();
@@ -67,7 +67,7 @@ public class GameActivity extends AppCompatActivity {
         System.out.println(levelrating);
     }
 
-    public void rateMe(View view){
+    public void rateMe(){
         levelrating = ratingBar.getRating();
         writeGoogledocs();
     }

@@ -159,11 +159,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                     case 7:c.drawBitmap(gold,null,dst,null);
                         break;
                 }
-
-
-
             }
-
             i++;
         }
     }
@@ -181,11 +177,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
         Position pos = new Position(j, i);
         Position posAgent = new Position( 0,i);
-        System.out.println(posAgent.getLig());
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                if( y > 0 && y < (pieceSize*(nbActor+1))){
+                if( y > 0 && y < (pieceSize*(nbActor+1))&& x < this.getWidth()){
                     if (gameModel.getIdByPos(pos) != null) {
                         int selectedPrefId = gameModel.getIdByPos(pos);
                         if(gameModel.getPiece(selectedPrefId) instanceof Preference){

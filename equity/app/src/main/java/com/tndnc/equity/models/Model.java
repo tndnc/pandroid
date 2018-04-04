@@ -43,7 +43,6 @@ public class Model{
     }
 
     public void ModelSetSelected(int idActor,int idPreference){
-        System.out.println("Actor : "+idActor+", Pref : "+idPreference);
         for(int i = 0; i<Pieces.length;i++){
             if(Pieces[i]instanceof Preference){
                 Preference pref =(Preference) Pieces[i];
@@ -173,19 +172,15 @@ public class Model{
         Preference P2pref = null;
         Preference P1pref = null;
         for (Preference pref:P1){
-            System.out.print(" id1 : "+pref.getId());
             if(pref.getSelectedby() != -1){
                 P1pref = pref;
             }
         }
-        System.out.println();
         for(Preference pref:P2){
-            System.out.print(" id2 : "+pref.getId());
             if(pref.getSelectedby() != -1){
                 P2pref = pref;
             }
         }
-        System.out.println();
         for(Preference pref:P2){
             if(pref.getValue() == P1pref.getValue()){
                 if(pref.getPos().getCol() < P2pref.getPos().getCol()){
@@ -228,13 +223,10 @@ public class Model{
                         }
                         tmpPiece[k] = (Preference) Pieces[j+k];
                     }
-                    System.out.println("before : "+isJealous(beforePiece,tmpPiece));
-                    System.out.println("after : "+isJealous(beforePiece,tmpPiece));
                     arejealous = arejealous || isJealous(beforePiece,tmpPiece) || isJealous(afterPiece,tmpPiece);
 
                 }
             }
-            System.out.println(arejealous);
             return !arejealous;
         }
         return false;

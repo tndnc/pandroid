@@ -100,7 +100,8 @@ public class Model{
 
     public boolean isJealous(Actor actor){
         boolean res = false;
-        int j = actor.getPos().getLig();
+        /*
+        int j = 1;
         Preference[] beforePiece = new Preference[nbActors];
         Preference[] tmpPiece = new Preference[nbActors];
         Preference[] afterPiece = new Preference[nbActors];
@@ -115,6 +116,7 @@ public class Model{
             tmpPiece[k] = (Preference) Pieces[j+k];
         }
         res = isJealous(beforePiece,tmpPiece) || isJealous(afterPiece,tmpPiece);
+        */
         return res;
 
     }

@@ -127,7 +127,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                 bottom = gridTop + pieceSize + pieceSize * currentCol;//switched
                 float pad = this.getWidth()/(nbActor*14);
                 dstf.set(left + pad*3, top + pad, right - pad*3, gridBottom+pad*3);
-                paint.setShader(new LinearGradient(0, 0, 0, getHeight(),primaryDarker, Color.BLACK, Shader.TileMode.MIRROR));
+                int tmpColor = Color.BLACK;
+                if(app.getGameModel().isJealous((Actor) currentPiece)){
+                    tmpColor = Color.RED;
+                }
+                paint.setShader(new LinearGradient(0, 0, 0, getHeight(),primaryDarker, tmpColor, Shader.TileMode.MIRROR));
                 c.drawRoundRect(dstf,this.getWidth()/(nbActor*2),this.getWidth()/(nbActor*5),paint);
                 paint.setShader(null);
                 dstf.set(left + pad, top + pad, right - pad, bottom - pad);

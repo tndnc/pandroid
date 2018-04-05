@@ -1,9 +1,9 @@
+package com.tndnc.equity.googleSheets;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
+import java.util.List;
 
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.AppendValuesResponse;
@@ -21,8 +21,8 @@ public class GoogleSheetsWriteUtil {
     
     public void writeUserInfo(String id_user, int age, String formation) throws Exception {
         ValueRange body = new ValueRange()
-          .setValues(Arrays.asList(
-            Arrays.asList(id_user, age, formation)));
+          .setValues(Arrays.<List<Object>>asList(
+                  new List[]{Arrays.asList(id_user, age, formation)}));
         AppendValuesResponse result = sheetsService.spreadsheets().values()
           .append(SPREADSHEET_ID, "A1", body)
           .setValueInputOption("RAW")
@@ -31,8 +31,8 @@ public class GoogleSheetsWriteUtil {
     
     public void writeUserEvaluation(String id_user, int time, int nbClick, int evaluation) throws Exception {
         ValueRange body = new ValueRange()
-          .setValues(Arrays.asList(
-            Arrays.asList(id_user, time, nbClick, evaluation)));
+          .setValues(Arrays.<List<Object>>asList(
+                  new List[]{Arrays.asList(id_user, time, nbClick, evaluation)}));
         AppendValuesResponse result = sheetsService.spreadsheets().values()
           .append(SPREADSHEET_ID, "A1", body)
           .setValueInputOption("RAW")

@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.RatingBar;
 
+import com.tndnc.equity.googleSheets.GoogleSheetsWriteUtil;
 import com.tndnc.equity.GameApplication;
 import com.tndnc.equity.models.Model;
 import com.tndnc.equity.R;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -19,10 +22,19 @@ public class GameActivity extends AppCompatActivity {
     Intent intentExtras;
     private RatingBar ratingBar;
     private float levelrating;
+    private GoogleSheetsWriteUtil sheetsWriteUtil;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sheetsWriteUtil = new GoogleSheetsWriteUtil();
+        try {
+            GoogleSheetsWriteUtil.setup();
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         intentExtras = getIntent();
@@ -58,6 +70,11 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void writeGoogledocs(){
+        try {
+            sheetsWriteUtil.writeUserEvaluation(app.getUniqueId(),app.getGameModel().getGameTime(),app.getGameModel().getNbmoves(),(int)levelrating);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println(app.getUniqueId());
 //        System.out.println(app.getUserAge());
 //        System.out.println(app.getUserFormation());

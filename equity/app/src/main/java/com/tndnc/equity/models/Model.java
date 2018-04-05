@@ -63,19 +63,6 @@ public class Model{
         }
     }
 
-    public Document readXMLFile(InputStream fname) {
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(false);
-            factory.setValidating(false);
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            return builder.parse(fname);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
 
     public int getGameTime(){
         return (int) ((Calendar.getInstance().getTimeInMillis()- gameTime)/1000);
@@ -107,62 +94,31 @@ public class Model{
         gameTime = Calendar.getInstance().getTimeInMillis();
     }
 
-//    public Model(int i, GameApplication app) {
-//        moveSequence = "";
-//        System.out.println("model Start");
-//        gameTime = Calendar.getInstance().getTimeInMillis();
-//        String fname = "levels.xml";
-//        AssetManager ass = app.getAssets();
-//        try {
-//            String[] strings = app.getAssets().list("");
-//            for(String s : strings){
-//                System.out.println(s);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            Document document = readXMLFile(ass.open(fname));
-//
-//            Element racine = document.getDocumentElement();
-//            NodeList racineNoeuds = racine.getChildNodes();
-//            Node noeud = racineNoeuds.item(i); //le niveau que l'on recupere . noeud =level
-//            int size = Integer.parseInt(noeud.getAttributes().getNamedItem("size").getNodeValue());
-//            nbActors = size;
-//            grid = new Grid(size);
-//            System.out.println(size);
-//            Pieces = new IPiece[size*(size+1)+1];
-//            for(int j =0;j<size;j++){
-//                Pieces[j] =  new Actor(j, 0,j);
-//                System.out.println("added actor");
-//            }
-//            NodeList pieceNoeuds = noeud.getChildNodes();
-//            for (int k = 0; k < pieceNoeuds.getLength(); k++) {
-//                String line = pieceNoeuds.item(k).getAttributes().getNamedItem("line").getNodeValue();
-//                String order = pieceNoeuds.item(k).getAttributes().getNamedItem("order").getNodeValue();
-//                char [] orderAschar = order.toCharArray();
-//                for(int l = 0;l<orderAschar.length;l++){
-//                    Pieces[l+(k+1)*size] = new Preference(l+(k+1)*size,l+1,Integer.parseInt(line)-1,orderAschar[l]);
-//                    //int id, int ncol, int nlig,int value
-//                    System.out.println("added Pref");
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        for(IPiece p : Pieces){
-//            if(p instanceof Preference){
-//                System.out.println(p.getId()+","+p.getPos().getCol()+","+p.getPos().getLig());
-//            }
-//        }
-//        for(int y = 0;y<nbActors*(nbActors+1);y++){
-//            grid.set(Pieces[y].getPos(), y);
-//        }
-//    }
-
     public int getNbActors() {
         return nbActors;
     }
+
+    public boolean isJealous(Actor actor){
+        boolean res = false;
+        int j = actor.getPos().getLig();
+        Preference[] beforePiece = new Preference[nbActors];
+        Preference[] tmpPiece = new Preference[nbActors];
+        Preference[] afterPiece = new Preference[nbActors];
+
+        for(int k = 0;k<nbActors;k++){
+            if(j >= nbActors*2){
+                beforePiece[k] = (Preference) Pieces[j-(nbActors - k)];
+            }
+            if (j <= Pieces.length-(nbActors*2)){
+                afterPiece[k] = (Preference)Pieces[j+(nbActors)+k];
+            }
+            tmpPiece[k] = (Preference) Pieces[j+k];
+        }
+        res = isJealous(beforePiece,tmpPiece) || isJealous(afterPiece,tmpPiece);
+        return res;
+
+    }
+
 
     //checking if p2 is jealous of P1
     private boolean isJealous(Preference[] P1,Preference[] P2){
@@ -231,12 +187,7 @@ public class Model{
         }
         return false;
     }
-
     public int getNbmoves() {
         return nbmoves;
     }
-
-//    public void setNbmoves(int nbmoves) {
-//        this.nbmoves = nbmoves;
-//    }
 }

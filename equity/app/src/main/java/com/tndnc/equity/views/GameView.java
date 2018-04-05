@@ -38,6 +38,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     private int min, max;
     private int pieceSize,gridTop,gridBottom;
     private Bitmap fire,oil,water,uranium,plant,gold,power;
+    private int primary,primaryDarker,accent,primarylight;
 
 
     Rect dst = new Rect();
@@ -55,6 +56,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         plant = BitmapFactory.decodeResource(getResources(), R.drawable.green_herb);
         power = BitmapFactory.decodeResource(getResources(), R.drawable.power_bolt);
         gold = BitmapFactory.decodeResource(getResources(), R.drawable.gold_bar);
+
+        primary = ContextCompat.getColor(getContext(),R.color.colorPrimary);
+        primaryDarker =  ContextCompat.getColor(getContext(),R.color.colorPrimaryDarker);
+        accent = ContextCompat.getColor(getContext(),R.color.colorAccent);
+        primarylight = ContextCompat.getColor(getContext(),R.color.colorPrimaryLight);
 
         if(fire == null){
             System.err.println("FAIL");
@@ -90,7 +96,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     public void draw(Canvas c) {
         super.draw(c);
         Paint paint = new Paint();
-        paint.setColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+        paint.setColor(primary);
         c.drawRect(0,0,getRight(),getBottom(),paint);
         IPiece currentPiece;
         int currentCol;
@@ -117,16 +123,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
             top = gridTop + pieceSize * currentCol;//switched
 
             if (currentPiece instanceof Actor) {
-
                 right =  pieceSize + pieceSize * currentLig;//switched
                 bottom = gridTop + pieceSize + pieceSize * currentCol;//switched
                 float pad = this.getWidth()/(nbActor*14);
                 dstf.set(left + pad*3, top + pad, right - pad*3, gridBottom+pad*3);
-                paint.setShader(new LinearGradient(0, 0, 0, getHeight(), (ContextCompat.getColor(getContext(),R.color.colorPrimaryDarker)), Color.BLACK, Shader.TileMode.MIRROR));
+                paint.setShader(new LinearGradient(0, 0, 0, getHeight(),primaryDarker, Color.BLACK, Shader.TileMode.MIRROR));
                 c.drawRoundRect(dstf,this.getWidth()/(nbActor*2),this.getWidth()/(nbActor*5),paint);
                 paint.setShader(null);
                 dstf.set(left + pad, top + pad, right - pad, bottom - pad);
-                paint.setColor((ContextCompat.getColor(getContext(),R.color.colorPrimaryDarker)));
+                paint.setColor(primaryDarker);
                 c.drawRoundRect(dstf,this.getWidth()/(nbActor*2),this.getWidth()/(nbActor*5),paint);
 
 
@@ -135,11 +140,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                 right = pieceSize + pieceSize * currentLig;//switched
                 bottom = gridTop + pieceSize + pieceSize * currentCol; //switched
                 if(!(pref.getSelectedby()== -1)){
-                    paint.setColor((ContextCompat.getColor(getContext(),R.color.colorAccent)));
+                    paint.setColor(accent);
                     c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*2),paint);
                     paint.setStyle(Paint.Style.FILL);
                 }else {
-                    paint.setColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryLight));
+                    paint.setColor(primarylight);
                     c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*3),paint);
                 }
                 dst.set(left+this.getWidth()/(nbActor*6), top+this.getWidth()/(nbActor*6), right-this.getWidth()/(nbActor*6), bottom-this.getWidth()/(nbActor*6));

@@ -1,0 +1,4 @@
+numpy
+seaborn
+PyQt5
+matplotlib

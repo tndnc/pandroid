@@ -1,0 +1,26 @@
+\begin{thebibliography}{1}
+
+\bibitem{smithmiles}
+Leo~Lopes Kate Smith-Miles.
+\newblock Measuring instance difficulty for combinatorial optimization
+  problems.
+\newblock {\em Computers \& Operations Research}, 39:875--889, 2012.
+
+\bibitem{cardenasmontes}
+Cárdenas-Montes M.
+\newblock Evaluating the difficulty of instances of the travelling salesman
+  problem in the nearby of the optimal solution based on random walk
+  exploration.
+\newblock In {\em Martínez-Álvarez F., Troncoso A., Quintián H., Corchado E.
+  (eds) Hybrid Artificial Intelligent Systems. HAIS 2016. Lecture Notes in
+  Computer Science, vol 9648.} Springer, Cham.
+
+\bibitem{analysis}
+Kudenko~D. Ridge~E.
+\newblock An analysis of problem difficulty for a class of optimisation
+  heuristics.
+\newblock In {\em Cotta C., van Hemert J. (eds) Evolutionary Computation in
+  Combinatorial Optimization. EvoCOP 2007. Lecture Notes in Computer Science,
+  vol 4446}. Springer, Berlin, Heidelberg.
+
+\end{thebibliography}

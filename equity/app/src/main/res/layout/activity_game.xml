@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.gualti.equity.GameActivity">
+    android:screenOrientation="landscape"
+    tools:context="com.tndnc.equity.activities.GameActivity">
 
-    <com.example.gualti.equity.GameView
+    <com.tndnc.equity.views.GameView
         android:id="@+id/surfaceView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

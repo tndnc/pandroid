@@ -17,3 +17,4 @@ __pycache__/
 ## GoogleSheetSecret
 
 google-sheets-client-secret.json
+my_project.json

@@ -3,6 +3,7 @@ package com.tndnc.equity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.tndnc.equity.models.Level;
@@ -33,6 +34,8 @@ public class GameApplication extends Application {
             uniqueId = UUID.randomUUID().toString();
             SharedPreferences.Editor mEditor = userProfile.edit();
             mEditor.putString("uuid", uniqueId).apply();
+        } else {
+            uniqueId = userProfile.getString("uuid", "ANON");
         }
 
 

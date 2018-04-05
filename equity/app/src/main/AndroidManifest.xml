@@ -28,5 +28,5 @@
         <activity android:name="com.tndnc.equity.activities.UserProfileActivity"/>
         <activity android:name="com.tndnc.equity.activities.AboutActivity"/>
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

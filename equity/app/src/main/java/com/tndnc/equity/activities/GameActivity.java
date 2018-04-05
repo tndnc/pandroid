@@ -29,7 +29,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         sheetsWriteUtil = new GoogleSheetsWriteUtil();
         try {
-            GoogleSheetsWriteUtil.setup();
+            GoogleSheetsWriteUtil.setup(this);
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         } catch (IOException e) {

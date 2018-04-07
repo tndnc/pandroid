@@ -5,6 +5,8 @@
     <color name="colorPrimaryDark">#4d3b4f</color>
     <color name="colorPrimaryDarker">#3d2e3e</color>
     <color name="colorAccent">#deae69</color>
+    <color name="colorAccentRed">#de7d69</color>
+
 
     <color name="black_overlay">#66000000</color>
     <color name="white">#cacaca</color>

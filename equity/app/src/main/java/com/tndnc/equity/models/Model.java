@@ -1,22 +1,14 @@
 package com.tndnc.equity.models;
 
-import android.content.res.AssetManager;
 
-import com.tndnc.equity.GameApplication;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 public class Model{
     private Grid grid;
@@ -64,6 +56,27 @@ public class Model{
         }
     }
 
+
+    public Map<Integer, Integer> multipleSelections(){
+        List<Integer> prefs = new ArrayList<Integer>();
+        for(int i = 0; i<Pieces.length;i++){
+            if(Pieces[i]instanceof Preference){
+                Preference pref =(Preference) Pieces[i];
+                if(pref.getSelectedby() != -1){
+                    prefs.add(pref.getValue());
+                }
+            }
+        }
+        Map<Integer, Integer> counts = new HashMap<>();
+        for (Integer i : prefs) {
+            if (counts.containsKey(i)) {
+                counts.put(i, counts.get(i) + 1);
+            } else {
+                counts.put(i, 1);
+            }
+        }
+        return  counts;
+    }
 
     public int getGameTime(){
         return (int) ((Calendar.getInstance().getTimeInMillis()- gameTime)/1000);

@@ -12,7 +12,6 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -27,6 +26,9 @@ import com.tndnc.equity.models.Model;
 import com.tndnc.equity.models.Position;
 import com.tndnc.equity.models.Preference;
 
+import java.util.Map;
+
+
 public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
     private GameViewThread th;
@@ -39,7 +41,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     private int min, max;
     private int pieceSize,gridTop,gridBottom;
     private Bitmap fire,oil,water,uranium,plant,gold,power;
-    private int primary,primaryDarker,accent,primarylight;
+    private int primary,primaryDarker,accent,accentRed,primarylight;
 
 
     Rect dst = new Rect();
@@ -53,7 +55,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         fire = BitmapFactory.decodeResource(getResources(), R.drawable.fire);
         oil = BitmapFactory.decodeResource(getResources(), R.drawable.oil);
         water = BitmapFactory.decodeResource(getResources(), R.drawable.water_drop);
-        uranium = BitmapFactory.decodeResource(getResources(), R.drawable.radioactive);
+        uranium = BitmapFactory.decodeResource(getResources(), R.drawable.radioactiveorange);
         plant = BitmapFactory.decodeResource(getResources(), R.drawable.green_herb);
         power = BitmapFactory.decodeResource(getResources(), R.drawable.power_bolt);
         gold = BitmapFactory.decodeResource(getResources(), R.drawable.gold_bar);
@@ -61,12 +63,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         primary = ContextCompat.getColor(getContext(),R.color.colorPrimary);
         primaryDarker =  ContextCompat.getColor(getContext(),R.color.colorPrimaryDarker);
         accent = ContextCompat.getColor(getContext(),R.color.colorAccent);
+        accentRed = ContextCompat.getColor(getContext(),R.color.colorAccentRed);
         primarylight = ContextCompat.getColor(getContext(),R.color.colorPrimaryLight);
-
-        if(fire == null){
-            System.err.println("FAIL");
-        }
-
     }
 
 
@@ -124,6 +122,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
             left = pieceSize * currentLig; //switched
             top = gridTop + pieceSize * currentCol;//switched
 
+            paint.setColor(accent);
+            paint.setTextAlign(Paint.Align.CENTER);
+            paint.setTextSize(this.getWidth()/10);
+            c.drawText(getContext().getString(R.string.level) +" "+ app.getGameModel().getLevelName(),this.getWidth()/2,gridTop/2,paint);
+
             if (currentPiece instanceof Actor) {
                 right =  pieceSize + pieceSize * currentLig;//switched
                 bottom = gridTop + pieceSize + pieceSize * currentCol;//switched
@@ -143,7 +146,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                 right = pieceSize + pieceSize * currentLig;//switched
                 bottom = gridTop + pieceSize + pieceSize * currentCol; //switched
                 if(!(pref.getSelectedby()== -1)){
-                    paint.setColor(accent);
+                    Map<Integer,Integer> count = app.getGameModel().multipleSelections();
+                    if(count.get(pref.getValue())>1){
+                        paint.setColor(accentRed);
+                    }else {
+                        paint.setColor(accent);
+                    }
                     c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*2),paint);
                     paint.setStyle(Paint.Style.FILL);
                 }else {

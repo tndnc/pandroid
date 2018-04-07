@@ -25,6 +25,7 @@ public class Model{
     private int nbmoves;
     private long gameTime;
     private String moveSequence;
+    private String levelName;
 
     public String getMoveSequence(){
         return moveSequence;
@@ -71,6 +72,7 @@ public class Model{
     public Model(Level l) {
         this.nbActors = l.getSize();
         this.grid = new Grid(this.nbActors);
+        this.levelName = l.getId();
         Pieces = new IPiece[this.nbActors * (this.nbActors+1) +1];
         for (int j = 0; j < this.nbActors; j++) {
             Pieces[j] = new Actor(j, 0, j);
@@ -191,5 +193,8 @@ public class Model{
     }
     public int getNbmoves() {
         return nbmoves;
+    }
+    public String getLevelName() {
+        return this.levelName;
     }
 }

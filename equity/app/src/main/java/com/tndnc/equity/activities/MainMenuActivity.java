@@ -42,4 +42,9 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void startTutorial(View v) {
+        Intent intent = new Intent(this, TutorialActivity.class);
+        startActivity(intent);
+    }
+
 }

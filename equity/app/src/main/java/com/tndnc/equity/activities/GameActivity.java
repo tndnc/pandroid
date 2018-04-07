@@ -58,12 +58,13 @@ public class GameActivity extends AppCompatActivity {
                      rateMe();
                      finish();
                  }});
-            builder.setNegativeButton("next level", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Rate", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     rateMe();
                     dialog.dismiss();
                 }});
             AlertDialog alert = builder.create();
+            alert.setCanceledOnTouchOutside(false);
             alert.show();
             ratingBar = alert.findViewById(R.id.ratingBar);
         }
@@ -71,7 +72,9 @@ public class GameActivity extends AppCompatActivity {
 
     public void writeGoogledocs(){
         try {
-            sheetsWriteUtil.writeUserEvaluation(app.getUniqueId(),app.getGameModel().getGameTime(),app.getGameModel().getNbmoves(),(int)levelrating);
+            sheetsWriteUtil.writeUserEvaluation(app.getUniqueId(),
+                    app.getGameModel().getGameTime(),app.getGameModel().getNbmoves(),(int)levelrating,
+                    app.getGameModel().getLevelName());
         } catch (Exception e) {
             e.printStackTrace();
         }

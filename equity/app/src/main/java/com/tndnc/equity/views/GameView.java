@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -88,6 +89,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                 th.join();
                 retry = false;
             } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -128,9 +130,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                 float pad = this.getWidth()/(nbActor*14);
                 dstf.set(left + pad*3, top + pad, right - pad*3, gridBottom+pad*3);
                 int tmpColor = Color.BLACK;
-                if(app.getGameModel().isJealous((Actor) currentPiece)){
-                    tmpColor = Color.RED;
-                }
                 paint.setShader(new LinearGradient(0, 0, 0, getHeight(),primaryDarker, tmpColor, Shader.TileMode.MIRROR));
                 c.drawRoundRect(dstf,this.getWidth()/(nbActor*2),this.getWidth()/(nbActor*5),paint);
                 paint.setShader(null);
@@ -165,7 +164,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                         break;
                     case 6:c.drawBitmap(oil,null,dst,null);
                         break;
-                    case 7:c.drawBitmap(gold,null,dst,null);
+                    case 0:c.drawBitmap(gold,null,dst,null);
                         break;
                 }
             }

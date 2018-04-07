@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class GoogleSheetsWriteUtil {
@@ -23,7 +24,7 @@ public class GoogleSheetsWriteUtil {
     private static String SPREADSHEET_ID = "1zLIlFkoa4GM70x5zydp6L0Rgjk8vzqXAM0FQ936YRhY";
 
     public static void setup(Context ctx) throws GeneralSecurityException, IOException {
-        InputStream in = ctx.getResources().openRawResource(+ R.raw.credentials);
+        InputStream in = ctx.getResources().openRawResource(R.raw.credentials);
         Credential credential = GoogleCredential.fromStream(in).createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
         sheetsService = SheetsServiceUtil.getSheetsService(credential);
     }
@@ -32,17 +33,19 @@ public class GoogleSheetsWriteUtil {
         new WriteUserInfoAsyncTask().execute(id_user, String.valueOf(age), formation);
     }
     
-    public void writeUserEvaluation(String id_user, int time, int nbClick, int evaluation) throws Exception {
-        new WriteUserEvaluationAsyncTask().execute(id_user, String.valueOf(time), String.valueOf(nbClick), String.valueOf(evaluation));
+    public void writeUserEvaluation(String id_user, int time, int nbClick, int evaluation, String levelName) throws Exception {
+        new WriteUserEvaluationAsyncTask().execute(id_user, String.valueOf(time), String.valueOf(nbClick), String.valueOf(evaluation), levelName);
     }
 
     private static class WriteUserInfoAsyncTask extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... data) {
 
+            Date date = new Date();
+
             ValueRange body = new ValueRange()
                     .setValues(Arrays.<List<Object>>asList(
-                            new List[]{Arrays.asList(data)}
+                            new List[]{Arrays.asList(data, date.toString())}
                     ));
             try {
                 sheetsService.spreadsheets().values()

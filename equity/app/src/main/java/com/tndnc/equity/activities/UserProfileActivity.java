@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
+import com.tndnc.equity.GameApplication;
 import com.tndnc.equity.R;
+import com.tndnc.equity.googleSheets.GoogleSheetsWriteUtil;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -34,13 +36,20 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     public void saveUserProfile(View v) {
+        String age = ageEditText.getText().toString();
+        String formation = formationEditText.getText().toString();
+
         SharedPreferences.Editor editor = userProfile.edit();
-        editor.putString("age", ageEditText.getText().toString());
-        editor.putString("formation", formationEditText.getText().toString());
+        editor.putString("age", age);
+        editor.putString("formation", formation);
         editor.putBoolean("user_profile_saved", true);
         editor.apply();
 
-        // TODO: save data to googleSheet.
+        ((GameApplication) this.getApplication()).getSheetsWriteUtil().writeUserInfo(
+                userProfile.getString("uuid", "ANON"),
+                age,
+                formation
+        );
 
         this.userProfileSaved = true;
         super.onBackPressed();

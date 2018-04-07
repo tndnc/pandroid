@@ -6,10 +6,13 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.tndnc.equity.googleSheets.GoogleSheetsWriteUtil;
 import com.tndnc.equity.models.Level;
 import com.tndnc.equity.utils.LevelLoader;
 import com.tndnc.equity.models.Model;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,9 +21,7 @@ import java.util.UUID;
 public class GameApplication extends Application {
     private Model theGame;
     private String uniqueId;
-//    private String userAge;
-//    private String userFormation;
-
+    private GoogleSheetsWriteUtil sheetsWriteUtil;
     private SparseArray<List<Level>> levels;
     private SparseArray<LevelListAdapter> cardAdapters;
 
@@ -38,6 +39,13 @@ public class GameApplication extends Application {
             uniqueId = userProfile.getString("uuid", "ANON");
         }
 
+        sheetsWriteUtil = new GoogleSheetsWriteUtil();
+        try {
+            GoogleSheetsWriteUtil.setup(this);
+        } catch (GeneralSecurityException | IOException e) {
+            Log.d("App", "Error during GoogleSheet service init");
+            e.printStackTrace();
+        }
 
         // init levels container
         this.levels = new SparseArray<>();
@@ -72,5 +80,9 @@ public class GameApplication extends Application {
 
     public LevelListAdapter getLevelListAdapter(int numberOfAgents) {
         return this.cardAdapters.get(numberOfAgents);
+    }
+
+    public GoogleSheetsWriteUtil getSheetsWriteUtil() {
+        return sheetsWriteUtil;
     }
 }

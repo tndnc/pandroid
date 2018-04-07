@@ -66,7 +66,7 @@ public class LevelLoader {
         parser.require(XmlPullParser.START_TAG, null, "level");
         id = parser.getAttributeValue(null, "name");
         size = Integer.parseInt(parser.getAttributeValue(null, "size"));
-        Log.d("LevelLoader", "Parsing level " + id);
+//        Log.d("LevelLoader", "Parsing level " + id);
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) continue;
 

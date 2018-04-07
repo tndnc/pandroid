@@ -14,6 +14,7 @@ import com.tndnc.equity.R;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -23,44 +24,48 @@ public class GoogleSheetsWriteUtil {
     private static Sheets sheetsService;
     private static String SPREADSHEET_ID = "1zLIlFkoa4GM70x5zydp6L0Rgjk8vzqXAM0FQ936YRhY";
 
+    private static List<String[]> failedUserInfo = new ArrayList<>();
+    private static List<String[]> failedEvaluation = new ArrayList<>();
+
     public static void setup(Context ctx) throws GeneralSecurityException, IOException {
         InputStream in = ctx.getResources().openRawResource(R.raw.credentials);
         Credential credential = GoogleCredential.fromStream(in).createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
         sheetsService = SheetsServiceUtil.getSheetsService(credential);
     }
-    
-    public void writeUserInfo(String id_user, int age, String formation) throws Exception {
-        new WriteUserInfoAsyncTask().execute(id_user, String.valueOf(age), formation);
-    }
-    
-    public void writeUserEvaluation(String id_user, int time, int nbClick, int evaluation, String levelName) throws Exception {
-        new WriteUserEvaluationAsyncTask().execute(id_user, String.valueOf(time), String.valueOf(nbClick), String.valueOf(evaluation), levelName);
-    }
 
-    private static class WriteUserInfoAsyncTask extends AsyncTask<String, Void, Void> {
-        @Override
-        protected Void doInBackground(String... data) {
-
-            Date date = new Date();
-
-            ValueRange body = new ValueRange()
-                    .setValues(Arrays.<List<Object>>asList(
-                            new List[]{Arrays.asList(data, date.toString())}
-                    ));
-            try {
-                sheetsService.spreadsheets().values()
-                        .append(SPREADSHEET_ID, "User_Info!A1", body)
-                        .setValueInputOption("RAW")
-                        .execute();
-            } catch (IOException e) {
-                Log.w("GoogleSheet", "Error during user info write");
-                e.printStackTrace();
+    private void checkFailures() {
+        if (failedUserInfo.size() > 0) {
+            for (String[] data : failedUserInfo) {
+                new WriteUserInfoAsyncTask().execute(data);
             }
-            return null;
+            failedUserInfo.clear();
+        }
+        if (failedEvaluation.size() > 0) {
+            for (String[] data : failedEvaluation) {
+                new WriteUserEvaluationAsyncTask().execute(data);
+            }
+            failedEvaluation.clear();
         }
     }
 
-    private static class WriteUserEvaluationAsyncTask extends AsyncTask<String, Void, Void> {
+    /**
+     * Write user info, args must be in this order:
+     * user_id, age, formation
+     */
+    public void writeUserInfo(String... data) {
+        new WriteUserInfoAsyncTask().execute(data);
+    }
+
+    /**
+     * Write user evaluation after resolution, args must be in this order:
+     * user_id, time, nb_moves, diff_eval, level_name
+     */
+    public void writeUserEvaluation(String... data) {
+        this.checkFailures();
+        new WriteUserEvaluationAsyncTask().execute(data);
+    }
+
+    private static class WriteUserInfoAsyncTask extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... data) {
 
@@ -70,11 +75,34 @@ public class GoogleSheetsWriteUtil {
                     ));
             try {
                 sheetsService.spreadsheets().values()
-                        .append(SPREADSHEET_ID, "User_Evaluation!A1", body)
-                        .setValueInputOption("RAW")
+                        .append(SPREADSHEET_ID, "User_Info!A1", body)
+                        .setValueInputOption("USER_ENTERED")
                         .execute();
             } catch (IOException e) {
-                Log.w("GoogleSheet", "Error during user eval write");
+                Log.w("GoogleSheet", "Error during user info write; rescheduling");
+                failedUserInfo.add(data);
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    private static class WriteUserEvaluationAsyncTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... data) {
+            
+            ValueRange body = new ValueRange()
+                    .setValues(Arrays.<List<Object>>asList(
+                            new List[]{Arrays.asList(data)}
+                    ));
+            try {
+                sheetsService.spreadsheets().values()
+                        .append(SPREADSHEET_ID, "User_Evaluation!A1", body)
+                        .setValueInputOption("USER_ENTERED")
+                        .execute();
+            } catch (IOException e) {
+                Log.w("GoogleSheet", "Error during user eval write; rescheduling");
+                failedEvaluation.add(data);
                 e.printStackTrace();
             }
             return null;

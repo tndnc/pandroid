@@ -26,21 +26,23 @@ public class GoogleSheetsWriteUtil {
 
     private static List<String[]> failedUserInfo = new ArrayList<>();
     private static List<String[]> failedEvaluation = new ArrayList<>();
+    private static Context savedCtx;
 
     public static void setup(Context ctx) throws GeneralSecurityException, IOException {
         InputStream in = ctx.getResources().openRawResource(R.raw.credentials);
         Credential credential = GoogleCredential.fromStream(in).createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
         sheetsService = SheetsServiceUtil.getSheetsService(credential);
+        savedCtx = ctx;
     }
 
     private void checkFailures() {
         if (failedUserInfo.size() > 0) {
-            for (String[] data : failedUserInfo) {
+            for (String[] data : failedUserInfo) { // TODO : Differencier FailedProfileModif et FailedUserInfo coz same shiet
                 new WriteUserInfoAsyncTask().execute(data);
             }
             failedUserInfo.clear();
         }
-        if (failedEvaluation.size() > 0) {
+        if (failedEvaluation.size() > 0) {  
             for (String[] data : failedEvaluation) {
                 new WriteUserEvaluationAsyncTask().execute(data);
             }
@@ -64,6 +66,14 @@ public class GoogleSheetsWriteUtil {
         this.checkFailures();
         new WriteUserEvaluationAsyncTask().execute(data);
     }
+    
+    /**
+     * Modify user Profile
+     */
+    public void ModifyUserProfile(String... data) {
+        this.checkFailures();
+        new ModifyUserProfileAsyncTask().execute(data);
+    }
 
     private static class WriteUserInfoAsyncTask extends AsyncTask<String, Void, Void> {
         @Override
@@ -74,10 +84,14 @@ public class GoogleSheetsWriteUtil {
                             new List[]{Arrays.asList(data)}
                     ));
             try {
-                sheetsService.spreadsheets().values()
+            	AppendValuesResponse result = sheetsService.spreadsheets().values()
                         .append(SPREADSHEET_ID, "User_Info!A1", body)
                         .setValueInputOption("USER_ENTERED")
                         .execute();
+            	Object userPos = result.getUpdates().getOrDefault("updatedRange", null);
+                userPos.toString();
+                SharedPreferences prefs = savedCtx.getSharedPreferences("user_info", Context.MODE_PRIVATE);
+                prefs.edit().putString("userPos", userPos).apply();
             } catch (IOException e) {
                 Log.w("GoogleSheet", "Error during user info write; rescheduling");
                 failedUserInfo.add(data);
@@ -103,6 +117,28 @@ public class GoogleSheetsWriteUtil {
             } catch (IOException e) {
                 Log.w("GoogleSheet", "Error during user eval write; rescheduling");
                 failedEvaluation.add(data);
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+    
+    private static class ModifyUserProfileAsyncTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... data) {
+            
+            ValueRange body = new ValueRange()
+                    .setValues(Arrays.<List<Object>>asList(
+                            new List[]{Arrays.asList(data)}
+                    ));
+            try {
+                sheetsService.spreadsheets().values()
+                        .update(SPREADSHEET_ID, savedCtx.getSharedPreferences("user_info", Context.MODE_PRIVATE).getString("userPos",""), body)
+                        .setValueInputOption("USER_ENTERED")
+                        .execute();
+            } catch (IOException e) {
+                Log.w("GoogleSheet", "Error during user  write; rescheduling");
+                failedUserInfo.add(data);
                 e.printStackTrace();
             }
             return null;

@@ -42,6 +42,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     private int pieceSize,gridTop,gridBottom;
     private Bitmap fire,oil,water,uranium,plant,gold,power;
     private int primary,primaryDarker,accent,accentRed,primarylight;
+    private SurfaceHolder _surfaceHolder;
+    private SurfaceView _surfaceView;
 
 
     Rect dst = new Rect();
@@ -65,13 +67,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         accent = ContextCompat.getColor(getContext(),R.color.colorAccent);
         accentRed = ContextCompat.getColor(getContext(),R.color.colorAccentRed);
         primarylight = ContextCompat.getColor(getContext(),R.color.colorPrimaryLight);
+        _surfaceView = findViewById(R.id.surfaceView2);
+        _surfaceHolder = _surfaceView.getHolder();
+        _surfaceHolder.addCallback(this);
+        _surfaceView.setWillNotDraw(false);
     }
 
 
     public void surfaceCreated(SurfaceHolder h) {
-        th = new GameViewThread(getHolder(), this);
-        th.setRunning(true);
-        th.start();
+        Canvas c = _surfaceHolder.lockCanvas();
+        draw(c);
+        _surfaceHolder.unlockCanvasAndPost(c);
+        //th = new GameViewThread(getHolder(), this);
+        //th.setRunning(true);
+        //th.start();
     }
 
     public void surfaceChanged(SurfaceHolder sh, int f, int w, int h) {
@@ -80,7 +89,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void surfaceDestroyed(SurfaceHolder h) {
-        boolean retry = true;
+        /*boolean retry = true;
         th.setRunning(false);
         while (retry) {
             try {
@@ -89,7 +98,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
 
@@ -209,6 +218,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                         }
                     }
                 }
+                Canvas c = null;
+                while (c == null){
+                    c = _surfaceHolder.lockCanvas();
+                }
+                this.invalidate();
+                draw(c);
+                _surfaceHolder.unlockCanvasAndPost(c);
                 return true;
             }
 
@@ -217,7 +233,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                 tempy = (int) event.getY();
                 deltaX = (xdebut - tempx);
                 deltaY = (ydebut - tempy);
-
                 return true;
             }
 
@@ -236,5 +251,4 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                 return true;
         }
     }
-
 }

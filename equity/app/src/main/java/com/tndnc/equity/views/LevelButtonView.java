@@ -2,6 +2,7 @@ package com.tndnc.equity.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
@@ -26,11 +27,18 @@ public class LevelButtonView extends AppCompatButton {
             public void onClick(View view) {
                 Model m = new Model(l);
                 Context ctx = view.getContext();
-                Activity activity = (Activity) ctx;
-                GameApplication app = (GameApplication) activity.getApplication();
-                app.setPartie(m);
-                Intent intent = new Intent(ctx, GameActivity.class);
-                ctx.startActivity(intent);
+                Activity activity;
+                while (ctx instanceof ContextWrapper) {
+                    if (ctx instanceof Activity) {
+                        activity = (Activity) ctx;
+                        GameApplication app = (GameApplication) activity.getApplication();
+                        app.setPartie(m);
+                        Intent intent = new Intent(ctx, GameActivity.class);
+                        ctx.startActivity(intent);
+                        break;
+                    }
+                    ctx = ((ContextWrapper)ctx).getBaseContext();
+                }
             }
         });
     }
@@ -38,4 +46,5 @@ public class LevelButtonView extends AppCompatButton {
     public void setLevel(Level l) {
         this.l = l;
     }
+
 }

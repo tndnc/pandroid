@@ -43,11 +43,11 @@
 
     <!-- Tutorial-->
     <string name="tutorial_title">Tutorial</string>
-    <string name="tutorial_step1">1. In this puzzle game a number of people are placed in a row and your goal is to choose and give a
+    <string name="tutorial_step1">1. In this puzzle game a number of persons are placed in a row and your goal is to choose and give a
         different resource to each person.</string>
-    <string name="tutorial_step2">2. Everyone has its own preferences concerning the resources. For example the first person
+    <string name="tutorial_step2">2. Everyone has its own preferences concerning the resources. Those preferences are aligned in columns under each person, For example the first person
     prefers water over power and prefers power over the leaf.</string>
-    <string name="tutorial_step3">3. Nobody can be jealous of its left and right neighbors for a solution to be accepted. For example, if you give the leaf
+    <string name="tutorial_step3">3. for a solution to be valid No person can be jealous of its left or right neighbors. For example, if you give the leaf
         to the first person and power to the second, the first is jealous because it would prefer power over the leaf and sees that its neighbor is in
         possession of power.</string>
 </resources>

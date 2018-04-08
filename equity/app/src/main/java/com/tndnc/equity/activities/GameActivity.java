@@ -28,11 +28,12 @@ public class GameActivity extends AppCompatActivity {
     GameApplication app;
     private RatingBar ratingBar;
     private float levelrating;
+    private int resTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        resTime = 0;
         setContentView(R.layout.activity_game);
 //        intentExtras = getIntent();
         app = (GameApplication) this.getApplication();
@@ -49,6 +50,9 @@ public class GameActivity extends AppCompatActivity {
             prefs.edit().putBoolean(gameModel.getLevelName(), true).apply();
             // TODO: only update relevant item
             app.getLevelListAdapter(gameModel.getNbActors()).notifyDataSetChanged();
+
+            if(resTime == 0)
+                resTime = app.getGameModel().getGameTime();
 
             // Show level complete screen
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -69,6 +73,7 @@ public class GameActivity extends AppCompatActivity {
 //                    startNewGame(app.getGameModel().getNextLevel());
 //                    finish();
 //                }});
+            builder.setCancelable(false);
             final AlertDialog alert = builder.create();
             alert.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
@@ -95,7 +100,7 @@ public class GameActivity extends AppCompatActivity {
             app.getSheetsWriteUtil().writeUserEvaluation(
                     app.getUniqueId(),
                     app.getGameModel().getLevelName(),
-                    String.valueOf(app.getGameModel().getGameTime()),
+                    String.valueOf(resTime),
                     String.valueOf(app.getGameModel().getNbmoves()),
                     String.valueOf((int)levelrating),
                     new Date().toString()

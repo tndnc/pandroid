@@ -124,8 +124,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
             paint.setColor(accent);
             paint.setTextAlign(Paint.Align.CENTER);
-            paint.setTextSize(this.getWidth()/10);
-            c.drawText(getContext().getString(R.string.level) +" "+ app.getGameModel().getLevelName(),this.getWidth()/2,gridTop/2,paint);
+            paint.setTextSize(this.getWidth()/12);
+            c.drawText(getContext().getString(R.string.level) +" "+ app.getGameModel().getLevelName(),this.getWidth()/2,(gridTop+this.getWidth()/24)/2,paint);
 
             if (currentPiece instanceof Actor) {
                 right =  pieceSize + pieceSize * currentLig;//switched

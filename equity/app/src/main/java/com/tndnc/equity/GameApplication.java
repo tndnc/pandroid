@@ -22,8 +22,10 @@ public class GameApplication extends Application {
     private Model theGame;
     private String uniqueId;
     private GoogleSheetsWriteUtil sheetsWriteUtil;
-    private SparseArray<List<Level>> levels;
+    private SparseArray<List<Level>> levelsBySize;
     private SparseArray<LevelListAdapter> cardAdapters;
+//    private List<Level> allLevels;
+
 
     @Override
     public void onCreate() {
@@ -47,17 +49,18 @@ public class GameApplication extends Application {
             e.printStackTrace();
         }
 
-        // init levels container
-        this.levels = new SparseArray<>();
+        // init levelsBySize container
+        this.levelsBySize = new SparseArray<>();
+//        this.allLevels = new ArrayList<>();
         for (int i = 3; i <= 7; i++) {
-            this.levels.put(i, new ArrayList<Level>());
+            this.levelsBySize.put(i, new ArrayList<Level>());
         }
-        // load levels in container
+        // load levelsBySize in container
         LevelLoader.loadAllLevels(this);
         // init list adapters for card views
         this.cardAdapters = new SparseArray<>();
         for (int i = 3; i <= 7; i++) {
-            this.cardAdapters.put(i, new LevelListAdapter(this.getLevels().get(i)));
+            this.cardAdapters.put(i, new LevelListAdapter(this.getLevelsBySize().get(i)));
         }
     }
 
@@ -74,8 +77,8 @@ public class GameApplication extends Application {
         return uniqueId;
     }
 
-    public SparseArray<List<Level>> getLevels() {
-        return this.levels;
+    public SparseArray<List<Level>> getLevelsBySize() {
+        return this.levelsBySize;
     }
 
     public LevelListAdapter getLevelListAdapter(int numberOfAgents) {
@@ -85,4 +88,5 @@ public class GameApplication extends Application {
     public GoogleSheetsWriteUtil getSheetsWriteUtil() {
         return sheetsWriteUtil;
     }
+
 }

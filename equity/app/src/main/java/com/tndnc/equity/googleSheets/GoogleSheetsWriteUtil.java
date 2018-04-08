@@ -1,6 +1,7 @@
 package com.tndnc.equity.googleSheets;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.api.services.sheets.v4.model.AppendValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import com.tndnc.equity.R;
 
@@ -24,23 +26,25 @@ public class GoogleSheetsWriteUtil {
     private static Sheets sheetsService;
     private static String SPREADSHEET_ID = "1zLIlFkoa4GM70x5zydp6L0Rgjk8vzqXAM0FQ936YRhY";
 
-    private static List<String[]> failedUserInfo = new ArrayList<>();
+    private static String[] failedUserInfo;
     private static List<String[]> failedEvaluation = new ArrayList<>();
-    private static Context savedCtx;
+    private static SharedPreferences prefs;
 
     public static void setup(Context ctx) throws GeneralSecurityException, IOException {
         InputStream in = ctx.getResources().openRawResource(R.raw.credentials);
         Credential credential = GoogleCredential.fromStream(in).createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
         sheetsService = SheetsServiceUtil.getSheetsService(credential);
-        savedCtx = ctx;
+        prefs = ctx.getSharedPreferences("user_profile", Context.MODE_PRIVATE);
     }
 
     private void checkFailures() {
-        if (failedUserInfo.size() > 0) {
-            for (String[] data : failedUserInfo) { // TODO : Differencier FailedProfileModif et FailedUserInfo coz same shiet
-                new WriteUserInfoAsyncTask().execute(data);
+        if (failedUserInfo != null) {
+            if (prefs.getBoolean("user_profile_saved", false)) {
+                new ModifyUserProfileAsyncTask().execute(failedUserInfo);
+            } else {
+                new WriteUserInfoAsyncTask().execute(failedUserInfo);
             }
-            failedUserInfo.clear();
+            failedUserInfo = null;
         }
         if (failedEvaluation.size() > 0) {  
             for (String[] data : failedEvaluation) {
@@ -88,13 +92,11 @@ public class GoogleSheetsWriteUtil {
                         .append(SPREADSHEET_ID, "User_Info!A1", body)
                         .setValueInputOption("USER_ENTERED")
                         .execute();
-            	Object userPos = result.getUpdates().getOrDefault("updatedRange", null);
-                userPos.toString();
-                SharedPreferences prefs = savedCtx.getSharedPreferences("user_info", Context.MODE_PRIVATE);
-                prefs.edit().putString("userPos", userPos).apply();
+            	Object userPos = result.getUpdates().get("updatedRange");
+                prefs.edit().putString("userPos", (String) userPos).apply();
             } catch (IOException e) {
                 Log.w("GoogleSheet", "Error during user info write; rescheduling");
-                failedUserInfo.add(data);
+                failedUserInfo = data;
                 e.printStackTrace();
             }
             return null;
@@ -133,12 +135,12 @@ public class GoogleSheetsWriteUtil {
                     ));
             try {
                 sheetsService.spreadsheets().values()
-                        .update(SPREADSHEET_ID, savedCtx.getSharedPreferences("user_info", Context.MODE_PRIVATE).getString("userPos",""), body)
+                        .update(SPREADSHEET_ID, prefs.getString("userPos",""), body)
                         .setValueInputOption("USER_ENTERED")
                         .execute();
             } catch (IOException e) {
-                Log.w("GoogleSheet", "Error during user  write; rescheduling");
-                failedUserInfo.add(data);
+                Log.w("GoogleSheet", "Error during user rewrite; rescheduling");
+                failedUserInfo = data;
                 e.printStackTrace();
             }
             return null;

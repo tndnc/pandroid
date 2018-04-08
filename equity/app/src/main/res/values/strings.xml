@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">equity</string>
-    <string name="title_activity_main_menu">equity</string>
+    <string name="app_name">Equity</string>
+    <string name="title_activity_main_menu">Equity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="title_activity_level_select">levelSelectActivity</string>
     <string name="button_Reset">Reset</string>
@@ -9,7 +9,7 @@
     <string name="submit">Submit</string>
     <string name="age">Age</string>
     <string name="formation">Formation</string>
-    <string name="level">Level :</string>
+    <string name="level">Level </string>
 
 
     <!-- Main Menu -->
@@ -35,7 +35,7 @@
     <string name="about_title">About us</string>
     <string name="about_text">This application is developed as a Master\'s project at the science
         faculty of Sorbonne Université. One focus is the study of a combinatorial satisfaction problem
-        named Locally-Envy-Free (LEF) and we want to evaluate the difficulty of a given instance for a resolution by a person.</string>
+        named Locally-Envy-Free (LEF) and we want to evaluate the difficulty of a given instance for a human resolution.</string>
     <string name="about_text_2">This prototype presents the problem as a puzzle game and allows us to
         collect resolution data for a set of preselected instances. This data will be used to study the
         correlation between instance features and human evaluated difficulty.</string>
@@ -43,10 +43,11 @@
 
     <!-- Tutorial-->
     <string name="tutorial_title">Tutorial</string>
-    <string name="tutorial_step1">1. This is a puzzle game with several actors to which you need to give
-    resources. Each one has to get a different resource.</string>
-    <string name="tutorial_step2">2. Every actor has its own preferences concerning the resources. For example the first actor
-    prefers power over water and prefers water over the leaf.</string>
-    <string name="tutorial_step3">3. No actor can be jealous of its left and right neighbors for a solution to be accepted. For example, if you give the leaf
-        to the first actor and power to the second, the first agent is jealous because it would prefer power over the leaf.</string>
+    <string name="tutorial_step1">1. In this puzzle game a number of people are placed in a row and your goal is to choose and give a
+        different resource to each person.</string>
+    <string name="tutorial_step2">2. Everyone has its own preferences concerning the resources. For example the first person
+    prefers water over power and prefers power over the leaf.</string>
+    <string name="tutorial_step3">3. Nobody can be jealous of its left and right neighbors for a solution to be accepted. For example, if you give the leaf
+        to the first person and power to the second, the first is jealous because it would prefer power over the leaf and sees that its neighbor is in
+        possession of power.</string>
 </resources>

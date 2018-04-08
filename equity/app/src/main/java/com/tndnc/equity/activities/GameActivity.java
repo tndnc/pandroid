@@ -1,5 +1,6 @@
 package com.tndnc.equity.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +9,8 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RatingBar;
 
 import com.tndnc.equity.googleSheets.GoogleSheetsWriteUtil;
@@ -23,7 +26,6 @@ import java.util.Date;
 public class GameActivity extends AppCompatActivity {
 
     GameApplication app;
-//    Intent intentExtras;
     private RatingBar ratingBar;
     private float levelrating;
 
@@ -55,21 +57,36 @@ public class GameActivity extends AppCompatActivity {
             builder.setMessage("You finished the level with "+ gameModel.getNbmoves() +" moves in "
                     + gameModel.getGameTime()+ " seconds, please rate this level difficulty");
             builder.setTitle("Level Accomplished");
-            builder.setNeutralButton("level menu", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("level menu", new DialogInterface.OnClickListener() {
                  public void onClick(DialogInterface dialog, int which) {
                      rateMe();
                      finish();
                  }});
 
-            builder.setNegativeButton("Rate", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    rateMe();
-                    dialog.dismiss();
-                }});
-            AlertDialog alert = builder.create();
+//            builder.setNegativeButton("Next level", new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int which) {
+//                    rateMe();
+//                    startNewGame(app.getGameModel().getNextLevel());
+//                    finish();
+//                }});
+            final AlertDialog alert = builder.create();
+            alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    final Button menuButton = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
+                    menuButton.setEnabled(false);
+                    ratingBar = alert.findViewById(R.id.ratingBar);
+                    ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                        @Override
+                        public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                            menuButton.setEnabled(true);
+                        }
+                    });
+                }
+            });
+
             alert.setCanceledOnTouchOutside(false);
             alert.show();
-            ratingBar = alert.findViewById(R.id.ratingBar);
         }
     }
 
@@ -98,5 +115,12 @@ public class GameActivity extends AppCompatActivity {
     public void rateMe(){
         levelrating = ratingBar.getRating();
         writeGoogledocs();
+    }
+
+    private void startNewGame(Level l) {
+        Model m = new Model(l);
+        app.setPartie(m);
+        Intent intent = new Intent(this, GameActivity.class);
+        this.startActivity(intent);
     }
 }

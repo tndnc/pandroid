@@ -14,11 +14,11 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class LevelLoader {
+
+    private static Level lastLoadedLevel;
 
     public static void loadAllLevels(GameApplication app) {
         AssetManager assetManager = app.getAssets();
@@ -32,7 +32,7 @@ public class LevelLoader {
             parser.nextTag();
 
             // load levels container
-            SparseArray<List<Level>> levels = app.getLevels();
+            SparseArray<List<Level>> levels = app.getLevelsBySize();
             // parse xml
             parser.require(XmlPullParser.START_TAG, null, "levels");
             while(parser.next() != XmlPullParser.END_TAG) {
@@ -41,13 +41,19 @@ public class LevelLoader {
                 String name = parser.getName();
                 if (name.equals("level")) {
                     Level level = parseLevel(parser);
+                    if (lastLoadedLevel != null) lastLoadedLevel.setNextLevel(level);
+
                     levels.get(level.getSize()).add(level);
                     Log.d("LevelLoader", "Level loaded: " + level);
+                    if (lastLoadedLevel != null)
+                        Log.d("LevelLoader", lastLoadedLevel.getId() + "-->" + lastLoadedLevel.getNextLevel().getId());
+                    lastLoadedLevel = level;
                 } else {
                     skip(parser);
                 }
             }
 
+            lastLoadedLevel = null;
             // close level file
             in.close();
 

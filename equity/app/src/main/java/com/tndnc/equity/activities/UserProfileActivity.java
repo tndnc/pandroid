@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -27,6 +28,7 @@ public class UserProfileActivity extends AppCompatActivity {
         this.userProfileSaved = userProfile.getBoolean("user_profile_saved", false);
         String age = userProfile.getString("age", "");
         String formation = userProfile.getString("formation", "");
+        String range = userProfile.getString( "userPos", "NONE");
 
         ageEditText = this.findViewById(R.id.age);
         formationEditText = this.findViewById(R.id.formation);
@@ -45,11 +47,19 @@ public class UserProfileActivity extends AppCompatActivity {
         editor.putBoolean("user_profile_saved", true);
         editor.apply();
 
-        ((GameApplication) this.getApplication()).getSheetsWriteUtil().writeUserInfo(
-                userProfile.getString("uuid", "ANON"),
-                age,
-                formation
-        );
+        if (!userProfileSaved) {
+            ((GameApplication) this.getApplication()).getSheetsWriteUtil().writeUserInfo(
+                    userProfile.getString("uuid", "ANON"),
+                    age,
+                    formation
+            );
+        } else {
+            ((GameApplication) this.getApplication()).getSheetsWriteUtil().ModifyUserProfile(
+                    userProfile.getString("uuid", "ANON"),
+                    age,
+                    formation
+            );
+        }
 
         this.userProfileSaved = true;
         super.onBackPressed();

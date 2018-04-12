@@ -205,7 +205,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                if( y > 0 && y < (pieceSize*(nbActor+1))&& x < this.getWidth()){
+                if( y > 0 && y < (pieceSize*(nbActor+1))&& x < this.getWidth()-1){
                     if (gameModel.getIdByPos(pos) != null) {
                         int selectedPrefId = gameModel.getIdByPos(pos);
                         if(gameModel.getPiece(selectedPrefId) instanceof Preference){

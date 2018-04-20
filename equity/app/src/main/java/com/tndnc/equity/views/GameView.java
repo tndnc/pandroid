@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -34,16 +35,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     private GameViewThread th;
     private GameApplication app;
     private int ch, cw;
-    private Integer pieceselect = null;
     private int tempx, tempy;
     private int xdebut, ydebut;
     private int deltaX, deltaY;
     private int min, max;
-    private int pieceSize,gridTop,gridBottom;
+    private int pieceSize,gridTop,gridBottom,cWidth;
     private Bitmap fire,oil,water,uranium,plant,gold,power;
-    private int primary,primaryDarker,accent,accentRed,primarylight;
+    private int primary,primaryDarker,accent,accentRed,primarylight,deepRed,darkGrey;
     private SurfaceHolder _surfaceHolder;
     private SurfaceView _surfaceView;
+    private boolean isNoob;
 
 
     Rect dst = new Rect();
@@ -53,6 +54,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().addCallback(this);
+        isNoob = false;
         app = (GameApplication) (context.getApplicationContext());
         fire = BitmapFactory.decodeResource(getResources(), R.drawable.fire);
         oil = BitmapFactory.decodeResource(getResources(), R.drawable.oil);
@@ -67,6 +69,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         accent = ContextCompat.getColor(getContext(),R.color.colorAccent);
         accentRed = ContextCompat.getColor(getContext(),R.color.colorAccentRed);
         primarylight = ContextCompat.getColor(getContext(),R.color.colorPrimaryLight);
+        deepRed = ContextCompat.getColor(getContext(),R.color.colorDeepRed);
+        darkGrey = ContextCompat.getColor(getContext(),R.color.colorDarkGrey);
+
+
         _surfaceView = findViewById(R.id.surfaceView2);
         _surfaceHolder = _surfaceView.getHolder();
         _surfaceHolder.addCallback(this);
@@ -78,12 +84,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         Canvas c = _surfaceHolder.lockCanvas();
         draw(c);
         _surfaceHolder.unlockCanvasAndPost(c);
+        cWidth = this.getWidth();
         //th = new GameViewThread(getHolder(), this);
         //th.setRunning(true);
         //th.start();
     }
 
     public void surfaceChanged(SurfaceHolder sh, int f, int w, int h) {
+        cWidth = this.getWidth();
         ch = h;
         cw = w;
     }
@@ -124,6 +132,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         //Dessin des Pieces
         while (gameModel.getPiece(i) != null) {
 
+            float pad = cWidth/(nbActor*14);
             currentPiece = gameModel.getPiece(i);
             currentCol = currentPiece.getPos().getCol();
             currentLig = currentPiece.getPos().getLig();
@@ -133,21 +142,34 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
             paint.setColor(accent);
             paint.setTextAlign(Paint.Align.CENTER);
-            paint.setTextSize(this.getWidth()/12);
-            c.drawText(getContext().getString(R.string.level) +" "+ app.getGameModel().getLevelName(),this.getWidth()/2,(gridTop+this.getWidth()/24)/2,paint);
+            paint.setTextSize(cWidth/12);
+            c.drawText(getContext().getString(R.string.level) +" "+ app.getGameModel().getLevelName(),cWidth/2,(gridTop+cWidth/24)/2,paint);
+            paint.setTextSize(cWidth/16);
+            if (isNoob){
+                paint.setColor(deepRed);
+            }else{
+                paint.setColor(primaryDarker);
+            }
+            c.drawCircle(cWidth*9/10,(gridTop+cWidth/24)/2,cWidth/14,paint);
+            paint.setColor(accent);
+            c.drawText(getContext().getString(R.string.hint),cWidth*9/10 ,(gridTop+cWidth/12)/2,paint);
 
             if (currentPiece instanceof Actor) {
                 right =  pieceSize + pieceSize * currentLig;//switched
                 bottom = gridTop + pieceSize + pieceSize * currentCol;//switched
-                float pad = this.getWidth()/(nbActor*14);
                 dstf.set(left + pad*3, top + pad, right - pad*3, gridBottom+pad*3);
-                int tmpColor = Color.BLACK;
+                int tmpColor;
+                if(isNoob && gameModel.isJealous((Actor) currentPiece)){
+                    tmpColor = deepRed;
+                }else{
+                    tmpColor = darkGrey;
+                }
                 paint.setShader(new LinearGradient(0, 0, 0, getHeight(),primaryDarker, tmpColor, Shader.TileMode.MIRROR));
-                c.drawRoundRect(dstf,this.getWidth()/(nbActor*2),this.getWidth()/(nbActor*5),paint);
+                c.drawRoundRect(dstf,cWidth/(nbActor*2),cWidth/(nbActor*5),paint);
                 paint.setShader(null);
                 dstf.set(left + pad, top + pad, right - pad, bottom - pad);
                 paint.setColor(primaryDarker);
-                c.drawRoundRect(dstf,this.getWidth()/(nbActor*2),this.getWidth()/(nbActor*5),paint);
+                c.drawRoundRect(dstf,cWidth/(nbActor*2),cWidth/(nbActor*5),paint);
 
 
             } else {
@@ -161,13 +183,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                     }else {
                         paint.setColor(accent);
                     }
-                    c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*2),paint);
+                    c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,cWidth/(nbActor*2),paint);
                     paint.setStyle(Paint.Style.FILL);
                 }else {
                     paint.setColor(primarylight);
-                    c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,this.getWidth()/(nbActor*3),paint);
+                    c.drawCircle((right-left)/2 + left,(top-bottom)/2 + bottom,cWidth/(nbActor*3),paint);
                 }
-                dst.set(left+this.getWidth()/(nbActor*6), top+this.getWidth()/(nbActor*6), right-this.getWidth()/(nbActor*6), bottom-this.getWidth()/(nbActor*6));
+                dst.set(left+cWidth/(nbActor*6), top+cWidth/(nbActor*6), right-cWidth/(nbActor*6), bottom-cWidth/(nbActor*6));
                 switch (((Preference) currentPiece).getValue()){
                     case 1:c.drawBitmap(power,null,dst,null);
                         break;
@@ -205,17 +227,23 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                if( y > 0 && y < (pieceSize*(nbActor+1))&& x < this.getWidth()-1){
+                if( y > 0 && y < (pieceSize*(nbActor+1))&& x < cWidth-1){
                     if (gameModel.getIdByPos(pos) != null) {
                         int selectedPrefId = gameModel.getIdByPos(pos);
                         if(gameModel.getPiece(selectedPrefId) instanceof Preference){
                             gameModel.ModelSetSelected(gameModel.getIdByPos(posAgent),selectedPrefId);
                             xdebut = (int) event.getX();
                             ydebut = (int) event.getY();
-                            pieceselect = selectedPrefId;
+                            //pieceselect = selectedPrefId;
                             min = 0;
                             max = 6;
                         }
+                    }//if(y>(gridTop+cWidth/24)/2 -cWidth/14 && y<(gridTop+cWidth/24)/2 + cWidth/14&& x > cWidth*9/10 - cWidth/14  && x<cWidth*9/10 + cWidth/14)
+                }else if( y+ gridTop >(gridTop+cWidth/24)/2 -cWidth/14 && y + gridTop <(gridTop+cWidth/24)/2 + cWidth/14 && x > cWidth*9/10 - cWidth/14  && x<cWidth*9/10 + cWidth/14) {
+                    if(isNoob){
+                        isNoob = false;
+                    }else {
+                        isNoob = true;
                     }
                 }
                 Canvas c = null;
@@ -243,7 +271,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                 tempy = 0;
                 deltaX = 0;
                 deltaY = 0;
-                pieceselect = null;
+                //pieceselect = null;
                 return true;
             }
 

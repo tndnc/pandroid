@@ -10,7 +10,7 @@
     <string name="age">Age</string>
     <string name="formation">Formation</string>
     <string name="level">Level </string>
-
+    <string name="hint">\?</string>
 
     <!-- Main Menu -->
     <string name="button_play_main">New game</string>

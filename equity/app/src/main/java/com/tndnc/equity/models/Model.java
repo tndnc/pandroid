@@ -117,12 +117,11 @@ public class Model{
 
     public boolean isJealous(Actor actor){
         boolean res = false;
-        /*
-        int j = 1;
+        int j = (actor.getId() + 1)*nbActors;
+        System.out.println(j);
         Preference[] beforePiece = new Preference[nbActors];
         Preference[] tmpPiece = new Preference[nbActors];
         Preference[] afterPiece = new Preference[nbActors];
-
         for(int k = 0;k<nbActors;k++){
             if(j >= nbActors*2){
                 beforePiece[k] = (Preference) Pieces[j-(nbActors - k)];
@@ -133,7 +132,7 @@ public class Model{
             tmpPiece[k] = (Preference) Pieces[j+k];
         }
         res = isJealous(beforePiece,tmpPiece) || isJealous(afterPiece,tmpPiece);
-        */
+        System.out.println(res);
         return res;
 
     }
@@ -155,6 +154,9 @@ public class Model{
             if(pref.getSelectedby() != -1){
                 P2pref = pref;
             }
+        }
+        if(P1pref == null || P2pref == null){
+            return false;
         }
         for(Preference pref:P2){
             if(pref.getValue() == P1pref.getValue()){

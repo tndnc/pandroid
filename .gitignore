@@ -17,3 +17,7 @@ __pycache__/
 ## GoogleSheetSecret
 
 credentials.json
+
+my_project.json
+
+google-sheets-client-secret.json

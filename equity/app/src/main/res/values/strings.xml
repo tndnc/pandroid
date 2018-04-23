@@ -47,7 +47,7 @@
         different resource to each person.</string>
     <string name="tutorial_step2">2. Everyone has its own preferences concerning the resources. Those preferences are aligned in columns under each person; for example the first person
     prefers water over power and prefers power over the leaf.</string>
-    <string name="tutorial_step3">3. for a solution to be valid No person can be jealous of its left or right neighbors. For example, if you give the leaf
-        to the first person and power to the second, the first is jealous because it would prefer power over the leaf and sees that its neighbor is in
-        possession of power.</string>
+    <string name="tutorial_step3">3.The goal is to distribute those ressources between our agents without creating any jealousy between them. When you assign a ressource to a person, you have to be sure that the persons next to him, left side or right side do not prefer that ressource over the one they've been assigned with. The same goes for the person itself. 
+For example, we have 3 person Alex, Bob and Charly :
+Let's suppose you assign the power to Bob. If the ressource given to Bob is in a higher position than the one that Alex or Charly have been assigned to in their preferences, they will be "jealous" of Bob. Here, you see that Alex has the leaf, but he clearly prefers the power over the leaf and he sees that Bob has the power, therefore he's jealous.string>
 </resources>

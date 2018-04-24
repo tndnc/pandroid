@@ -6,20 +6,24 @@ from PyQt5.QtWidgets import (
 	QVBoxLayout,
 	QSlider,
 	QGridLayout,
-	QLabel
+	QLabel,
+	QShortcut,
 )
+from PyQt5.QtGui import QKeySequence
 from PyQt5.QtCore import pyqtSlot, Qt
 from package.modules.generation import generate_random_instance, generate_solvable
-from package.modules.backtrack_solve import backtrack_from_agent, compute_optimal_solutions
-from package.modules.heuristics import h1
+from package.modules.backtrack_solve import compute_optimal_solutions
+from package.modules.asp_solve import solve as asp_solve
 from package.ui.widgets import InstanceView, AllSolutionsView
 from package.modules.export import export_toLATEX, export_toXML
+from package.modules.utils import pprint_metadata
+from package.modules.analysis import *
 
 class MainWindow(QMainWindow):
 
 	def __init__(self, app):
 		super().__init__()
-		self.resize(600, 450)
+		self.resize(600, 500)
 		self.setWindowTitle("LEF Solver / Analysis tool")
 		self.clipboard = app.clipboard()
 
@@ -33,8 +37,20 @@ class MainWindow(QMainWindow):
 		self.centralWidget.setLayout(app_layout)
 		self.setCentralWidget(self.centralWidget)
 
+		# init shortcuts
+		self.gen_shortcut = QShortcut(QKeySequence('Ctrl+R'), self)
+		self.gen_shortcut.activated.connect(self.generate_new_instance)
+		self.inc_shortcut = QShortcut(QKeySequence('Ctrl+Up'), self)
+		self.inc_shortcut.activated.connect(lambda: self.set_nbActors(min(self.nb_actors + 1, 10)))
+		self.dec_shortcut = QShortcut(QKeySequence('Ctrl+Down'), self)
+		self.dec_shortcut.activated.connect(lambda: self.set_nbActors(max(self.nb_actors - 1, 3)))
+		self.prev_shortcut = QShortcut(QKeySequence('Ctrl+Left'), self)
+		self.prev_shortcut.activated.connect(self.prev_solution)
+		self.next_shortcut = QShortcut(QKeySequence('Ctrl+Right'), self)
+		self.next_shortcut.activated.connect(self.next_solution)
+
 		# init app variables
-		self.set_nbActors(3)
+		self.set_nbActors(4)
 		self.generate_new_instance()
 
 		self.show()
@@ -44,8 +60,6 @@ class MainWindow(QMainWindow):
 		layout = QVBoxLayout()
 
 		self.instanceView = InstanceView()
-		# self.instanceView.resize(550, 400)
-		# self.instanceView.setStyleSheet('background-color: red;')
 		layout.addWidget(self.instanceView)
 
 		widget.setLayout(layout)
@@ -57,44 +71,66 @@ class MainWindow(QMainWindow):
 		layout.setColumnStretch(0, 1)
 		layout.setColumnStretch(1, 2)
 
-		slider = QSlider(Qt.Horizontal, self)
-		slider.setMinimum(3)
-		slider.setMaximum(10)
-		slider.setTickInterval(1)
-		slider.valueChanged.connect(lambda: self.set_nbActors(slider.value()))
-		layout.addWidget(slider, 0, 0)
+		left_layout = QVBoxLayout()
+		left_widget = QWidget()
+		left_widget.setLayout(left_layout)
+
+		layout.addWidget(left_widget, 0, 0)
+
+		pager_layout = QHBoxLayout()
+		self.prev_button = QPushButton('<', self)
+		self.prev_button.clicked.connect(self.prev_solution)
+		self.next_button = QPushButton('>', self)
+		self.next_button.clicked.connect(self.next_solution)
+		pager_layout.addWidget(self.prev_button)
+		pager_layout.addWidget(self.next_button)
+		pager_widget = QWidget()
+		pager_widget.setLayout(pager_layout)
+		left_layout.addWidget(pager_widget)
+
+		self.nbActorsLabel = QLabel()
+		self.nbActorsLabel.setAlignment(Qt.AlignCenter)
+		left_layout.addWidget(self.nbActorsLabel)
+
+		self.slider = QSlider(Qt.Horizontal, self)
+		self.slider.setMinimum(3)
+		self.slider.setMaximum(10)
+		self.slider.setTickInterval(1)
+		self.slider.valueChanged.connect(lambda: self.set_nbActors(self.slider.value()))
+		left_layout.addWidget(self.slider)
 
 		gbutton = QPushButton('Generate new instance', self)
 		gbutton.clicked.connect(self.generate_new_instance)
-		layout.addWidget(gbutton, 1, 0)
+		left_layout.addWidget(gbutton)
 
-		solbutton = QPushButton('Show all solutions', self)
-		solbutton.clicked.connect(self.show_all_solutions)
-		layout.addWidget(solbutton, 2, 0)
+		graph_button = QPushButton('Show graph', self)
+		graph_button.clicked.connect(lambda: show_optima_graph(self.metadata['optima_graph']))
+		left_layout.addWidget(graph_button)
 
-		exportLATEXbutton = QPushButton('Export to LATEX', self)
-		exportLATEXbutton.clicked.connect(self.export_to_clipboard_LATEX)
-		layout.addWidget(exportLATEXbutton, 3, 0)
+		# solbutton = QPushButton('Show all solutions', self)
+		# solbutton.clicked.connect(self.show_all_solutions)
+		# layout.addWidget(solbutton, 3, 0)
 
-		exportXMLbtn = QPushButton('Export to XML', self)
-		exportXMLbtn.clicked.connect(self.export_to_clipboard_XML)
-		layout.addWidget(exportXMLbtn, 4, 0)
+		# exportLATEXbutton = QPushButton('Export to LATEX', self)
+		# exportLATEXbutton.clicked.connect(self.export_to_clipboard_LATEX)
+		# layout.addWidget(exportLATEXbutton, 3, 0)
 
-		self.nbActorsLabel = QLabel()
-		self.nbActorsLabel.setText("Number of actors: 3")
-		layout.addWidget(self.nbActorsLabel, 0, 1)
+		# exportXMLbtn = QPushButton('Export to XML', self)
+		# exportXMLbtn.clicked.connect(self.export_to_clipboard_XML)
+		# layout.addWidget(exportXMLbtn, 4, 0)
 
-		self.niterLabel = QLabel()
-		self.niterLabel.setText("Number of iterations: 0")
-		layout.addWidget(self.niterLabel, 1, 1)
 
-		self.heuristicValueLabel1 = QLabel()
-		self.heuristicValueLabel1.setText("h1 = Infeasible")
-		layout.addWidget(self.heuristicValueLabel1, 2, 1)
+		self.metaLabel = QLabel()
+		layout.addWidget(self.metaLabel, 0, 1)
+		self.metaLabel.setAlignment(Qt.AlignTop)
 
-		hotbutton = QPushButton('Show heatmap', self)
-		hotbutton.clicked.connect(self.show_heatmap)
-		layout.addWidget(hotbutton, 3, 1)
+		# self.heuristicValueLabel1 = QLabel()
+		# self.heuristicValueLabel1.setText("")
+		# layout.addWidget(self.heuristicValueLabel1, 2, 1)
+
+		# hotbutton = QPushButton('Show heatmap', self)
+		# hotbutton.clicked.connect(self.show_heatmap)
+		# layout.addWidget(hotbutton, 3, 1)
 
 		widget.setLayout(layout)
 		return widget
@@ -102,45 +138,47 @@ class MainWindow(QMainWindow):
 	# Slots
 	@pyqtSlot()
 	def generate_new_instance(self):
-		# self.instance = generate_random_instance(self.nb_actors)
 		self.instance = generate_solvable(self.nb_actors)
-		self.solutions, self.metadata = compute_optimal_solutions(self.instance)
+		self.solutions = asp_solve(instance=self.instance)
+		wpos, stats = compute_optimal_solutions(self.instance)
+		
+		self.metadata = compute_metadata(self.instance, 
+			self.solutions, wpos, stats)
+		self.metaLabel.setText(pprint_metadata(self.metadata))
+		# show_optima_graph(self.solutions)
 		# show first solutions in mainwindow
-		sol = self.solutions[0] if len(self.solutions) > 0 else None
-		niter = self.metadata[0]['niter'] if len(self.solutions) > 0 else None
-		self.instanceView.setInstance(self.instance, allocation=sol)
-		self.niterLabel.setText("Number of iterations: {}".format(niter))
+		self.set_solution_view(0)
 
-		if len(self.solutions) > 0:
-			self.h = h1(self.instance, self.solutions, self.metadata)
-			self.heuristicValueLabel1.setText("h1 = {}".format(self.h))
-		else:
-			self.heuristicValueLabel1.setText("h1 = Infeasible")
+	def set_solution_view(self, sol_idx):
+		self.sol_idx = sol_idx
+		self.instanceView.setInstance(self.instance, allocation=self.solutions[sol_idx])
+		self.next_button.setEnabled(sol_idx < len(self.solutions)-1)
+		self.prev_button.setEnabled(sol_idx > 0)
 
 	@pyqtSlot()
+	def prev_solution(self):
+		self.sol_idx = max(self.sol_idx-1, 0)
+		self.set_solution_view(self.sol_idx)
+
+	@pyqtSlot()
+	def next_solution(self):
+		self.sol_idx = min(self.sol_idx+1, len(self.solutions)-1)
+		self.set_solution_view(self.sol_idx)
+
 	def set_nbActors(self, value):
 		self.nb_actors = value
+		self.slider.setValue(value)
 		self.nbActorsLabel.setText("Number of actors: {}".format(value))
 
-	@pyqtSlot()
-	def show_all_solutions(self):
-		self.popup = AllSolutionsView([{'instance': self.instance, 'alloc': s} for s in self.solutions])
-
-	@pyqtSlot()
-	def export_to_clipboard_LATEX(self):
-		latexstr = export_toLATEX(instance=self.instance, 
-			allocation=self.solutions[0], niter=self.metadata[0]['niter'], h=self.h, env='subfigure')
-		self.clipboard.setText(latexstr)
-		print("exported to clipboard")
+	# @pyqtSlot()
+	# def export_to_clipboard_LATEX(self):
+	# 	latexstr = export_toLATEX(instance=self.instance, 
+	# 		allocation=self.solutions[0], niter=self.metadata[0]['niter'], h=self.h, env='subfigure')
+	# 	self.clipboard.setText(latexstr)
+	# 	self.statusBar().showMessage("Exported to clipboard")
 
 	@pyqtSlot()
 	def export_to_clipboard_XML(self):
 		xmlstr = export_toXML(instance=self.instance)
 		self.clipboard.setText(xmlstr)
-		print("exported to clipboard")
-
-	@pyqtSlot()
-	def show_heatmap(self):
-		from package.modules.utils import show_average_heatmap
-		hotspots_list = [m['hotspots'] for m in self.metadata]
-		show_average_heatmap(hotspots_list, self.instance)
+		self.statusBar().showMessage("Exported to clipboard")

@@ -1,6 +1,7 @@
 package com.tndnc.equity.views;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -46,7 +47,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     private SurfaceView _surfaceView;
     private boolean isNoob;
 
-
     Rect dst = new Rect();
     RectF dstf = new RectF();
 
@@ -90,6 +90,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         //th.start();
     }
 
+    public boolean isNoob() {
+        return isNoob;
+    }
+
+    public void setNoob(boolean noob) {
+        isNoob = noob;
+        Canvas c = _surfaceHolder.lockCanvas();
+        this.invalidate();
+        draw(c);
+        _surfaceHolder.unlockCanvasAndPost(c);
+    }
+
     public void surfaceChanged(SurfaceHolder sh, int f, int w, int h) {
         cWidth = this.getWidth();
         ch = h;
@@ -128,7 +140,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         gridTop = c.getHeight()/2 -pieceSize*(nbActor+1)/2;
         gridBottom = gridTop + (nbActor+1)*pieceSize;
 
-
         //Dessin des Pieces
         while (gameModel.getPiece(i) != null) {
 
@@ -143,16 +154,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
             paint.setColor(accent);
             paint.setTextAlign(Paint.Align.CENTER);
             paint.setTextSize(cWidth/12);
-            c.drawText(getContext().getString(R.string.level) +" "+ app.getGameModel().getLevelName(),cWidth/2,(gridTop+cWidth/24)/2,paint);
+//            c.drawText(getContext().getString(R.string.level) +" "+ app.getGameModel().getLevelName(),cWidth/2,(gridTop+cWidth/24)/2,paint);
             paint.setTextSize(cWidth/16);
             if (isNoob){
                 paint.setColor(deepRed);
             }else{
                 paint.setColor(primaryDarker);
             }
-            c.drawCircle(cWidth*9/10,(gridTop+cWidth/24)/2,cWidth/14,paint);
-            paint.setColor(accent);
-            c.drawText(getContext().getString(R.string.hint),cWidth*9/10 ,(gridTop+cWidth/12)/2,paint);
+//            c.drawCircle(cWidth*9/10,(gridTop+cWidth/24)/2,cWidth/14,paint);
+//            paint.setColor(accent);
+//            c.drawText(getContext().getString(R.string.hint),cWidth*9/10 ,(gridTop+cWidth/12)/2,paint);
 
             if (currentPiece instanceof Actor) {
                 right =  pieceSize + pieceSize * currentLig;//switched
@@ -239,12 +250,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                             max = 6;
                         }
                     }//if(y>(gridTop+cWidth/24)/2 -cWidth/14 && y<(gridTop+cWidth/24)/2 + cWidth/14&& x > cWidth*9/10 - cWidth/14  && x<cWidth*9/10 + cWidth/14)
-                }else if( y+ gridTop >(gridTop+cWidth/24)/2 -cWidth/14 && y + gridTop <(gridTop+cWidth/24)/2 + cWidth/14 && x > cWidth*9/10 - cWidth/14  && x<cWidth*9/10 + cWidth/14) {
-                    if(isNoob){
-                        isNoob = false;
-                    }else {
-                        isNoob = true;
-                    }
                 }
                 Canvas c = null;
                 while (c == null){

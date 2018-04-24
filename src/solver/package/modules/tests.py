@@ -1,11 +1,12 @@
 from package.modules.generation import generate_random_instance, generate_solvable
 from package.modules.export import export_toLATEX
-from package.modules.heuristics import h1
 from package.modules.backtrack_solve import (
     backtrack_from_agent, compute_optimal_solutions
 )
 from package.modules.utils import pprint_instance
-
+from package.modules.analysis import *
+from package.modules.asp_solve import solve as asp_solve
+import networkx as nx
 
 def test_(number_of_tries=20, number_of_agents=3):
     import time
@@ -63,39 +64,39 @@ def test_backtrack():
     sol, niter, _ = backtrack_from_agent(instance, 1)
     print(sol)
 
-def test_h1Distribution(number_of_tries=10000):
+# def test_h1Distribution(number_of_tries=10000):
 
-    print("Number of tries: {}".format(number_of_tries))
-    number_of_agents = range(3,8)
-    for n in number_of_agents:
-        niter_means = list()
-        r_means = list()
-        nsols_mean = list()
+#     print("Number of tries: {}".format(number_of_tries))
+#     number_of_agents = range(3,8)
+#     for n in number_of_agents:
+#         niter_means = list()
+#         r_means = list()
+#         nsols_mean = list()
 
-        infeasibles = 0
+#         infeasibles = 0
 
-        print("Solving for {} agents".format(n))
-        for _ in range(number_of_tries):
-            instance = generate_solvable(n)
-            solutions, metadata = compute_optimal_solutions(instance)
-            if len(solutions) > 0:
-                h = h1(instance, solutions, metadata)
-                niter_means.append(h[0])
-                r_means.append(h[1])
-                nsols_mean.append(h[2])
-                # print(".", end="", flush=True)
-            else:
-                infeasibles += 1
-                # print("x", end="", flush=True)
+#         print("Solving for {} agents".format(n))
+#         for _ in range(number_of_tries):
+#             instance = generate_solvable(n)
+#             solutions, metadata = compute_optimal_solutions(instance)
+#             if len(solutions) > 0:
+#                 h = h1(instance, solutions, metadata)
+#                 niter_means.append(h[0])
+#                 r_means.append(h[1])
+#                 nsols_mean.append(h[2])
+#                 # print(".", end="", flush=True)
+#             else:
+#                 infeasibles += 1
+#                 # print("x", end="", flush=True)
 
-        print("Failed attempts: {}".format(infeasibles))
-        print("Average number of iterations = {} (min: {}, max: {})"\
-            .format(sum(niter_means)/len(niter_means), min(niter_means), max(niter_means)))
-        print("Average regret = {} (min: {}, max: {})"\
-            .format(sum(r_means)/len(r_means), min(r_means), max(r_means)))
-        print("Average number of solutions = {} (min: {}, max: {})"\
-            .format(sum(nsols_mean)/len(nsols_mean), min(nsols_mean), max(nsols_mean)))
-        print()
+#         print("Failed attempts: {}".format(infeasibles))
+#         print("Average number of iterations = {} (min: {}, max: {})"\
+#             .format(sum(niter_means)/len(niter_means), min(niter_means), max(niter_means)))
+#         print("Average regret = {} (min: {}, max: {})"\
+#             .format(sum(r_means)/len(r_means), min(r_means), max(r_means)))
+#         print("Average number of solutions = {} (min: {}, max: {})"\
+#             .format(sum(nsols_mean)/len(nsols_mean), min(nsols_mean), max(nsols_mean)))
+#         print()
 
 
 def test_generation(number_of_tries=100):
@@ -116,4 +117,13 @@ def test_generation(number_of_tries=100):
 
     print()
     print("Number of fails: {}".format(fails))
+
+def test_graph():
+    instance = generate_solvable(5)
+    sols = asp_solve(instance=instance)
+    print("Number of solutions: {}".format(len(sols)))
+    G = get_optima_graph(instance, sols)
+    print("Size of attraction basins: {}".format(len(G)-len(sols)))
+    # print("Diameter: {}".format(nx.diameter(G)))
+    show_optima_graph(G)
 

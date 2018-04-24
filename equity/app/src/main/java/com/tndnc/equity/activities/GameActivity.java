@@ -6,18 +6,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.tndnc.equity.googleSheets.GoogleSheetsWriteUtil;
 import com.tndnc.equity.GameApplication;
 import com.tndnc.equity.models.Level;
 import com.tndnc.equity.models.Model;
 import com.tndnc.equity.R;
+import com.tndnc.equity.views.GameView;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -29,16 +33,21 @@ public class GameActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private float levelrating;
     private int resTime;
+    private SharedPreferences prefs;
+    private boolean finished;
+    private GameView gameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        resTime = 0;
         setContentView(R.layout.activity_game);
-//        intentExtras = getIntent();
         app = (GameApplication) this.getApplication();
-        //actualLevel = intentExtras.getIntExtra("ActualXMLLevel", 0);
-        //nextLevel = actualLevel + 1;
+        ((TextView)findViewById(R.id.level_title)).setText("Level " + app.getGameModel().getLevelName());
+        gameView = findViewById(R.id.surfaceView2);
+        prefs = getSharedPreferences("level_completion", Context.MODE_PRIVATE);
+        resTime = prefs.getInt(app.getGameModel().getLevelName() + "_res_time", 0);
+        finished = false;
+        Log.d("GameActivity", "Loaded previous resolution time: " + resTime);
         onWin();
     }
 
@@ -46,20 +55,19 @@ public class GameActivity extends AppCompatActivity {
         Model gameModel = app.getGameModel();
         if (gameModel.endOfGame()) {
             // Set level completion
-            SharedPreferences prefs = getSharedPreferences("level_completion", Context.MODE_PRIVATE);
+            finished = true;
             prefs.edit().putBoolean(gameModel.getLevelName(), true).apply();
             // TODO: only update relevant item
             app.getLevelListAdapter(gameModel.getNbActors()).notifyDataSetChanged();
 
-            if(resTime == 0)
-                resTime = app.getGameModel().getGameTime();
+            resTime += app.getGameModel().getGameTime();
 
             // Show level complete screen
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater inflater = this.getLayoutInflater();
             builder.setView(inflater.inflate(R.layout.popup_start_rating, null));
             builder.setMessage("You finished the level with "+ gameModel.getNbmoves() +" moves in "
-                    + gameModel.getGameTime()+ " seconds, please rate this level difficulty");
+                    + resTime + " seconds, please rate this level difficulty");
             builder.setTitle("Level Accomplished");
             builder.setNegativeButton("level menu", new DialogInterface.OnClickListener() {
                  public void onClick(DialogInterface dialog, int which) {
@@ -95,6 +103,39 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        saveResTime();
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        loadResTime();
+//    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveResTime();
+    }
+
+    private void saveResTime() {
+        if(finished) {
+            resTime = 0;
+            Log.d("GameActivity", "Reset resolution time after victory.");
+        }
+        else resTime += app.getGameModel().getGameTime();
+
+        prefs.edit().putInt(app.getGameModel().getLevelName()+ "_res_time", resTime).apply();
+        Log.d("GameActivity", "Saved resolution time: " + resTime);
+    }
+
+    private void loadResTime() {
+
+    }
+
     public void writeGoogledocs(){
         try {
             app.getSheetsWriteUtil().writeUserEvaluation(
@@ -111,7 +152,7 @@ public class GameActivity extends AppCompatActivity {
         System.out.println(app.getUniqueId());
 //        System.out.println(app.getUserAge());
 //        System.out.println(app.getUserFormation());
-        System.out.println(String.valueOf(app.getGameModel().getGameTime()));
+        System.out.println(String.valueOf(resTime));
         System.out.println(app.getGameModel().getNbmoves());
         System.out.println(app.getGameModel().getMoveSequence());
         System.out.println(levelrating);
@@ -127,5 +168,19 @@ public class GameActivity extends AppCompatActivity {
         app.setPartie(m);
         Intent intent = new Intent(this, GameActivity.class);
         this.startActivity(intent);
+    }
+
+    public void setHelp(View v) {
+        Drawable d;
+        if(gameView.isNoob()) {
+            d = getResources().getDrawable(R.drawable.circle_background_off);
+            gameView.setNoob(false);
+        }
+        else {
+            d = getResources().getDrawable(R.drawable.circle_background_on);
+            gameView.setNoob(true);
+        }
+        Log.d("GameView", "gameview toggle to " + gameView.isNoob() + ". Drawable="+d);
+        v.setBackground(d);
     }
 }

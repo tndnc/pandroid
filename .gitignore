@@ -1,6 +1,8 @@
 ## Python
 __pycache__/
 *.pyc
+asp_py_lextab.py
+asp_py_parsetab.py
 
 ## latex
 *.acn
@@ -17,7 +19,5 @@ __pycache__/
 ## GoogleSheetSecret
 
 credentials.json
-
 my_project.json
-
 google-sheets-client-secret.json

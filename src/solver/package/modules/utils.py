@@ -3,6 +3,18 @@ import seaborn as sns
 import numpy as np
 
 
+def pprint_metadata(metadata):
+    buffer = str()
+    buffer += "Number of solutions: {}\n".format(metadata['number_of_solutions'])
+    buffer += "WPO solutions: {}\n".format(metadata['number_of_wpos'])
+    buffer += "Average number of iterations: {:.2f}\n".format(metadata['average_niter'])
+    # buffer += repr(metadata['proportions']) + "\n"
+    buffer += "Number of frozen variables: {}\n".format(metadata['number_of_frozen_variables'])
+    buffer += "Size of attraction basins: {}\n".format(metadata['attraction_basin_size'])
+
+    return buffer
+
+
 def pprint_instance(instance, allocation=None, indices=None):
     if not allocation: allocation = dict()
     n = len(instance)
@@ -19,7 +31,7 @@ def pprint_instance(instance, allocation=None, indices=None):
         buffer += "\n"
         # print(buffer)
 
-    return buffer
+    return buffer[:-2]
 
 
 def save_to_file(n_agents, values):
@@ -32,30 +44,30 @@ def save_to_file(n_agents, values):
             f.write("\n")
 
 
-def strobj(instance, a, x, alloc):
-    return "{}{}".format("*" if instance[a][x] == alloc.get(a) else "",
-        instance[a][x])
+# def strobj(instance, a, x, alloc):
+#     return "{}{}".format("*" if instance[a][x] == alloc.get(a) else "",
+#         instance[a][x])
 
 
 def strobj_fromid(instance, a, x, ind):
     return "{}{}".format("*" if ind == x else "", instance[a][x])
 
 
-def draw_hotspots(hotspots, instance, alloc, figname):
-    if not alloc: alloc = dict()
-    f = figure()
-    # im = imshow(data, interpolation='nearest', cmap='Reds')
-    annotations = [[strobj(instance, a, x, alloc) for a in range(len(instance))] for x in range(len(instance))]
-    annotations = np.asarray(annotations)
-    ax = sns.heatmap(hotspots, annot=annotations, fmt="s")
-    # grid(True)
-    savefig('../output/{}.png'.format(figname))
+# def draw_hotspots(hotspots, instance, alloc, figname):
+#     if not alloc: alloc = dict()
+#     f = figure()
+#     # im = imshow(data, interpolation='nearest', cmap='Reds')
+#     annotations = [[strobj(instance, a, x, alloc) for a in range(len(instance))] for x in range(len(instance))]
+#     annotations = np.asarray(annotations)
+#     ax = sns.heatmap(hotspots, annot=annotations, fmt="s")
+#     # grid(True)
+#     savefig('../output/{}.png'.format(figname))
 
 
-def show_average_heatmap(hotspots_list, instance):
-    f = figure()
-    annotations = np.asarray([[instance[a][x] for a in range(len(instance))] \
-        for x in range(len(instance))])
-    average_heatmap = np.mean(hotspots_list, axis=0)
-    ax = sns.heatmap(average_heatmap, annot=annotations, fmt="d")
-    f.show()
+# def show_average_heatmap(hotspots_list, instance):
+#     f = figure()
+#     annotations = np.asarray([[instance[a][x] for a in range(len(instance))] \
+#         for x in range(len(instance))])
+#     average_heatmap = np.mean(hotspots_list, axis=0)
+#     ax = sns.heatmap(average_heatmap, annot=annotations, fmt="d")
+#     f.show()

@@ -58,6 +58,21 @@
             android:layout_gravity="center"
             app:srcCompat="@drawable/tutorial2"
             android:maxWidth="80dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white2"
+            android:textSize="15sp"
+            android:padding="15dp"
+            android:text="@string/tutorial_step4"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/tutorial_envy_btn"
+            android:maxWidth="80dp"/>
     </LinearLayout>
 
 </ScrollView>

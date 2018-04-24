@@ -10,7 +10,7 @@
     <string name="age">Age</string>
     <string name="formation">Formation</string>
     <string name="level">Level </string>
-    <string name="hint">\?</string>
+    <string name="hint">Show envy</string>
 
     <!-- Main Menu -->
     <string name="button_play_main">New game</string>
@@ -25,7 +25,7 @@
     <!-- User profile -->
     <string name="user_profile_title">Please input user data</string>
     <string name="user_profile_age">Age</string>
-    <string name="user_profile_formation">Formation</string>
+    <string name="user_profile_formation">Education</string>
     <string name="button_user_profile">Save</string>
     <string name="user_profile_disclaimer">This data will be used by the developers.</string>
     <string name="user_profile_disc_2">The app also records data about your play style: \n
@@ -45,9 +45,17 @@
     <string name="tutorial_title">Tutorial</string>
     <string name="tutorial_step1">1. In this puzzle game a number of persons are placed in a row and your goal is to choose and give a
         different resource to each person.</string>
-    <string name="tutorial_step2">2. Everyone has its own preferences concerning the resources. Those preferences are aligned in columns under each person; for example the first person
-    prefers water over power and prefers power over the leaf.</string>
-    <string name="tutorial_step3">3.The goal is to distribute those ressources between our agents without creating any jealousy between them. When you assign a ressource to a person, you have to be sure that the persons next to him, left side or right side do not prefer that ressource over the one they've been assigned with. The same goes for the person itself. 
-For example, we have 3 person Alex, Bob and Charly :
-Let's suppose you assign the power to Bob. If the ressource given to Bob is in a higher position than the one that Alex or Charly have been assigned to in their preferences, they will be "jealous" of Bob. Here, you see that Alex has the leaf, but he clearly prefers the power over the leaf and he sees that Bob has the power, therefore he's jealous.string>
+    <string name="tutorial_step2">2. Everyone has its own preferences concerning the resources. Those preferences are aligned in columns under each person; for example
+        the first person on the left prefers <font fgcolor="#599BFC">water</font> over <font fgcolor='#FEDC61'>power</font> and prefers <font fgcolor='#FEDC61'>power</font> over
+        the <font fgcolor="#74C642">leaf</font>.</string>
+    <string name="tutorial_step3">3.The goal is to distribute those resources between our agents without creating any jealousy between them. When you assign a
+        resource to a person, you have to be sure that the persons next to him, left side or right side do not prefer that resource over the one they\'ve been
+        assigned with. The same goes for the person itself.\n\nFor example, we have 3 person Alex, Bob and Charly : let\'s suppose you assign the
+        <font fgcolor="#599BFC">water</font> to Bob. If the resource given to Bob is in a higher position than the one that Alex or Charly have been
+        assigned to in their preferences, they will be "jealous" of Bob. Here, you see that Alex has the <font fgcolor='#FEDC61'>power</font>, but he clearly
+        prefers <font fgcolor="#599BFC">water</font> over the <font fgcolor='#FEDC61'>power</font> and he sees that Bob has the <font fgcolor="#599BFC">water</font>,
+        therefore he\'s jealous.</string>
+    <string name="tutorial_step4">By default, you will not be able to see which persons are envious of a neighbor but you can enable a red display for them
+        by tapping the button shown below.
+    </string>
 </resources>

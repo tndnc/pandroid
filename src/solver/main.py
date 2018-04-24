@@ -6,5 +6,4 @@ if __name__ == '__main__':
     	sys.exit(app.run(sys.argv))
     else:
     	from package.modules.tests import *
-    	# test_h1Distribution()
-    	test_generation()
+    	test_graph()

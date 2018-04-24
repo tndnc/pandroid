@@ -56,6 +56,6 @@
         prefers <font fgcolor="#599BFC">water</font> over the <font fgcolor='#FEDC61'>power</font> and he sees that Bob has the <font fgcolor="#599BFC">water</font>,
         therefore he\'s jealous.</string>
     <string name="tutorial_step4">By default, you will not be able to see which persons are envious of a neighbor but you can enable a red display for them
-        by tapping the button shown below.
+        by tapping the button "show envy" when playing.
     </string>
 </resources>

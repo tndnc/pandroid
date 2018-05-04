@@ -173,13 +173,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                 if(isNoob && gameModel.isJealous((Actor) currentPiece)){
                     tmpColor = deepRed;
                 }else{
-                    tmpColor = darkGrey;
+                    tmpColor = primaryDarker;
                 }
-                paint.setShader(new LinearGradient(0, 0, 0, getHeight(),primaryDarker, tmpColor, Shader.TileMode.MIRROR));
+                paint.setShader(new LinearGradient(0, 0, 0, getHeight(), tmpColor,primaryDarker, Shader.TileMode.MIRROR));
                 c.drawRoundRect(dstf,cWidth/(nbActor*2),cWidth/(nbActor*5),paint);
                 paint.setShader(null);
                 dstf.set(left + pad, top + pad, right - pad, bottom - pad);
-                paint.setColor(primaryDarker);
+                paint.setColor(tmpColor);
                 c.drawRoundRect(dstf,cWidth/(nbActor*2),cWidth/(nbActor*5),paint);
 
 

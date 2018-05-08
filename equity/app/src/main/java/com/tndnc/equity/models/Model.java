@@ -4,6 +4,7 @@ package com.tndnc.equity.models;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +19,6 @@ public class Model{
     private long gameTime;
     private String moveSequence;
     private String levelName;
-    private Level nextLevel;
 
     public String getMoveSequence(){
         return moveSequence;
@@ -83,11 +83,42 @@ public class Model{
         return (int) ((Calendar.getInstance().getTimeInMillis()- gameTime)/1000);
     }
 
+    //to reload the selected pieces after leaving and going back to a level
+    public void setSelectedPieces(List<String> values){
+        System.out.println(values);
+        int i = 0;
+        for(String value : values){
+            int val = Integer.parseInt(value);
+            if(val != 0){
+                Integer actorid = this.getIdByPos(new Position(0,i));
+                Integer prefid = this.getIdByPos(new Position(val,i));
+                this.ModelSetSelected(actorid,prefid);
+            }
+            i ++;
+        }
+    }
+
+    public String getSelectedPieces(){
+        int[] res = new int[nbActors];
+        for(int i = 0; i<Pieces.length;i++){
+            if(Pieces[i]instanceof Preference){
+                Preference pref =(Preference) Pieces[i];
+                if(pref.getSelectedby() != -1){
+                    res[pref.getPos().getLig()]= pref.getPos().getCol();
+                }
+            }
+        }
+        String str = "";
+        for(int s : res){
+            str += s;
+        }
+        return str;
+    }
+
     public Model(Level l) {
         this.nbActors = l.getSize();
         this.grid = new Grid(this.nbActors);
         this.levelName = l.getId();
-        this.nextLevel = l.getNextLevel();
         Pieces = new IPiece[this.nbActors * (this.nbActors+1) +1];
         for (int j = 0; j < this.nbActors; j++) {
             Pieces[j] = new Actor(j, 0, j);
@@ -109,6 +140,7 @@ public class Model{
 
         this.nbmoves = 0;
         gameTime = Calendar.getInstance().getTimeInMillis();
+
     }
 
     public int getNbActors() {
@@ -213,8 +245,4 @@ public class Model{
     }
     public String getLevelName() {
         return this.levelName;
-    }
-    public Level getNextLevel() {
-        return this.nextLevel;
-    }
-}
+    }}

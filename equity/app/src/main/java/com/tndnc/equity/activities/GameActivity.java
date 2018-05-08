@@ -25,7 +25,11 @@ import com.tndnc.equity.views.GameView;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -33,6 +37,7 @@ public class GameActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private float levelrating;
     private int resTime;
+    private String selecedPrefs;
     private SharedPreferences prefs;
     private boolean finished;
     private GameView gameView;
@@ -46,6 +51,16 @@ public class GameActivity extends AppCompatActivity {
         gameView = findViewById(R.id.surfaceView2);
         prefs = getSharedPreferences("level_completion", Context.MODE_PRIVATE);
         resTime = prefs.getInt(app.getGameModel().getLevelName() + "_res_time", 0);
+        selecedPrefs = prefs.getString(app.getGameModel().getLevelName() + "_sel_pref","0");
+        if(selecedPrefs.length()>1){
+            System.err.println(selecedPrefs);
+            String[] aselectedPrefs = selecedPrefs.split("");
+            List<String> list = new LinkedList<String>(Arrays.asList(aselectedPrefs));
+            list.remove(0);
+            List<String> lselectedPrefs = new ArrayList<>(list);
+            System.out.println(lselectedPrefs);
+            app.getGameModel().setSelectedPieces(lselectedPrefs);
+        }
         finished = false;
         Log.d("GameActivity", "Loaded previous resolution time: " + resTime);
         onWin();
@@ -118,6 +133,7 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        savePositions();
         saveResTime();
     }
 
@@ -132,8 +148,15 @@ public class GameActivity extends AppCompatActivity {
         Log.d("GameActivity", "Saved resolution time: " + resTime);
     }
 
-    private void loadResTime() {
-
+    private void savePositions() {
+        if(finished) {
+            selecedPrefs = "0";
+            Log.d("GameActivity", "Reset selected pieces after victory.");
+        }else{
+            selecedPrefs = app.getGameModel().getSelectedPieces();
+        }
+        prefs.edit().putString(app.getGameModel().getLevelName()+ "_sel_pref", selecedPrefs).apply();
+        Log.d("GameActivity", "Saved selected Pieces: " + selecedPrefs);
     }
 
     public void writeGoogledocs(){

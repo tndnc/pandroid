@@ -119,7 +119,7 @@ def test_generation(number_of_tries=100):
     print("Number of fails: {}".format(fails))
 
 def test_graph():
-    instance = generate_solvable(5)
+    instance = generate_solvable(4)
     sols = asp_solve(instance=instance)
     print("Number of solutions: {}".format(len(sols)))
     G = get_optima_graph(instance, sols)

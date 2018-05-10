@@ -23,7 +23,7 @@ def compute_metadata(instance, solutions, wpos, stats,
 				number_of_frozen_variables += 1
 
 	G = get_optima_graph(instance, solutions)
-	print(nx.diameter(G))
+	# print(nx.diameter(G))
 
 	return {
 		'number_of_wpos': len(wpos),
@@ -123,7 +123,7 @@ def get_attraction_basin(solutions):
 
 		for pair in all_pairs:
 			candidate = swap(origin, pair)
-			if candidate.cost > origin.cost and candidate.cost < len(solutions[0]):
+			if candidate.cost >= origin.cost and candidate.cost < len(solutions[0]):
 				B.add((candidate, origin))
 				# B.update(get_attraction_basin(candidate))
 				if candidate not in S_: S.add(candidate)

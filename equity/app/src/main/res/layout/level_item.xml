@@ -27,9 +27,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/level_done"
-        android:textColor="@color/white"
-        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/level_name"
         />
 

@@ -72,9 +72,6 @@ public class GameActivity extends AppCompatActivity {
             // Set level completion
             finished = true;
             prefs.edit().putBoolean(gameModel.getLevelName(), true).apply();
-            // TODO: only update relevant item
-            app.getLevelListAdapter(gameModel.getNbActors()).notifyDataSetChanged();
-
             resTime += app.getGameModel().getGameTime();
 
             // Show level complete screen
@@ -89,13 +86,6 @@ public class GameActivity extends AppCompatActivity {
                      rateMe();
                      finish();
                  }});
-
-//            builder.setNegativeButton("Next level", new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int which) {
-//                    rateMe();
-//                    startNewGame(app.getGameModel().getNextLevel());
-//                    finish();
-//                }});
             builder.setCancelable(false);
             final AlertDialog alert = builder.create();
             alert.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -118,23 +108,13 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        saveResTime();
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        loadResTime();
-//    }
-
     @Override
     protected void onStop() {
         super.onStop();
         savePositions();
         saveResTime();
+        // TODO: only update relevant item
+        app.getLevelListAdapter(app.getGameModel().getNbActors()).notifyDataSetChanged();
     }
 
     private void saveResTime() {

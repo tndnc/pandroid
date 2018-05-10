@@ -1,6 +1,7 @@
 package com.tndnc.equity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,13 +50,23 @@ public class LevelListAdapter extends RecyclerView.Adapter<LevelListAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         Level l = this.levels.get(position);
         holder.buttonView.setLevel(l);
-        if(holder.levelComplete.getContext()
-                .getSharedPreferences("level_completion", Context.MODE_PRIVATE)
-                .getBoolean(l.getId(), false))
-        {
-            holder.levelComplete.setVisibility(TextView.VISIBLE);
-        }
         holder.levelName.setText("Level " + String.valueOf(position+1));
+        Context ctx = holder.levelComplete.getContext();
+        SharedPreferences prefs = ctx.getSharedPreferences("level_completion",
+                Context.MODE_PRIVATE);
+
+        if (prefs.getString(l.getId()+"_sel_pref", "0").length() > 1) {
+            // Level in progress
+            holder.levelComplete.setText(R.string.in_progress);
+            holder.levelComplete.setTextColor(ctx.getResources().getColor(R.color.colorAccentRed));
+            return;
+        }
+        if(prefs.getBoolean(l.getId(), false))
+        {
+            holder.levelComplete.setText(R.string.level_done);
+            holder.levelComplete.setTextColor(ctx.getResources().getColor(R.color.white));
+        }
+
     }
 
     @Override

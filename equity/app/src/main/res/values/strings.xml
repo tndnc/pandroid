@@ -22,6 +22,7 @@
     <string name="level_select_title">Pick a level</string>
     <string name="button_play">Play</string>
     <string name="level_done">• completed</string>
+    <string name="in_progress">• in progress</string>
     <!-- User profile -->
     <string name="user_profile_title">Please input user data</string>
     <string name="user_profile_age">Age</string>

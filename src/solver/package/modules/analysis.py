@@ -37,17 +37,32 @@ def compute_metadata(instance, solutions, wpos, stats,
 	mean_regret_wpos /= len(wpos)
 	ext_regret /= len(wpos)
 
+	# Compute average number of possible agents for variables
+	average_nb_of_possible_position = 0
+	for obj in range(len(instance)):
+		n = 0
+		for a in range(len(instance)):
+			if a == 0: neighbors = [a+1]
+			elif a == len(instance)-1: neighbors = [a-1]
+			else: neighbors = [a-1, a+1]
+
+			if all(instance[neighbor][0] != obj for neighbor in neighbors):
+				n += 1
+		average_nb_of_possible_position += n
+	average_nb_of_possible_position /= len(instance)
+
 	return {
 		'number_of_wpos': len(wpos),
 		'number_of_solutions': len(solutions),
-		'proportions': proportions,
+		# 'proportions': proportions,
 		'average_niter': sum(s['niter'] for s in stats) / len(stats),
 		'number_of_frozen_variables': number_of_frozen_variables,
 		'attraction_basin_size': len(G) - len(solutions),
-		'optima_graph': G,
+		# 'optima_graph': G,
 		'mean_regret': mean_regret,
 		'ext_regret': ext_regret,
-		'mean_regret_wpos': mean_regret_wpos
+		'mean_regret_wpos': mean_regret_wpos,
+		'average_number_of_possible_position': average_nb_of_possible_position
 	}
 
 

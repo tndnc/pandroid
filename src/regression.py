@@ -13,8 +13,8 @@ df['Size'] = df['Instance id'].apply(lambda a: int(a[0]))
 
 plot_by = 'Frozen Variables'
 predict = 'Difficulty'
-features = ['Size', 'Number of wpos', 'Number of solution', 'Frozen Variables',
-            'Attraction Basin Size', 'Number of iteration']
+features = ['Size', 'wpos', 'allsols', 'frozen',
+            'attr_bas_size', 'avg_iter', 'avg_regret', 'ext_regret', 'avg_regret_wpos', 'avg_nb_pos']
 
 # df.sort_values(by=plot_by, inplace=True)
 X = df[features].copy()
@@ -22,7 +22,7 @@ X = df[features].copy()
 X_ = (X - X.mean()) / X.std()
 # X_ = (X - X.min()) / (X.max() - X.min())
 # polynomial transform
-degree = 4
+degree = 5
 for deg in range(2, degree+1):
     for feature in features:
         X_["{}^{}".format(feature, deg)] = X_[feature].apply(lambda a: pow(a, deg))

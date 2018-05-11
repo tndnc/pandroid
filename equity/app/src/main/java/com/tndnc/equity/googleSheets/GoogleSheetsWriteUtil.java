@@ -19,12 +19,11 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 public class GoogleSheetsWriteUtil {
     private static Sheets sheetsService;
-    private static String SPREADSHEET_ID = "1zLIlFkoa4GM70x5zydp6L0Rgjk8vzqXAM0FQ936YRhY";
+    private static String SPREADSHEET_ID = DB.sid;
 
     private static String[] failedUserInfo;
     private static List<String[]> failedEvaluation = new ArrayList<>();
@@ -89,7 +88,7 @@ public class GoogleSheetsWriteUtil {
                     ));
             try {
             	AppendValuesResponse result = sheetsService.spreadsheets().values()
-                        .append(SPREADSHEET_ID, "User_Info!A1", body)
+                        .append(SPREADSHEET_ID, "User_Info_2!A1", body)
                         .setValueInputOption("USER_ENTERED")
                         .execute();
             	Object userPos = result.getUpdates().get("updatedRange");
@@ -113,7 +112,7 @@ public class GoogleSheetsWriteUtil {
                     ));
             try {
                 sheetsService.spreadsheets().values()
-                        .append(SPREADSHEET_ID, "User_Evaluation!A1", body)
+                        .append(SPREADSHEET_ID, "User_Evaluation_2!A1", body)
                         .setValueInputOption("USER_ENTERED")
                         .execute();
             } catch (IOException e) {

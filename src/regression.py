@@ -46,3 +46,7 @@ def plot_features():
         plt.ylabel(predict)
         plt.legend()
         plt.show()
+
+#plot_features()
+sns.pairplot(X, x_vars=['avg_iter', 'avg_regret', 'ext_regret', 'Size', 'wpos'], y_vars=['avg_regret_wpos', 'avg_nb_pos', 'attr_bas_size'])
+plt.show()

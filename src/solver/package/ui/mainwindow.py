@@ -115,9 +115,13 @@ class MainWindow(QMainWindow):
 		# exportLATEXbutton.clicked.connect(self.export_to_clipboard_LATEX)
 		# layout.addWidget(exportLATEXbutton, 3, 0)
 
-		# exportXMLbtn = QPushButton('Export to XML', self)
-		# exportXMLbtn.clicked.connect(self.export_to_clipboard_XML)
-		# layout.addWidget(exportXMLbtn, 4, 0)
+		exportXMLbtn = QPushButton('Export to XML', self)
+		exportXMLbtn.clicked.connect(self.export_to_clipboard_XML)
+		left_layout.addWidget(exportXMLbtn)
+
+		exportMetaBtn = QPushButton('Export metadata', self)
+		exportMetaBtn.clicked.connect(self.export_to_clipboard_metadata)
+		left_layout.addWidget(exportMetaBtn)
 
 
 		self.metaLabel = QLabel()
@@ -182,3 +186,13 @@ class MainWindow(QMainWindow):
 		xmlstr = export_toXML(instance=self.instance)
 		self.clipboard.setText(xmlstr)
 		self.statusBar().showMessage("Exported to clipboard")
+
+	@pyqtSlot()
+	def export_to_clipboard_metadata(self):
+		ordered_values = [self.metadata[k] for k in ('number_of_wpos', 
+			'number_of_solutions', 'average_niter', 'number_of_frozen_variables',
+			'attraction_basin_size', 'mean_regret', 'ext_regret', 'mean_regret_wpos',
+			'average_number_of_possible_position')]
+		string = ",".join(map(str, ordered_values))
+		self.clipboard.setText(string)
+		self.statusBar().showMessage("Metadata exported")

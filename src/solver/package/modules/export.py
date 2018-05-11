@@ -6,10 +6,10 @@ def export_toXML(**kwargs):
 		# TODO
 		raise
 
-	s = "<level name=\"grid_{}\" size=\"{}\">".format(1, len(instance))
+	s = "<level name=\"grid_{}\" size=\"{}\">\n".format(1, len(instance))
 	for i in range(len(instance)):
-		s += "<preferences line=\"{}\" order=\"{}\"/>".format(i+1, "".join(map(str, instance[i])))
-	s += "</level>"
+		s += "\t\t<preferences line=\"{}\" order=\"{}\"/>\n".format(i+1, "".join(map(str, instance[i])))
+	s += "\t</level>\n"
 	return s
 
 

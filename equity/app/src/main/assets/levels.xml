@@ -12,214 +12,143 @@
     </level>
 
     <level name="4-1" size="4">
-        <preferences line="1" order="0321" />
-        <preferences line="2" order="1320" />
-        <preferences line="3" order="2013" />
-        <preferences line="4" order="2130" />
+        <preferences line="1" order="0213"/>
+        <preferences line="2" order="0321"/>
+        <preferences line="3" order="2103"/>
+        <preferences line="4" order="3102"/>
     </level>
     <level name="4-2" size="4">
-        <preferences line="1" order="3201" />
-        <preferences line="2" order="1203" />
-        <preferences line="3" order="0321" />
-        <preferences line="4" order="0213" />
+        <preferences line="1" order="1230"/>
+        <preferences line="2" order="2031"/>
+        <preferences line="3" order="1320"/>
+        <preferences line="4" order="2031"/>
     </level>
-
     <level name="4-3" size="4">
-        <preferences line="1" order="0132" />
-        <preferences line="2" order="0213" />
-        <preferences line="3" order="1320" />
-        <preferences line="4" order="3201" />
+        <preferences line="1" order="2103"/>
+        <preferences line="2" order="0312"/>
+        <preferences line="3" order="1203"/>
+        <preferences line="4" order="0321"/>
     </level>
     <level name="4-4" size="4">
-        <preferences line="1" order="0231" />
-        <preferences line="2" order="0123" />
-        <preferences line="3" order="3201" />
-        <preferences line="4" order="3102" />
+        <preferences line="1" order="3210"/>
+        <preferences line="2" order="0123"/>
+        <preferences line="3" order="2301"/>
+        <preferences line="4" order="0312"/>
     </level>
-    ﻿
 
-    ﻿
     <level name="5-1" size="5">
-        <preferences line="1" order="20413" />
-        <preferences line="2" order="04321" />
-        <preferences line="3" order="20134" />
-        <preferences line="4" order="32410" />
-        <preferences line="5" order="21034" />
+        <preferences line="1" order="12043"/>
+        <preferences line="2" order="13402"/>
+        <preferences line="3" order="42013"/>
+        <preferences line="4" order="12340"/>
+        <preferences line="5" order="23041"/>
     </level>
     <level name="5-2" size="5">
-        <preferences line="1" order="43102" />
-        <preferences line="2" order="04213" />
-        <preferences line="3" order="43102" />
-        <preferences line="4" order="02143" />
-        <preferences line="5" order="34120" />
+        <preferences line="1" order="24013"/>
+        <preferences line="2" order="42310"/>
+        <preferences line="3" order="04123"/>
+        <preferences line="4" order="03214"/>
+        <preferences line="5" order="34102"/>
     </level>
-    ﻿
-
-    ﻿
     <level name="5-3" size="5">
-        <preferences line="1" order="42301" />
-        <preferences line="2" order="41320" />
-        <preferences line="3" order="42013" />
-        <preferences line="4" order="13024" />
-        <preferences line="5" order="41203" />
+        <preferences line="1" order="23140"/>
+        <preferences line="2" order="03214"/>
+        <preferences line="3" order="24130"/>
+        <preferences line="4" order="03142"/>
+        <preferences line="5" order="14203"/>
     </level>
-
     <level name="5-4" size="5">
-        <preferences line="1" order="43201" />
-        <preferences line="2" order="32140" />
-        <preferences line="3" order="24031" />
-        <preferences line="4" order="03142" />
-        <preferences line="5" order="04213" />
+        <preferences line="1" order="12340"/>
+        <preferences line="2" order="01234"/>
+        <preferences line="3" order="43210"/>
+        <preferences line="4" order="30142"/>
+        <preferences line="5" order="04231"/>
     </level>
-    ﻿
-    <level name="5-5" size="5">
-        <preferences line="1" order="01324" />
-        <preferences line="2" order="01432" />
-        <preferences line="3" order="02314" />
-        <preferences line="4" order="41320" />
-        <preferences line="5" order="04321" />
-    </level>
-    ﻿
 
-    ﻿
     <level name="6-1" size="6">
-        <preferences line="1" order="423105" />
-        <preferences line="2" order="135420" />
-        <preferences line="3" order="432051" />
-        <preferences line="4" order="521430" />
-        <preferences line="5" order="532014" />
-        <preferences line="6" order="052413" />
+        <preferences line="1" order="431502"/>
+        <preferences line="2" order="231540"/>
+        <preferences line="3" order="354012"/>
+        <preferences line="4" order="321450"/>
+        <preferences line="5" order="420531"/>
+        <preferences line="6" order="340125"/>
     </level>
-    ﻿
-
-    ﻿
     <level name="6-2" size="6">
-        <preferences line="1" order="503241" />
-        <preferences line="2" order="504132" />
-        <preferences line="3" order="240315" />
-        <preferences line="4" order="315042" />
-        <preferences line="5" order="412350" />
-        <preferences line="6" order="312054" />
+        <preferences line="1" order="123045"/>
+        <preferences line="2" order="501342"/>
+        <preferences line="3" order="432051"/>
+        <preferences line="4" order="123504"/>
+        <preferences line="5" order="450231"/>
+        <preferences line="6" order="543210"/>
     </level>
     <level name="6-3" size="6">
-        <preferences line="1" order="403251" />
-        <preferences line="2" order="431205" />
-        <preferences line="3" order="302514" />
-        <preferences line="4" order="524130" />
-        <preferences line="5" order="135024" />
-        <preferences line="6" order="051423" />
+        <preferences line="1" order="351402"/>
+        <preferences line="2" order="105243"/>
+        <preferences line="3" order="104352"/>
+        <preferences line="4" order="024513"/>
+        <preferences line="5" order="231450"/>
+        <preferences line="6" order="320541"/>
     </level>
-    ﻿
     <level name="6-4" size="6">
-        <preferences line="1" order="210345" />
-        <preferences line="2" order="423510" />
-        <preferences line="3" order="401352" />
-        <preferences line="4" order="035241" />
-        <preferences line="5" order="451032" />
-        <preferences line="6" order="305124" />
+        <preferences line="1" order="104235"/>
+        <preferences line="2" order="532140"/>
+        <preferences line="3" order="021453"/>
+        <preferences line="4" order="253401"/>
+        <preferences line="5" order="051423"/>
+        <preferences line="6" order="520341"/>
     </level>
-
     <level name="6-5" size="6">
-        <preferences line="1" order="402513" />
-        <preferences line="2" order="432150" />
-        <preferences line="3" order="245013" />
-        <preferences line="4" order="153204" />
-        <preferences line="5" order="534021" />
-        <preferences line="6" order="325014" />
+        <preferences line="1" order="134520"/>
+        <preferences line="2" order="450321"/>
+        <preferences line="3" order="214530"/>
+        <preferences line="4" order="432051"/>
+        <preferences line="5" order="015234"/>
+        <preferences line="6" order="034125"/>
     </level>
-    ﻿
-    <level name="6-6" size="6">
-        <preferences line="1" order="305214" />
-        <preferences line="2" order="521430" />
-        <preferences line="3" order="120354" />
-        <preferences line="4" order="014523" />
-        <preferences line="5" order="302415" />
-        <preferences line="6" order="354012" />
-    </level>
-    ﻿
 
     <level name="7-1" size="7">
-        <preferences line="1" order="6453012" />
-        <preferences line="2" order="1426530" />
-        <preferences line="3" order="1046352" />
-        <preferences line="4" order="2513604" />
-        <preferences line="5" order="2063451" />
-        <preferences line="6" order="0532164" />
-        <preferences line="7" order="6405321" />
+        <preferences line="1" order="4321560"/>
+        <preferences line="2" order="0125346"/>
+        <preferences line="3" order="2634501"/>
+        <preferences line="4" order="3012465"/>
+        <preferences line="5" order="0456213"/>
+        <preferences line="6" order="0143652"/>
+        <preferences line="7" order="2504613"/>
     </level>
     <level name="7-2" size="7">
-        <preferences line="1" order="0425163" />
-        <preferences line="2" order="5340162" />
-        <preferences line="3" order="2465130" />
-        <preferences line="4" order="3250146" />
-        <preferences line="5" order="3614205" />
-        <preferences line="6" order="0325641" />
-        <preferences line="7" order="2416035" />
+        <preferences line="1" order="4105326"/>
+        <preferences line="2" order="6324510"/>
+        <preferences line="3" order="0142365"/>
+        <preferences line="4" order="5321640"/>
+        <preferences line="5" order="0124653"/>
+        <preferences line="6" order="6013524"/>
+        <preferences line="7" order="4015623"/>
     </level>
-    ﻿
     <level name="7-3" size="7">
-        <preferences line="1" order="4362051" />
-        <preferences line="2" order="0615234" />
-        <preferences line="3" order="4503261" />
-        <preferences line="4" order="2316045" />
-        <preferences line="5" order="4315260" />
-        <preferences line="6" order="6031425" />
-        <preferences line="7" order="4216530" />
+        <preferences line="1" order="5613042"/>
+        <preferences line="2" order="6401235"/>
+        <preferences line="3" order="3564021"/>
+        <preferences line="4" order="0312645"/>
+        <preferences line="5" order="3254601"/>
+        <preferences line="6" order="2153064"/>
+        <preferences line="7" order="3542160"/>
     </level>
-    ﻿
     <level name="7-4" size="7">
-        <preferences line="1" order="0135462" />
-        <preferences line="2" order="1432065" />
-        <preferences line="3" order="6031542" />
-        <preferences line="4" order="1234560" />
-        <preferences line="5" order="6150234" />
-        <preferences line="6" order="6523410" />
-        <preferences line="7" order="1502643" />
+        <preferences line="1" order="3421560"/>
+        <preferences line="2" order="6405132"/>
+        <preferences line="3" order="4523160"/>
+        <preferences line="4" order="1420635"/>
+        <preferences line="5" order="5210364"/>
+        <preferences line="6" order="0362415"/>
+        <preferences line="7" order="2630154"/>
     </level>
-
-    ﻿
     <level name="7-5" size="7">
-        <preferences line="1" order="1254036" />
-        <preferences line="2" order="5032614" />
-        <preferences line="3" order="5431062" />
-        <preferences line="4" order="5640231" />
-        <preferences line="5" order="3104625" />
-        <preferences line="6" order="6154230" />
-        <preferences line="7" order="1024365" />
+        <preferences line="1" order="5164023"/>
+        <preferences line="2" order="3542610"/>
+        <preferences line="3" order="1260453"/>
+        <preferences line="4" order="0542316"/>
+        <preferences line="5" order="1463052"/>
+        <preferences line="6" order="0321546"/>
+        <preferences line="7" order="4653102"/>
     </level>
-    ﻿
-
-    ﻿
-    <level name="7-6" size="7">
-        <preferences line="1" order="2563401" />
-        <preferences line="2" order="3410562" />
-        <preferences line="3" order="2630541" />
-        <preferences line="4" order="1306425" />
-        <preferences line="5" order="6251034" />
-        <preferences line="6" order="6214350" />
-        <preferences line="7" order="6124053" />
-    </level>
-    ﻿
-    <level name="7-7" size="7">
-        <preferences line="1" order="0513642" />
-        <preferences line="2" order="4026513" />
-        <preferences line="3" order="6134052" />
-        <preferences line="4" order="6245301" />
-        <preferences line="5" order="4132065" />
-        <preferences line="6" order="1356204" />
-        <preferences line="7" order="1043526" />
-    </level>
-    <level name="7-8" size="7">
-        <preferences line="1" order="3605241" />
-        <preferences line="2" order="3165204" />
-        <preferences line="3" order="0426531" />
-        <preferences line="4" order="6513402" />
-        <preferences line="5" order="0142563" />
-        <preferences line="6" order="4136052" />
-        <preferences line="7" order="0415236" />
-    </level>
-    ﻿
-
-    ﻿
-
 </levels>

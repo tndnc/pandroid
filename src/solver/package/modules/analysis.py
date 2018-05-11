@@ -23,7 +23,19 @@ def compute_metadata(instance, solutions, wpos, stats,
 				number_of_frozen_variables += 1
 
 	G = get_optima_graph(instance, solutions)
-	# print(nx.diameter(G))
+
+	mean_regret = 0
+	mean_regret_wpos = 0
+	ext_regret = 0
+	for solution in solutions:
+		r, ext1, ext2 = regret(instance, solution)
+		mean_regret += r
+		if solution in wpos: 
+			ext_regret += ext1 + ext2
+			mean_regret_wpos += r
+	mean_regret /= len(solutions)
+	mean_regret_wpos /= len(wpos)
+	ext_regret /= len(wpos)
 
 	return {
 		'number_of_wpos': len(wpos),
@@ -32,8 +44,20 @@ def compute_metadata(instance, solutions, wpos, stats,
 		'average_niter': sum(s['niter'] for s in stats) / len(stats),
 		'number_of_frozen_variables': number_of_frozen_variables,
 		'attraction_basin_size': len(G) - len(solutions),
-		'optima_graph': G
+		'optima_graph': G,
+		'mean_regret': mean_regret,
+		'ext_regret': ext_regret,
+		'mean_regret_wpos': mean_regret_wpos
 	}
+
+
+def regret(instance, solution):
+	s = 0
+	for a in range(len(instance)):
+		s += instance[a].index(solution[a])
+	ext1 = instance[0].index(solution[0])
+	ext2 = instance[-1].index(solution[len(instance)-1])
+	return s, ext1, ext2
 
 
 def get_optima_graph(instance, solutions):
@@ -92,22 +116,6 @@ def swap(solution, pair):
 	return solution_
 
 
-# def find_local_optima(instance, N=1):
-# 	local_optima = dict()
-# 	all_pairs = combinations(range(len(instance)), 2)
-
-# 	for _ in range(N):
-# 		candidate_solution = list(range(len(instance)))
-# 		shuffle(candidate_solution)
-# 		candidate_solution = dict(enumerate(candidate_solution))
-# 		cost_ = cost(instance, candidate_solution)
-		
-# 		print("Starting with random solution: {}".format(candidate_solution))
-# 		print("Cost of random starting solution: {}".format(cost_))
-
-# 		while True:
-# 			break
-
 def get_attraction_basin(solutions):
 	B = set()
 	S = set(solutions)
@@ -129,6 +137,7 @@ def get_attraction_basin(solutions):
 				if candidate not in S_: S.add(candidate)
 
 	return B
+
 
 def show_optima_graph(G):
 	colormap = {

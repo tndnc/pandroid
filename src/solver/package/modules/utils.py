@@ -11,6 +11,9 @@ def pprint_metadata(metadata):
     # buffer += repr(metadata['proportions']) + "\n"
     buffer += "Number of frozen variables: {}\n".format(metadata['number_of_frozen_variables'])
     buffer += "Size of attraction basins: {}\n".format(metadata['attraction_basin_size'])
+    buffer += "Average regret: {:.2f}\n".format(metadata['mean_regret'])
+    buffer += "Average regret in wpos: {:.2f}\n".format(metadata['mean_regret_wpos'])
+    buffer += "Average regret in ext for wpos: {:.2f}".format(metadata['ext_regret'])
 
     return buffer
 

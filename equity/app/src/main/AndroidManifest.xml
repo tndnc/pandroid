@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tndnc.equity">
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name="com.tndnc.equity.GameApplication"
         android:allowBackup="true"
@@ -24,10 +24,10 @@
             android:name="com.tndnc.equity.activities.LevelSelectActivity"
             android:label="@string/level_select_title"
             android:theme="@style/AppTheme" />
-        <activity android:name="com.tndnc.equity.activities.GameActivity"/>
+        <activity android:name="com.tndnc.equity.activities.GameActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.tndnc.equity.activities.UserProfileActivity"/>
         <activity android:name="com.tndnc.equity.activities.AboutActivity"/>
         <activity android:name="com.tndnc.equity.activities.TutorialActivity"/>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

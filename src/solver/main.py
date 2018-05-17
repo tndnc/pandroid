@@ -6,8 +6,9 @@ if __name__ == '__main__':
 		sys.exit(app.run(sys.argv))
 	else:
 		from package.modules.tests import *
-		for instance_id in test_instances.keys():
-			instance = test_instances[instance_id]
+		from instances.inst import *
+		for instance_id in instances.keys():
+			instance = instances[instance_id]
 			solutions = asp_solve(instance=instance)
 			wpos, stats = compute_optimal_solutions(instance)
 

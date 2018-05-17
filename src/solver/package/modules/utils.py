@@ -15,6 +15,8 @@ def pprint_metadata(metadata):
     buffer += "Average regret in wpos: {:.2f}\n".format(metadata['mean_regret_wpos'])
     buffer += "Average regret in ext for wpos: {:.2f}\n".format(metadata['ext_regret'])
     buffer += "Average number of possible obj position: {:.2f}\n".format(metadata['average_number_of_possible_position'])
+    buffer += "Min regret: {:.2f}\n".format(metadata['min_regret'])
+    buffer += "Min ext regret: {:.2f}\n".format(metadata['min_ext_regret'])
 
     return buffer
 

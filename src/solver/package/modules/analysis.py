@@ -22,14 +22,18 @@ def compute_metadata(instance, solutions, wpos, stats,
 			if proportions[var_idx][k] >= MIN_FREEZE_PROPORTION:
 				number_of_frozen_variables += 1
 
-	G = get_optima_graph(instance, solutions)
+	# G = get_optima_graph(instance, solutions)
 
 	mean_regret = 0
 	mean_regret_wpos = 0
 	ext_regret = 0
+	min_regret = float('inf')
+	min_ext_regret = float('inf')
 	for solution in solutions:
 		r, ext1, ext2 = regret(instance, solution)
 		mean_regret += r
+		if r < min_regret: min_regret = r
+		if ext1 + ext2 < min_ext_regret: min_ext_regret = ext1 + ext2
 		if solution in wpos: 
 			ext_regret += ext1 + ext2
 			mean_regret_wpos += r
@@ -57,12 +61,14 @@ def compute_metadata(instance, solutions, wpos, stats,
 		# 'proportions': proportions,
 		'average_niter': sum(s['niter'] for s in stats) / len(stats),
 		'number_of_frozen_variables': number_of_frozen_variables,
-		'attraction_basin_size': len(G) - len(solutions),
+		'attraction_basin_size': 0,
 		# 'optima_graph': G,
 		'mean_regret': mean_regret,
 		'ext_regret': ext_regret,
 		'mean_regret_wpos': mean_regret_wpos,
-		'average_number_of_possible_position': average_nb_of_possible_position
+		'average_number_of_possible_position': average_nb_of_possible_position,
+		'min_regret': min_regret,
+		'min_ext_regret': min_ext_regret
 	}
 
 

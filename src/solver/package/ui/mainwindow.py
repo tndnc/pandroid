@@ -123,6 +123,10 @@ class MainWindow(QMainWindow):
 		exportMetaBtn.clicked.connect(self.export_to_clipboard_metadata)
 		left_layout.addWidget(exportMetaBtn)
 
+		exportPyBtn = QPushButton('Export to py', self)
+		exportPyBtn.clicked.connect(self.export_to_py)
+		left_layout.addWidget(exportPyBtn)
+
 
 		self.metaLabel = QLabel()
 		layout.addWidget(self.metaLabel, 0, 1)
@@ -192,7 +196,13 @@ class MainWindow(QMainWindow):
 		ordered_values = [self.metadata[k] for k in ('number_of_wpos', 
 			'number_of_solutions', 'average_niter', 'number_of_frozen_variables',
 			'attraction_basin_size', 'mean_regret', 'ext_regret', 'mean_regret_wpos',
-			'average_number_of_possible_position')]
+			'average_number_of_possible_position', 'min_regret', 'min_ext_regret')]
 		string = ",".join(map(str, ordered_values))
 		self.clipboard.setText(string)
 		self.statusBar().showMessage("Metadata exported")
+
+	@pyqtSlot()
+	def export_to_py(self):
+		s = str(self.instance)
+		self.clipboard.setText(s)
+		self.statusBar().showMessage("Inst to py exported")

@@ -1,12 +1,51 @@
-\documentclass{article}
+%--------------------------------------------------
+%	DOCUMENT CONFIGURATION
+%--------------------------------------------------
+
+\documentclass[a4paper, 10pt, titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[margin=1in]{geometry}
+\usepackage{import}
+\usepackage{hyperref}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{graphicx}
+\usepackage[subpreambles=true]{standalone}
+\usepackage{cleveref}
+\usepackage[table]{xcolor}
+\usepackage{titlesec}
+%-----------------------------------------------
+% DOCUMENT CONFIG
+%-----------------------------------------------
+% Add point after title number
+\titleformat{\section}[block]{\sc\bfseries\center\Large}{\thesection.}{0.5em}{}
+\titleformat{\subsection}[block]{\sc\bfseries\center}{\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}[block]{\sc\bfseries\center}{\thesubsubsection.}{0.5em}{}
 
-\begin{document}
-	\nocite{smithmiles}
-	\nocite{cardenasmontes}
-	\nocite{analysis}
 
-	\bibliography{bibliography.bib}
-	\bibliographystyle{unsrt}
+
+% DOC INFO
+\title{Rapport de Projet Tuteuré - ANDROIDE}
+\author{Alexandre Bontems, Gualtiero Mottola, Hans Thirunavukarasu}
+
+%--------------------------------------------------
+%	DOCUMENT BODY
+%--------------------------------------------------
+\begin{document}	
+	\maketitle
+	\tableofcontents
+	\newpage
+
+	\section{Introduction}
+		\import{sections/}{intro.tex}
+	\section{Analyse d'instances}
+		\import{sections/}{analyse.tex}
+	\section{Application mobile}
+	
+	\section{Conclusion}
+	
+	
+	%\bibliography{bibliography.bib}
+	%\bibliographystyle{unsrt}
 \end{document}

@@ -1,0 +1,83 @@
+%--------------------------------------------------
+%	DOCUMENT CONFIGURATION
+%--------------------------------------------------
+
+\documentclass[a4paper, 10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[margin=1in]{geometry}
+\usepackage{import}
+\usepackage{hyperref}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{graphicx}
+\usepackage[subpreambles=true]{standalone}
+\usepackage{cleveref}
+\usepackage[table]{xcolor}
+\usepackage{titlesec}
+\usepackage{listings}
+%-----------------------------------------------
+% DOCUMENT CONFIG
+%-----------------------------------------------
+% Add point after title number
+\titleformat{\section}[block]{\sc\bfseries\center\Large}{\thesection.}{0.5em}{}
+\titleformat{\subsection}[block]{\sc\bfseries\center}{\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}[block]{\sc\bfseries\center}{\thesubsubsection.}{0.5em}{}
+\lstset{
+frame=single,
+basicstyle=\ttfamily\small,
+numbers=left,
+%numbersep=5pt,
+literate=%
+{é}{{\'e}}1
+{à}{{\`a}}1
+}
+
+\begin{document}
+	Dans la partie théorique de ce projet, nous nous sommes attelés au calcul de métriques diverses permettant de résumer les caractéristiques d'une instance donnée. Puisque l'évaluation de la difficulté d'une instance se fait par rapport à une résolution par l'humain, plusieurs hypothèses ont été posées concernant les méthodes de résolution utilisées par un joueur. Elles dérivent directement d'observations réalisées grâce à l'application mobile développée dans le cadre de ce projet. Dans cette section, les différentes métriques conçues sont détaillées ainsi que les hypothèses à leur source.
+	
+	\subsection{Solvabilité d'une instance}
+	Afin d'obtenir des instances pertinentes pour notre analyse, il a d'abord été essentiel d'étudier leur solvabilité. Puisque le voisinage de chaque agent est connu, il a été possible de générer des instances comptant au moins une solution. L'idée est de choisir une allocation aléatoire, c'est-à-dire l'indice, dans les liste de préférences, de l'objet qui sera alloué à chaque agent. On s'assure ensuite qu'un agent donné ne préfère pas les objets choisis pour ses voisins à sa propre allocation. Le pseudo-code suivant a été implémenté dans ce projet. 
+
+\begin{lstlisting}
+Indices := []
+Pour chaque agent a:
+    Si a est le premier agent ou le dernier agent:
+        Indices[a] := valeur aléatoire entre 1 et n-1
+    Sinon:
+        Indices[a] := valeur aléatoire entre 1 et n-2
+
+Pour chaque agent a:
+    Prefs[a] := []
+    ValeursPossibles := {1, .., n}\(Indices[Voisins[a]] et Indices[a])
+    
+    Pour chaque indice i < Indices[a]:
+        k := valeur aléatoire parmi ValeursPossibles
+        Prefs[a, i] := k
+        ValeursPossibles := ValeursPossibles\{k}
+        
+    Prefs[a, i] := Indices[a]
+    ValeursPossibles := ValeursPossibles et Indices[Voisins[a]]
+    
+    Pour chaque indice i > Indices[a]:
+        k := valeur aléatoire parmi ValeursPossibles
+        Prefs[a, i] := k
+        ValeursPossibles := ValeursPossibles\{k}
+\end{lstlisting}
+Un exemple d'instance générée se trouve en ADD REF
+	
+	\subsection{Résolution par backtracking}
+	Avec des instances résolvables, nous avons pu procéder à leur analyse et la première approche abordée a été de résoudre le problème à l'aide d'un algorithme de backtracking. En effet, il s'est rapidement montré évident qu'un processus similaire pouvait être utilisé comme méthode de résolution par un humain. Un déroulement fréquemment observé est de choisir un objet pour un agent donné (généralement en extrémité car le voisinage est alors de taille $1$ seulement), puis de choisir itérativement un objet pour les voisins qui satisfasse les contraintes. Il est aussi plus facile de choisir des objets situés en tête des listes de préférences car la probabilité de jalousie est plus faible. L'explication du problème au joueur peut cependant influer sur ce déroulement typique: par exemple si la visualisation des listes de préférences n'est pas bien comprise alors la procédure de choix des objets à affecter peut être altérée.
+	
+	C'est avec ces observations en tête que l'algorithme de backtracking a été conçu. Ainsi, depuis un agent quelconque, l'algorithme tente d'affecter les objets préférés en premier tout en vérifiant les contraintes, et procède ainsi de voisin en voisin jusqu'à ce qu'une affectation soit trouvée. Si au cours de la recherche d'un objet pour un agent, aucune affectation n'est possible dans sa liste de préférence sans générer de jalousie, alors un retour arrière sur l'agent précédent est opéré et une nouvelle affectation est tentée pour cet agent précédent. De par l'heuristique de choix des objets pour chaque agent, on s'assure de trouver des solutions Pareto-optimales (voir paragraphe sur les solutions Pareto-optimales). AJOUTER DEROULEMENT ALGO
+	
+	\paragraph{Nombre d'essai d'affectation}{Une première mesure résultant de l'exécution de l'algorithme est le nombre de tentatives d'affectation. Ce nombre est incrémenté à chaque fois que l'algorithme }
+	\paragraph{Solutions Pareto-optimales}{L'algorithme de backtracking permet de trouver l'ensemble des solutions Pareto-optimales d'une instance. Ce sont, d'après notre hypothèse de choix par un joueur humain, les instances les plus facilement accessibles.}
+	
+	\paragraph{Regret global associé à une solution}
+	\subsection{Modélisation ASP}
+	
+	\subsection{Basin d'attraction}
+	\subsection{Apprentissage de la difficulté}
+	
+\end{document}

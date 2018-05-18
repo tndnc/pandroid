@@ -14,7 +14,11 @@ asp_py_parsetab.py
 *.log
 *.out
 *.synctex.gz
+*.synctex.gz(busy)
 *.toc
+*.sta
+*.pdf
+!main.pdf
 
 ## GoogleSheetSecret
 DB.java

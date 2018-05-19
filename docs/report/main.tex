@@ -1,20 +1,22 @@
 %--------------------------------------------------
 %	DOCUMENT CONFIGURATION
 %--------------------------------------------------
-
-\documentclass[a4paper, 10pt, titlepage]{article}
+\documentclass[a4paper, 11pt, titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage[margin=1in]{geometry}
-\usepackage{import}
 \usepackage{hyperref}
-\usepackage{amsmath, amssymb, mathtools}
+\usepackage{amsmath, amssymb, mathtools, amsthm}
 \usepackage{graphicx}
-\usepackage[subpreambles=true]{standalone}
+\usepackage{subfiles}
 \usepackage{cleveref}
 \usepackage[table]{xcolor}
 \usepackage{titlesec}
+\usepackage{tikz}
+\usepackage{tkz-graph}
+\usepackage{listings}
+\usepackage{subcaption}
 %-----------------------------------------------
 % DOCUMENT CONFIG
 %-----------------------------------------------
@@ -22,13 +24,38 @@
 \titleformat{\section}[block]{\sc\bfseries\center\Large}{\thesection.}{0.5em}{}
 \titleformat{\subsection}[block]{\sc\bfseries\center}{\thesubsection.}{0.5em}{}
 \titleformat{\subsubsection}[block]{\sc\bfseries\center}{\thesubsubsection.}{0.5em}{}
-
-
-
+% Commands
+\newcommand{\yy}[1]{\colorbox{yellow!70}{#1}}
+\newcommand{\bb}[1]{\colorbox{blue!30}{#1}}
+\newcommand{\rr}[1]{\colorbox{red!30}{#1}}
+\newcommand{\gr}[1]{\colorbox{green!30}{#1}}
+\newcommand{\textquote}[1]{«#1»}
+% Tikz
+\tikzstyle{vertex}=[circle, draw, inner sep=2pt, minimum size=8pt]
+\newcommand{\vertex}{\node[vertex]}
+\usetikzlibrary{arrows,petri,topaths,calc}
 % DOC INFO
 \title{Rapport de Projet Tuteuré - ANDROIDE}
 \author{Alexandre Bontems, Gualtiero Mottola, Hans Thirunavukarasu}
-
+% Listings
+\lstset{
+frame=lines,
+basicstyle=\ttfamily\small,
+numbers=left,
+numberstyle=\tiny,
+%numbersep=5pt,
+literate=%
+{é}{{\'e}}1
+{ê}{{\^e}}1
+{à}{{\`a}}1,
+commentstyle=\color{gray},
+language=Octave
+}
+% Theorems
+\newtheorem{observation}{\it\bfseries Observation}
+\newtheorem{definition}{\it\bfseries Définition}
+%images storage 
+\graphicspath{ {./images/} {./sections/images/}}
 %--------------------------------------------------
 %	DOCUMENT BODY
 %--------------------------------------------------
@@ -38,11 +65,11 @@
 	\newpage
 
 	\section{Introduction}
-		\import{sections/}{intro.tex}
+		\subfile{sections/intro.tex}
 	\section{Analyse d'instances}
-		\import{sections/}{analyse.tex}
+        \subfile{sections/analyse.tex}
 	\section{Application mobile}
-	
+	    \subfile{sections/app.tex}
 	\section{Conclusion}
 	
 	

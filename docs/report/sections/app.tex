@@ -1,129 +1,98 @@
-%--------------------------------------------------
-%	DOCUMENT CONFIGURATION
-%--------------------------------------------------
-
-\documentclass[a4paper, 11pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[french]{babel}
-\usepackage[margin=1in]{geometry}
-\usepackage{import}
-\usepackage{hyperref}
-\usepackage{amsmath, amssymb, mathtools}
-\usepackage{graphicx}
-\usepackage[subpreambles=true]{standalone}
-\usepackage{cleveref}
-\usepackage[table]{xcolor}
-\usepackage{titlesec}
-\usepackage{listings}
-\usepackage{subcaption}
-%-----------------------------------------------
-% DOCUMENT CONFIG
-%-----------------------------------------------
-%images storage 
-\graphicspath{ {./images/} }
-% Add point after title number
-\titleformat{\section}[block]{\sc\bfseries\center\Large}{\thesection.}{0.5em}{}
-\titleformat{\subsection}[block]{\sc\bfseries\center}{\thesubsection.}{0.5em}{}
-\titleformat{\subsubsection}[block]{\sc\bfseries\center}{\thesubsubsection.}{0.5em}{}
-\lstset{
-frame=single,
-basicstyle=\ttfamily\small,
-numbers=left,
-%numbersep=5pt,
-literate=%
-{é}{{\'e}}1
-{à}{{\`a}}1
-}
+\documentclass[../main.tex]{subfiles}
 
 \begin{document}
-	\paragraph{}L'application Android a été développée sous l'IDE Android Studio 3, avec l'API Android 26, mais supportant les versions plus vieilles jusqu'à la version 16 de l'api, ce qui nous permet de l'installer sur 99\% des appareils Android en circulation. Le code de l'application a été entièrement geré avec Git, il est d'ailleurs  disponible à l'adresse suivante :  \url{https://github.com/tndnc/pandroid/tree/master/equity}. 
-	\paragraph{}Le but de l'application est le suivant : l'utilisateur doit pouvoir sélectionner un niveau, jouer une partie et noter le niveau en question. Quand à nous, il faut qu'il soit possible de mettre à jour la liste des niveaux facilement lors des mises a jour de l'application, et que les notes et données utilisateurs provenant du déroulement d'une partie soit récupérables via internet sur un document Google sheets(via Google Sheets API v4).  
+	\paragraph{}L'application Android a été développée sous l'IDE Android Studio 3, avec l'API Android 16, supportant ainsi près de 99\% des appareils Android en circulation. Le code de l'application a été entièrement géré avec Git et est d'ailleurs disponible à l'adresse suivante : \url{https://github.com/tndnc/pandroid/tree/master/equity}. 
 	
-	\subsection{Composant Android}
-	\paragraph{} Une application Android s'organise en plusieurs composants , nous allons en présenter certains dans la section suivante pour pouvoir présenter l'application et ses fonctionnalités avec plus d'aisance. Nous allons notamment nous concentrer sur le concept d'activité qui est nécessaire pour pouvoir présenter l'interface.
-\hfill \break
-\begin{itemize}
-	\item Une activité Android correspond a une fenêtre d'une application, chaque application est composé d'au moins une activité et la navigation a l'intérieur de l'application se fait en changeant d'activité. Une activité dispose d'une interface utilisateur graphique  par un layout composé de vues (ex : un bouton) et elle répond à des évènements (ex : lancer une nouvelle activité).
-	\item Un layout est un ficher XML qui est chargé par une activité lorsque celle-ci est créé, il contient des vues qui permettent de définir les éléments graphiques (vues) de l'activité comme par exemple des boutons.
-\end{itemize}
+	L'application devait répondre aux spécifications suivantes: permettre aux utilisateurs de sélectionner des niveaux, de les résoudre et d'en noter la difficulté. Pour les administrateurs il était également important de pouvoir facilement mettre à jour la liste des niveaux ainsi que de pouvoir récupérer les notes et meta-données issues de l'utilisation de l'application par les utilisateurs. Ces données devaient pouvoir être exportées vers une base données Google Sheets.
+	% Google sheets API v4 à ajouter dans partie sur google sheet.
+	
+	\subsection{Composants Android}
+	Une application Android s'organise en plusieurs composants, nous allons en présenter certains dans la~\Cref{sec-struct} pour pouvoir décrire l'application et ses fonctionnalités aisément. Nous allons notamment nous concentrer sur le concept d'activité, nécessaire pour pouvoir présenter l'interface.
+	
+	Une activité Android correspond à une fenêtre d'application et chaque application est donc composée d'au moins une activité. La navigation à l'intérieur d'une application se fait en changeant d'activité. Leur apparence visuelle est principalement définie par leur \textit{layout} qui structure l'agencement des vues (images, boutons, etc) et peut lier certains événements, initiés par l'utilisateur (comme par exemple un \textquote{clic} de bouton), à des actions prédéfinies (par exemple, lancer un niveau). Le layout, chargé par une activité à sa création, est décrit dans un fichier XML.
+	
 	\subsection{Structure de l'application}
-Notre application est donc composée de six activités que nous allons présenter dans ce paragraphe :
+	\label{sec-struct}
+Notre application est composée de six activités que nous allons présenter ici. Des impressions d'écrans sont visibles en~\Cref{fig-screen1}.
 \hfill \break
 \begin{itemize}
- \item \texttt{MainMenuActivity} : l'activité principale de l'application, lorsque celle-ci est ouverte, l'utilisateur arrive sur l'écran qui correspond au menu principal, il a ensuite la possibilité de sélectionner un des quatres boutons du layout pour effectuer les actions suivantes : ouvrir le menu de sélection des niveaux, lancer le tutoriel, modifier son profil utilisateur et ouvrir l'onglet About.
- \item \texttt{LevelSelectActivity} : l'activité de sélection des niveaux, la liste des niveaux est affichée, catégorisée par le nombre d'agents de chacun des niveaux l'utilisateur a la possibilité de lancer chacun des niveaux présentés.
- \item \texttt{UserProfileActivity} : Cette activité remplace la \texttt{MainMenuActivity} lors du premier lancement de l'application, elle comporte deux zones d'entrées de texte qui permettent a l'utilisateur de rentrer sa formation et son age, ses données seront ensuite utilisées lors de l'apprentissage de la difficulté des niveaux, on note que l'utilisateur a la possibilité de lancer cette activité depuis le menu principal ou de ne pas remplir les champs de texte s'il ne désire pas partager ces informations. 
- \item\texttt{AboutActivity} : un bref résumé de l'objectif de notre projet, de la raison pour laquelle l'application a été développé.
- \item\texttt{TutorialActivity} : le tutoriel du jeu, on y trouve une description de l'interface de jeu, la définition de ce qu'est un agent jaloux, les modalités de victoire d'une partie ainsi que des captures d'écran pour illustrer nos propos.
- \item \texttt{GameActivity} : l'activité où se déroule la partie, elle est composée principalement d'un canevas sur lequel est affiché l'interface de jeu, et deux autres vues qui permettent d'afficher le nom du niveau et un bouton permettant d'afficher les acteurs jaloux.
+ \item \texttt{MainMenuActivity} : l'activité principale de l'application, lorsque celle-ci est ouverte, l'utilisateur arrive sur l'écran qui correspond au menu principal, il a ensuite la possibilité de sélectionner un des quatres boutons du layout pour effectuer les actions suivantes : ouvrir le menu de sélection des niveaux, lancer le tutoriel, modifier son profil utilisateur ou ouvrir la page \textquote{à propos}.
+ \item \texttt{LevelSelectActivity} : l'activité de sélection des niveaux dans laquelle la liste des niveaux est affichée, catégorisée par le nombre d'agents de chacun des niveaux. L'utilisateur a la possibilité de lancer chacun des niveaux présentés.
+ \item \texttt{UserProfileActivity} : Cette activité remplace la \texttt{MainMenuActivity} lors du premier lancement de l'application. Elle comporte deux zones d'entrées de texte qui permettent à l'utilisateur de rentrer sa formation et son âge, données utiles lors de l'analyse des niveaux. On note que l'utilisateur a la possibilité de revenir sur cette activité depuis le menu principal ou de ne pas remplir les champs de texte s'il ne désire pas partager ces informations. 
+ \item\texttt{AboutActivity} : un bref résumé de l'objectif de notre projet et des raisons pour laquelle l'application a été développé est visible sur cette page.
+ \item\texttt{TutorialActivity} : le tutoriel du jeu, on y trouve une description de l'interface de jeu, la définition de ce qu'est un agent jaloux, les modalités de victoire d'une partie ainsi que des captures d'écran pour illustration.
+ \item \texttt{GameActivity} : l'activité où se déroule la partie. Elle est composée principalement d'un canevas sur lequel est affiché l'interface de jeu. Deux autres vues permettent d'afficher le nom du niveau et un bouton activant la visualisation de l'envie chez les agents.
  \end{itemize}  
  
 \begin{figure}[h!]
     \centering
-    \begin{subfigure}{0.23\textwidth}
+    \begin{subfigure}{0.34\textwidth}
         \centering
-        \includegraphics[height=2.5in]{abou}
+        \includegraphics[width=\linewidth]{main}
+        \caption{Menu principal}
+    \end{subfigure}
+    ~
+    \begin{subfigure}{0.34\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{infor}
+        \caption{Profil}
+    \end{subfigure}
+    ~
+    \begin{subfigure}{0.34\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{abou}
         \caption{About}
     \end{subfigure}
-    \begin{subfigure}{0.23\textwidth}
+    ~
+    \begin{subfigure}{0.34\textwidth}
         \centering
-        \includegraphics[height=2.5in]{infor}
-        \caption{sélection}
-    \end{subfigure}%
-    \begin{subfigure}{0.23\textwidth}
-        \centering
-        \includegraphics[height=2.5in]{main}
-        \caption{affichage}
-    \end{subfigure}%
-    \begin{subfigure}{0.23\textwidth}
-        \centering
-        \includegraphics[height=2.5in]{tuto}
-        \caption{victoire}
+        \includegraphics[width=\linewidth]{tuto}
+        \caption{Tutoriel}
     \end{subfigure}
-    \caption{Exemple Gameview}
+    \caption{Design final des menus de l'application}
+    \label{fig-screen1}
 \end{figure}
  
 	\subsection{Le modèle du jeu}
 
 \paragraph{}
-La représentation théorique du jeu est stocké dans l'application Android sous le package \texttt{models}, on trouve dans ce package la classe \texttt{Model} qui est appelée dès lors qu'il est nécessaire de faire une modification du modèle, par exemple l'assignation d'une préférence à un des agents ou encore lorsqu'il faut récupérer des informations par rapport au jeu, comme le nombre d'agents d'un niveau. La classe 
-\texttt{Model} store en effet la grille qui représente le niveau en question, comprenant les agents et les préférences. Le package model contient aussi la définition de l’interface IPiece de laquelle découle les classes Preference et Actor qui représentent respectivement les préférences et les agents.
+Le package \texttt{models} contient les classes nécessaires à la représentation du jeu dans l'application. On y trouve la classe \texttt{Model}, appelée dès lors qu'il est demandé de faire une modification du modèle (assignation d'un objet à un des agents par exemple) ou encore de récupérer des informations du jeu comme le nombre d'agents d'un niveau. Cette classe stocke en effet la grille qui représente un niveau, comprenant les agents et les préférences. Le package contient également la définition de l'interface \texttt{IPiece}, implémentée par les classes \texttt{Preference} et \texttt{Actor} qui représentent respectivement les préférences et les agents.
+
  \begin{itemize}
 \item définition d'une Pièce (Interface \texttt{IPiece}) : L’interface IPiece est composé de deux méthodes, la méthode getId qui retourne l'identifiant de la pièce et la méthode getPosition qui permet de retourner la position de la pièce sous forme d’un objet position qui contient les indices de la ligne et de la colonne dans lesquelles se trouve la pièce.   
-\item définition d’un Acteur (Class \texttt{Actor}) :La classe Actor implémente l'interface IPiece et toute ses méthodes, elle représente les agents du jeu.                                                                                                                                                                                                                                                                                                                                      
-\item définition d’une Préférence ( Class \texttt{Préférence}) : La classe Préférence implémente également l’interface IPiece, on y ajoute cependant là deux entier, value : qui permet de déterminer de quel type est cette préférence et selectedby : qui permet de savoir si cette préférence est sélectionnée par un des agents et par quel agent elle l’est. 
+\item définition d’un Acteur (Classe \texttt{Actor}) : La classe Actor implémente l'interface IPiece et toute ses méthodes, elle représente les agents du jeu.                                                                                                                                                                                                                                                                                                                                      
+\item définition d’une Préférence (Classe \texttt{Préférence}) : La classe Préférence implémente également l’interface IPiece, on y ajoute cependant là deux entier, value : qui permet de déterminer de quel type est cette préférence et selectedby : qui permet de savoir si cette préférence est sélectionnée par un des agents et par quel agent elle l’est. 
 \end{itemize}
 \hfill \break
 \begin{lstlisting}
-    private boolean isJealous(Preference[] P1,Preference[] P2){
-        if (P1[0] == null){
-            return false;
-        }
-        Preference P2pref = null;
-        Preference P1pref = null;
-        for (Preference pref:P1){
-            if(pref.getSelectedby() != -1){
-                P1pref = pref;
-            }
-        }
-        for(Preference pref:P2){
-            if(pref.getSelectedby() != -1){
-                P2pref = pref;
-            }
-        }
-        if(P1pref == null || P2pref == null){
-            return false;
-        }
-        for(Preference pref:P2){
-            if(pref.getValue() == P1pref.getValue()){
-                if(pref.getPos().getCol() < P2pref.getPos().getCol()){
-                    return true;
-                }
-            }
-        }
+private boolean isJealous(Preference[] P1,Preference[] P2){
+    if (P1[0] == null){
         return false;
     }
+    Preference P2pref = null;
+    Preference P1pref = null;
+    for (Preference pref:P1){
+        if(pref.getSelectedby() != -1){
+            P1pref = pref;
+        }
+    }
+    for(Preference pref:P2){
+        if(pref.getSelectedby() != -1){
+            P2pref = pref;
+        }
+    }
+    if(P1pref == null || P2pref == null){
+        return false;
+    }
+    for(Preference pref:P2){
+        if(pref.getValue() == P1pref.getValue()){
+            if(pref.getPos().getCol() < P2pref.getPos().getCol()){
+                return true;
+            }
+        }
+    }
+    return false;
+}
 \end{lstlisting}
 Fonction de détection de la jalousie 
 

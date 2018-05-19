@@ -18,6 +18,9 @@ asp_py_parsetab.py
 *.toc
 *.sta
 *.pdf
+*.bbl
+*.blg
+*.dvi
 !main.pdf
 
 ## GoogleSheetSecret

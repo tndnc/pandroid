@@ -178,12 +178,12 @@ L'interface centrale de  l'application, l'ère de jeu de equity est un des compo
 	\subsection{Récupération des données}
 	
 	\paragraph{}
-	L’analyse de diverses instances du problème nous a permis donc de dégager plusieurs métriques, qui peuvent être utiliser pour essayer de prédire la difficulté de nos niveaux. Cependant, il nous fallait confronter ces prédictions avec des données réelles , qui seraient justement basé sur ces métriques, et ce afin de trouver si oui ou non, il existait une corrélation entre la difficulté d’un niveau et ces métriques. 
+	L’analyse de diverses instances du problème nous a permis donc de dégager plusieurs métriques, qui peuvent être utilisées pour essayer de prédire la difficulté de nos niveaux. Cependant, il nous fallait confronter ces prédictions avec des données réelles , qui seraient justement basé sur ces critères, et ce afin de trouver si oui ou non, il existait une corrélation entre la difficulté d’un niveau et ces derniers. 
 	\paragraph{}
-Une fois l’application mobile réalisé, nous avions donc décidé de la faire tester sur un public de taille variante et diverse, pour recueillir assez de données. Mais nous avions besoin d’un moyen d’écrire ces données quelque part , la contrainte étant que l’utilisateur allait jouer sur son téléphone. Il nous fallait donc envoyer ces informations sur une sorte de base de données. Notre regard s’est alors porté sur l’API Google Sheets qui nous offrait une relaxation de cette contrainte.
+Une fois l’application mobile réalisée, nous avions donc décidé de la faire tester sur un public de taille variante et diverse, pour recueillir assez de données. Mais nous avions besoin d’un moyen de les écrire quelque part , la contrainte étant que l’utilisateur allait jouer sur son téléphone. Il nous fallait donc envoyer ces informations sur une sorte de base de données. Notre regard s’est alors porté sur l’API Google Sheets qui nous offrait une relaxation de cette contrainte.
 
 \paragraph{Googlesheets}
-Nous avons donc intégrer dans l’application mobile, une solution permettant l’envois de diverses données joueurs qui étaient enregistrées lors de la résolution d’une instance : l’API Google Sheets permet l’écriture/lecture de données sur une Google Sheet via différentes plateformes : application mobile, site web, programme python, etc….. 
+Nous avons donc intégré dans l’application mobile, une solution permettant l’envois de diverses données joueurs qui étaient enregistrées lors de la résolution d’une instance : l’API Google Sheets permet l’écriture/lecture de données sur une Google Sheet via différentes plateformes : application mobile, site web, programme python, etc….. 
 En ce qui nous concerne, notre but est d’envoyer les différentes métriques abordées précédemment sur une Google Sheet avec diverses informations sur l’utilisateur pour ensuite les analyser et appliquer une régression dessus.
 
 \paragraph{}
@@ -193,7 +193,7 @@ La communication entre la feuille et notre application est géré via l’API, e
 \item l’usage d’un compte de service Google
 \end{itemize}
 Néanmoins, la première méthode requiert une confirmation de l’utilisateur à chaque fois qu’il envoie des données via son téléphone car l’application demandera la permission d'interagir avec la feuille sous le compte de l’utilisateur. Nous avons donc opté pour la seconde solution qui user d’un compte de service dédié à notre application. L’application interagira via ce compte sans demander la confirmation de l’utilisateur, ce qui est crucial pour l’envie de l’utilisateur à vouloir tester notre application sur une courte durée/longue durée.
-Dans les deux cas, un fichier JSON est créé, il contiendra les informations nécessaire pour créer nos identifiants.
+Dans les deux cas, un fichier JSON est créé et il contiendra les informations nécessaire pour créer nos identifiants.
 
 \paragraph{}
 L’intégration de cette solution dans notre application se traduit donc par deux classes:
@@ -205,7 +205,7 @@ L’intégration de cette solution dans notre application se traduit donc par de
 La première classe java SheetsServiceUtil contient une unique méthode getSheetsService qui permet la création d’une instance de l’objet Sheet qui est l'intermédiaire pour écrire et lire via l’API. Cette instance contiendra les identifiants nécessaire à l’autorisation de la communication entre l’application et la feuille.
 \paragraph{}
 La deuxième classe java GoogleSheetsWriteUtil contient toutes les méthodes qui seront appelées pour l’écritures de nos données. 
-La méthode setup() permet entre autre la création d’une instance de l’objet Credential, à partir de notre fichier JSON qui est contenu dans les ressources de notre applications ( on accède aux ressources de nos applications via ctx.getRessourses();. Cette instance est ensuite passé en paramètre dans la méthode getSheetsService de notre classe SheetsServiceUtil qui retournera un objet Sheets, sur lequel toute nos méthodes agiront par la suite.
+La méthode setup() permet entre autre la création d’une instance de l’objet Credential, à partir de notre fichier JSON qui est contenu dans les ressources de notre applications (pour rappel, on accède aux ressources de nos applications via ctx.getRessourses();). Cette instance est ensuite passée en paramètre dans la méthode getSheetsService de notre classe SheetsServiceUtil qui retournera un objet Sheets, sur lequel toute nos méthodes agiront par la suite.
 Par ailleurs, nous récupérons aussi les données du profil utilisateur enregistré si elles existent pour permettre de détecter la modification d’un profil.
 \paragraph{}
 Nous utilisons des AsyncTask pour envoyer nos données. En effet il est impossible sous android de faire des opérations réseaux ( transfert de données ) , sous le thread principale, on utilise donc des AsyncTask pour le faire en background. Cela nous évite des lags au niveau de l’interface qui est entièrement gérée par le main thread.
@@ -248,13 +248,20 @@ ou écrire de nouvelles données (pour WriteUserEvalAsyncTask et ModifyUserInfoA
 \end{lstlisting}
 Fonction WriteUserInfoAsyncTask
 \paragraph{}
-Comme il est possible que l’écritures des données sur la feuille puisse échouer (problème de réseau, téléphone non connecté à internet, etc..) , il est nécessaire de sauvegarder les données non envoyées pour permettre une planification d’un renvois plus tard. Ils existent donc deux variable dans notre classe SheetsServiceUtil pour cela : 
+Comme il est possible que l’écriture des données sur la feuille puisse échouer (problème de réseau, téléphone non connecté à internet, etc...) , il est nécessaire de sauvegarder les données non envoyées pour permettre une planification d’un renvois plus tard. Il existe donc deux variables dans notre classe SheetsServiceUtil pour cela : 
 failedEvaluation si l’écriture d’une évaluation échoue
 failedUserInfo si l’écriture/modification du profil utilisateur échoue
 \paragraph{}
 Avant toute nouvelles écritures, il faut donc vérifier s’il n’en existe pas qui ont échouées.
-Pour cette raison, nous avons créé trois méthodes : WriteUserInfo(String data), ModifyUserInfo(String data) , WriterUserEval(String data), qui appelle toujours au début une méthode “CheckFailures” qui verifie si failedEvaluation et failedUserInfo sont vide ou non. Si elles ne le sont pas, alors on créer de nouvelles asyncTask pour renvoyer ces données. Et dans tous les cas, on crée de nouvelles AsyncTask correspondant à la méthode qui est appelé (par exemple WriteUserInfoAsyncTask pour la méthode WriteUserInfo) pour les nouvelles données passées en paramètre de ces méthodes.
-
+Pour cette raison, nous avons créé trois méthodes : WriteUserInfo(String data), ModifyUserInfo(String data) , WriterUserEval(String data), qui appelle toujours au début une méthode “CheckFailures” qui verifie si failedEvaluation et failedUserInfo sont vide ou non. Si elles ne le sont pas, alors on crée de nouvelles asyncTask pour renvoyer ces données. Et dans tous les cas, on crée de nouvelles AsyncTask correspondant à la méthode qui est appelé (par exemple WriteUserInfoAsyncTask pour la méthode WriteUserInfo) pour les nouvelles données passées en paramètre de ces méthodes.
+\hfill \break
+\begin{lstlisting}
+	public void writeUserEvaluation(String... data) {
+        	this.checkFailures();
+        	new WriteUserEvaluationAsyncTask().execute(data);
+    	}
+\end{lstlisting}
+Méthode WriteUserEvaluation
 	
 \end{document}
 

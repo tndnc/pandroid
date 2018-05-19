@@ -2,7 +2,7 @@
 %	DOCUMENT CONFIGURATION
 %--------------------------------------------------
 
-\documentclass[a4paper, 10pt]{article}
+\documentclass[a4paper, 11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
@@ -238,7 +238,8 @@ AsyncTask<String, Void, Void>{
 			Object userPos = result.getUpdates().get("updatedRange");
 			prefs.edit().putString("userPos", (String) userPos).apply();
 		} catch (IOException e) {
-			Log.w("GoogleSheet", "Error during user info write; rescheduling");
+			Log.w("GoogleSheet", "Error during user info write; 
+			rescheduling");
 			failedUserInfo = data;
 			e.printStackTrace();
 		 }

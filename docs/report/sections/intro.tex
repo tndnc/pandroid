@@ -1,5 +1,64 @@
-\documentclass{standalone}
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{cleveref}
+\usepackage{tikz}
+\usepackage{tkz-graph}
+\usepackage{xcolor}
+
+\newcommand{\yy}[1]{\colorbox{yellow!70}{#1}}
+\newcommand{\textquote}[1]{«#1»}
+% tikz
+\tikzstyle{vertex}=[circle, draw, inner sep=2pt, minimum size=8pt]
+\newcommand{\vertex}{\node[vertex]}
+\usetikzlibrary{arrows,petri,topaths,calc}
 
 \begin{document}
-	This is the intro
+	Ce travail s'est effectué dans le cadre du projet tuteuré du Master ANDROIDE, proposé par la faculté des sciences de \textit{Sorbonne Université}. Les principaux objectifs, donnés par l'équipe cliente (composée de Nicolas Maudet et Aurélie Beynier), étaient de développer un jeu basé sur le problème de satisfaction LEF et de pouvoir y proposer des niveaux de difficulté croissante. Pour répondre à ces besoins le projet s'est vu divisé en deux parties: l'analyse d'instances pour en évaluer la difficulté et, en parallèle, le développement d'une application permettant de jouer au jeu.
+	
+	Définit dans \cite{?}, le problème de satisfaction LEF est résumé ici; $n$ agents se trouvent liés par un réseau social dans lequel chaque agent peut percevoir un à deux autres voisins. Ils sont disposés en chaîne et sont liés à leurs voisins de gauche et de droite (voir~\Cref{fig-lefex}). C'est le seul type de réseau évoqué par ce projet mais tout autre type peut être envisagé pour analyse avec les outils proposés dans ce rapport. On dispose d'autant de biens indivisibles (ou objets) que d'agents. La résolution du problème consiste alors en la recherche d'une allocation équitable $\mathcal{A}$ d'un objet par agent. Une allocation est recevable si aucun agent n'éprouve de jalousie, c'est-à-dire si pour toute paire d'agents $(a_i, a_j)$, voisins dans le réseau, la relation suivante est vérifiée: $\mathcal{A}(a_i) \succ_{i} \mathcal{A}(a_j)$. Comme on peut le voir dans la~\Cref{fig-lefex}, chaque agent est associé à une liste de préférences concernant tous les biens, triée de haut en bas. Par exemple, l'agent $a_1$ est définit par l'ordre de préférence $o_2 \succ o_4 \succ o_1 \succ o_3$. Une solution possible de l'exemple est surlignée en jaune.
+	
+	\begin{figure}[h!]
+	    \centering
+	    \begin{tikzpicture}
+    	    % Agents
+	        \vertex (a1) at (0,0) {$a_1$};
+	        \vertex (a2) at (1.5,0) {$a_2$};
+	        \vertex (a3) at (3,0) {$a_3$};
+	        \vertex (a4) at (4.5,0) {$a_4$};
+	        % Prefs
+	        \node (a1o1) at (0,2.2) {$o_2$};
+	        \node (a1o2) at (0,1.7) {$o_4$};
+	        \node (a1o3) at (0,1.2) {\yy{$o_1$}};
+	        \node (a1o4) at (0,0.7) {$o_3$};
+	        \node (a2o1) at (1.5,2.2) {\yy{$o_3$}};
+	        \node (a2o2) at (1.5,1.7) {$o_4$};
+	        \node (a2o3) at (1.5,1.2) {$o_2$};
+	        \node (a2o4) at (1.5,0.7) {$o_1$};
+	        \node (a3o1) at (3.0,2.2) {\yy{$o_2$}};
+	        \node (a3o2) at (3.0,1.7) {$o_1$};
+	        \node (a3o3) at (3.0,1.2) {$o_4$};
+	        \node (a3o4) at (3.0,0.7) {$o_3$};
+	        \node (a4o1) at (4.5,2.2) {$o_3$};
+	        \node (a4o2) at (4.5,1.7) {\yy{$o_4$}};
+	        \node (a4o3) at (4.5,1.2) {$o_2$};
+	        \node (a4o4) at (4.5,0.7) {$o_1$};
+	        \path
+	        (a1) edge (a2)
+            (a2) edge (a3)
+            (a3) edge (a4)	        
+	        ;
+	    \end{tikzpicture}
+	    \caption{Exemple d'instance étudiée du problème LEF}
+	    \label{fig-lefex}
+	\end{figure}
+	
+    Ce sont les instances de cette variante du problème LEF qui ont été analysées au cours de ce projet. Seules les instances de trois à sept agents étaient concernées car celles de tailles inférieures à trois ne peuvent avoir qu'une solution et qu'une borne de taille était nécessaire à cause du support choisi pour le jeu. Afin de proposer des enjeux intéressants aux joueurs, le travail d'analyse s'est concentré sur l'obtention d'instances solvables et le développement d'outils permettant d'évaluer leur difficulté. Puisque la résolution au sein du jeu se fait \textquote{à la main} par un humain, obtenir les ressentis de difficulté des joueurs était primordial et l'application de jeu s'est révélée très utile pour récupérer ces informations. Il a ainsi été possible d'étudier les corrélations entre les caractéristiques d'une instance et la difficulté éprouvée par les joueurs. Ces résultats permettent d'intégrer de nouvelles instances dans le jeu et de déterminer un niveau de difficulté probable selon leur configuration.
+    	
+	Il a été décidé très tôt qu'une plateforme mobile se prêtait au mieux à ce type de jeu puzzle et l'application a donc été produite au sein de l'écosystème \texttt{Android}, permettant ainsi la distribution du jeu à un grand public. Un certain nombre de problématiques liées au développement d'application et d'interface ont été traitées, notamment la conception de tutoriel et d'une interface favorisant la compréhension et l'amusement.
+	
+	Ce rapport détaille en premier lieu le processus d'analyse des instances, puis l'architecture logicielle ainsi que l'esthétique de l'application jeu en elle-même. 
 \end{document}

@@ -2,20 +2,21 @@
 %	DOCUMENT CONFIGURATION
 %--------------------------------------------------
 
-\documentclass[a4paper, 10pt]{article}
+\documentclass[a4paper, 11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage[margin=1in]{geometry}
 \usepackage{import}
 \usepackage{hyperref}
-\usepackage{amsmath, amssymb, mathtools}
+\usepackage{amsmath, amssymb, mathtools, amsthm}
 \usepackage{graphicx}
 \usepackage[subpreambles=true]{standalone}
 \usepackage{cleveref}
 \usepackage[table]{xcolor}
 \usepackage{titlesec}
 \usepackage{listings}
+
 %-----------------------------------------------
 % DOCUMENT CONFIG
 %-----------------------------------------------
@@ -24,24 +25,40 @@
 \titleformat{\subsection}[block]{\sc\bfseries\center}{\thesubsection.}{0.5em}{}
 \titleformat{\subsubsection}[block]{\sc\bfseries\center}{\thesubsubsection.}{0.5em}{}
 \lstset{
-frame=single,
+frame=lines,
 basicstyle=\ttfamily\small,
 numbers=left,
+numberstyle=\tiny,
 %numbersep=5pt,
 literate=%
 {é}{{\'e}}1
-{à}{{\`a}}1
+{ê}{{\^e}}1
+{à}{{\`a}}1,
+commentstyle=\color{gray},
+language=Octave
 }
+\newcommand{\yy}[1]{\colorbox{yellow!70}{#1}}
+\newcommand{\bb}[1]{\colorbox{blue!30}{#1}}
+\newcommand{\rr}[1]{\colorbox{red!30}{#1}}
+\newcommand{\gr}[1]{\colorbox{green!30}{#1}}
+
+\newcommand{\textquote}[1]{«#1»}
+
+\newtheorem{observation}{\it\bfseries Observation}
+\newtheorem{definition}{\it\bfseries Définition}
 
 \begin{document}
-	Dans la partie théorique de ce projet, nous nous sommes attelés au calcul de métriques diverses permettant de résumer les caractéristiques d'une instance donnée. Puisque l'évaluation de la difficulté d'une instance se fait par rapport à une résolution par l'humain, plusieurs hypothèses ont été posées concernant les méthodes de résolution utilisées par un joueur. Elles dérivent directement d'observations réalisées grâce à l'application mobile développée dans le cadre de ce projet. Dans cette section, les différentes métriques conçues sont détaillées ainsi que les hypothèses à leur source.
+	Dans la partie théorique de ce projet, nous nous sommes attelés au calcul de métriques diverses permettant de résumer les caractéristiques d'une instance donnée. Puisque l'évaluation de la difficulté d'une instance se fait par rapport à une résolution humaine, plusieurs hypothèses ont été posées concernant les méthodes de résolution utilisées par un joueur. Elles dérivent directement d'observations réalisées grâce à l'application mobile développée dans le cadre de ce projet. Dans cette section, les différentes métriques conçues sont détaillées ainsi que les observations à leur source.
 	
 	\subsection{Solvabilité d'une instance}
-	Afin d'obtenir des instances pertinentes pour notre analyse, il a d'abord été essentiel d'étudier leur solvabilité. Puisque le voisinage de chaque agent est connu, il a été possible de générer des instances comptant au moins une solution. L'idée est de choisir une allocation aléatoire, c'est-à-dire l'indice, dans les liste de préférences, de l'objet qui sera alloué à chaque agent. On s'assure ensuite qu'un agent donné ne préfère pas les objets choisis pour ses voisins à sa propre allocation. Le pseudo-code suivant a été implémenté dans ce projet. 
+	Afin d'obtenir des instances pertinentes pour notre analyse, il a d'abord été essentiel d'étudier leur solvabilité. Puisque le voisinage de chaque agent est connu, générer des instances comptant au moins une solution est relativement aisé. L'idée est de choisir une allocation aléatoire, c'est-à-dire l'indice pour chaque agent, dans leur liste de préférences respective, de l'objet qui leur sera alloué. On s'assure ensuite qu'un agent donné ne préfère pas les objets choisis pour ses voisins à sa propre allocation. Le pseudo-code suivant a été implémenté dans ce projet. 
 
 \begin{lstlisting}
 Indices := []
 Pour chaque agent a:
+    % Il faut que les objets voisins ne soient pas préférés à l'indice
+    % choisi donc on garde une place pour les agents en extrémités et 
+    % deux places pour les restants.
     Si a est le premier agent ou le dernier agent:
         Indices[a] := valeur aléatoire entre 1 et n-1
     Sinon:
@@ -50,7 +67,7 @@ Pour chaque agent a:
 Pour chaque agent a:
     Prefs[a] := []
     ValeursPossibles := {1, .., n}\(Indices[Voisins[a]] et Indices[a])
-    
+
     Pour chaque indice i < Indices[a]:
         k := valeur aléatoire parmi ValeursPossibles
         Prefs[a, i] := k
@@ -64,20 +81,166 @@ Pour chaque agent a:
         Prefs[a, i] := k
         ValeursPossibles := ValeursPossibles\{k}
 \end{lstlisting}
-Un exemple d'instance générée se trouve en ADD REF
+\begin{table}[h!]
+\centering
+\begin{tabular}{|cccc|}
+    \hline
+    \fbox{\yy{1}} & 3 & 1 & 4 \\
+    3 & \fbox{\bb{4}} & \fbox{\rr{2}} & \fbox{\gr{3}} \\
+    2 & \rr{2} & \gr{3} & 0 \\
+    \bb{4} & \yy{1} & \bb{4} & \rr{2} \\
+    \hline
+    $a_1$ & $a_2$ & $a_3$ & $a_4$ \\
+    \hline    
+\end{tabular}
+\caption{Exemple d'instance générée}
+\label{fig-exgen}
+\end{table}
+Un exemple d'instance générée se trouve en~\Cref{fig-exgen}. Les objets correspondants aux indices choisis en première étape sont encadrés et on se rend bien compte que les objets choisis pour les voisins sont bien placés dans les préférences de façon à ne pas générer de jalousie dans l'allocation.
 	
 	\subsection{Résolution par backtracking}
-	Avec des instances résolvables, nous avons pu procéder à leur analyse et la première approche abordée a été de résoudre le problème à l'aide d'un algorithme de backtracking. En effet, il s'est rapidement montré évident qu'un processus similaire pouvait être utilisé comme méthode de résolution par un humain. Un déroulement fréquemment observé est de choisir un objet pour un agent donné (généralement en extrémité car le voisinage est alors de taille $1$ seulement), puis de choisir itérativement un objet pour les voisins qui satisfasse les contraintes. Il est aussi plus facile de choisir des objets situés en tête des listes de préférences car la probabilité de jalousie est plus faible. L'explication du problème au joueur peut cependant influer sur ce déroulement typique: par exemple si la visualisation des listes de préférences n'est pas bien comprise alors la procédure de choix des objets à affecter peut être altérée.
 	
-	C'est avec ces observations en tête que l'algorithme de backtracking a été conçu. Ainsi, depuis un agent quelconque, l'algorithme tente d'affecter les objets préférés en premier tout en vérifiant les contraintes, et procède ainsi de voisin en voisin jusqu'à ce qu'une affectation soit trouvée. Si au cours de la recherche d'un objet pour un agent, aucune affectation n'est possible dans sa liste de préférence sans générer de jalousie, alors un retour arrière sur l'agent précédent est opéré et une nouvelle affectation est tentée pour cet agent précédent. De par l'heuristique de choix des objets pour chaque agent, on s'assure de trouver des solutions Pareto-optimales (voir paragraphe sur les solutions Pareto-optimales). AJOUTER DEROULEMENT ALGO
+	Avec des instances résolvables, nous avons pu procéder à leur analyse et la première approche abordée a été de résoudre le problème à l'aide d'un algorithme de backtracking. En effet, il s'est rapidement montré évident qu'un processus similaire pouvait être utilisé comme méthode de résolution par un humain (\Cref{obs-backtrack}). 
 	
-	\paragraph{Nombre d'essai d'affectation}{Une première mesure résultant de l'exécution de l'algorithme est le nombre de tentatives d'affectation. Ce nombre est incrémenté à chaque fois que l'algorithme }
-	\paragraph{Solutions Pareto-optimales}{L'algorithme de backtracking permet de trouver l'ensemble des solutions Pareto-optimales d'une instance. Ce sont, d'après notre hypothèse de choix par un joueur humain, les instances les plus facilement accessibles.}
+	\begin{observation}
+	\label{obs-backtrack}
+	Un déroulement fréquemment observé est de commencer par choisir un premier agent pour lui affecter un objet (généralement parmi les extrémités car le voisinage est alors de taille $1$ seulement et les contraintes sont par conséquent plus faciles à satisfaire). L'étape suivante est de choisir un objet pour cet agent et le plus facile est de commencer par l'objet préféré: plus un objet est apprécié par un agent, moins il est probable de laisser place à de la jalousie. On poursuit ensuite le processus d'allocation en choisissant un voisin de cet agent et en procédant de manière similaire de voisin en voisin. Lorsqu'un agent se montre jaloux, on revient sur le choix précédent. L'explication du problème au joueur peut cependant influer sur ce déroulement typique; Par exemple si la visualisation des listes de préférences n'est pas bien comprise alors la procédure de choix des objets à affecter peut être altérée. Ce comportement atypique disparaît généralement si un joueur joue plusieurs fois.
+	\end{observation}
 	
-	\paragraph{Regret global associé à une solution}
+	C'est avec ces observations en tête que l'algorithme de backtracking a été conçu. Depuis un agent quelconque, l'algorithme tente d'affecter les objets préférés en premier tout en vérifiant les contraintes, et procède ainsi de voisin en voisin jusqu'à ce qu'une affectation soit trouvée. Si au cours de la recherche aucune affectation n'est possible dans la liste de préférence d'un agent sans générer de jalousie, alors un retour arrière sur l'agent précédent est opéré et une nouvelle affectation est tentée pour cet agent. De par l'heuristique de choix des objets à affecter, on s'assure de trouver des solutions Pareto-optimales (voir~\Cref{pareto-def}). L'algorithme est lancé depuis tous les points de départs possibles et dans chaque direction possible afin de trouver toutes les solutions optimales. Donc pour chaque agent $a_i$, l'algorithme va dans la direction $a_{i+1} \rightarrow a_{i+2} \rightarrow ...$ pour trouver une solution puis dans la direction $a_{i-1} \rightarrow a_{i-2} \rightarrow ...$ pour tenter d'en trouver une autre.
+	
+	\begin{definition}
+	\label{pareto-def}
+	    Une solution \textbf{Pareto-optimale} est une solution telle que l'on ne peut affecter un meilleur objet à un agent sans devoir affecter un objet moins aimé à un ou plusieurs autres agents. 
+	\end{definition}
+	
+	\paragraph{Nombre d'affectations}{Une première mesure résultant de l'exécution de l'algorithme est le nombre de tentatives d'affectation qui est incrémenté à chaque fois que l'algorithme tente d'allouer un objet à un agent. Un déroulement sans retours arrière affiche donc un nombre d'affectation égal au nombre d'agents mais une instance plus difficile à résoudre engendrera un plus grand nombre d'essais à cause des retours arrière. On peut mesurer la moyenne de ce nombre sur toutes les exécutions de l'algorithme sur une instance et obtenir une estimation du nombre d'objets à considérer en moyenne lors d'une résolution.}
+	
+	\paragraph{Solutions Pareto-optimales}{L'algorithme de backtracking permet de trouver l'ensemble de ces solutions pour une instance. Ce sont, d'après notre hypothèse de choix des objets par un joueur humain (commencer par les préférés), les instances les plus facilement accessibles. Compter leur nombre donne donc une indication de la force des contraintes dans l'instance. Évidemment moins il existe de solutions, plus le temps moyen de recherche augmente et on devrait donc voir apparaître une corrélation directe entre la difficulté ressentie et le nombre de solutions Pareto-optimales.}
+	
+	\paragraph{Regret global associé à une solution}{Toujours en rapport avec l'hypothèse de choix des objets, on définit le regret global associé à une solution tout simplement comme la somme des indices de l'allocation dans les listes de préférences respectives. Soit $ind(.)$ la fonction qui a un objet associe son indice dans la liste de préférence de son agent alors le regret $R$ peut s'écrire comme suit.
+	\begin{equation*}
+	    R = \sum_{i=1}^n ind(\mathcal{A}(a_i))
+	\end{equation*}
+	Ainsi, en utilisant une indexation à partir de $0$, dans la~\Cref{fig-exemple1}, la solution en \yy{jaune} a un regret de $1$ et la solution en \bb{bleu} a un regret de $3+4+2+4+2+1+2=18$. La première est bien évidemment la plus facile à trouver. 
+	
+	\begin{table}[h!]
+	    \centering
+		\begin{tabular}{c|c c c c c c c}
+		    \textbf{Index} \\
+			\hline
+			0&    2	& \yy{3}	& \yy{2}	& \yy{5} & \yy{7}	& \yy{4}	& \yy{6}	\\ 
+    		1&  \yy{1} &  4    &  6	&  6	&  3    & \bb{5}&  1	\\ 
+			2&    3	&  2	& \bb{1}&  7	& \bb{2}&  6    & \bb{3}\\ 
+			3& \bb{6}	&  5	&  3	&  3    &  1	&  7	&  7	\\ 
+			4&    5	& \bb{7}&  4	& \bb{4}&  6	&  1	&  5	\\ 
+			5&    3	&  1	&  7	&  2	&  4	&  2	&  2	\\ 
+			6&    7	&  6	&  5	&  1	&  5	&  3	&  4    \\ 
+			\hline
+		\end{tabular}
+		\caption{Exemple de deux solutions pour une instance de 7 agents}
+		\label{fig-exemple1}
+	\end{table}
+	
+	De cette mesure de regret on peut tirer plusieurs métriques intéressantes:
+	\begin{itemize}
+	    \item Le regret minimum à atteindre pour trouver une solution,
+	    \item Le regret moyen dans les solutions Pareto-optimales,
+	    \item Le regret minimum pour les agents en extrémité puisque ce sont eux qui sont choisis en premier le plus fréquemment.
+	\end{itemize}
+}
+
+\begin{observation}
+\label{obs-position}
+    Une grande proportion de joueurs, après plusieurs résolutions, exhibe une méthode de réduction des domaines de variables basée sur la présence de certains objets en top préférence. 
+\end{observation}
+
+\paragraph{Nombre de positions possibles pour un objet}{Grâce à l'\Cref{obs-position}, il a été remarqué que l'on pouvait, dans certaines instances, déterminer des positions impossibles pour un objet donné. En effet, la présence d'un objet en top préférence dans plusieurs listes voisines empêche son affectation aux agents concernés. Par exemple dans la~\Cref{fig-exemple2}, aucun des agents $a_4$, $a_5$ ou $a_6$ ne peut se voir affecté l'objet $7$ sous peine de rendre au moins un de ses voisins jaloux. D'une manière générale, si un objet est en top d'une liste de préférence, il ne peut pas être affecté à un agent voisin sans créer de jalousie chez l'agent l'ayant en top. De plus, on ne peut affecter à un agent que les $(n-nbvoisins)$ premiers objets de sa liste de préférences car il est sinon impossible de ne pas envier au moins un de ses voisins. Dans la~\Cref{fig-exemple2}, on a donc seulement deux positions possibles pour l'objet $7$, surlignées en \bb{bleu}. Les positions des agents $a_3$, $a_4$, $a_5$ et $a_6$ sont prohibés par la présence de l'objet en top chez un voisin et on ne peut pas affecter l'objet à l'agent $a_2$ car il serait forcément jaloux de ses voisins.
+
+    \begin{table}[h!]
+	    \centering
+		\begin{tabular}{c|c c c c c c c|}
+			
+			&\bb{7} & 2 & 6 & 2 & \rr{7} & \rr{7} & \rr{7} \\
+			&2 & 1 & 4 & 6 & 2 & 1 & 5 \\
+			&4 & 3 & \bb{7} & 4 & 1 & 6 & 6 \\
+			&3 & 4 & 2 & 5 & 3 & 5 & 3 \\
+			&6 & 5 & 3 & 1 & 6 & 4 & 2 \\
+			&5 & 6 & 5 & 3 & 5 & 2 & 1 \\
+			&1 & \rr{7} & 1 & \rr{7} & 4 & 3 & 4 \\
+			\hline
+			\textbf{Agents} & $a_1$ & $a_2$ & $a_3$ & $a_4$ & $a_5$ & $a_6$ & $a_7$
+			
+		\end{tabular}
+		\caption{Exemple des positions possibles d'un objet}
+		\label{fig-exemple2}
+	\end{table}
+}
+	
 	\subsection{Modélisation ASP}
+	Acquérir l'ensemble des solutions possibles d'une instance était intéressant pour comprendre ses contraintes ainsi que pour certaines métriques détaillées dans la suite de cette section. Pour cela, le problème a été modélisé sous la forme d'un programme d'\textbf{Answer Set Programming} (ASP), particulièrement efficace pour la résolution de problèmes NP-difficiles. La génération de modèle ainsi que les contraintes écrites dans le formalisme ASP sont visibles ci-dessous.
+\begin{lstlisting}[language=Prolog]
+% Génération:
+% On doit avoir au plus un objet par agent.
+1{ aff(A, O) : object(O) }1 :- agent(A).
+
+% Un objet O ne peut être affecté qu'une seule fois.
+:- aff(A1, O), aff(A2, O), A1 != A2.
+
+% Pas de jalousie entre voisins.
+:- aff(A1, O1), aff(A2, O2), 
+	position(A1, O1, P1), 
+	position(A1, O2, P2), 
+	P2 < P1, |A1-A2|==1.
+\end{lstlisting}
+Pour chaque instance à résoudre, il suffit donc de générer l'encodage des données, c'est-à-dire les listes de préférences. Pour une instance à $n$ agents, cela prend la forme suivante.
+\begin{lstlisting}
+% On a les agents 1 à n.
+agent(1..n).
+% On a les objets 1 a n.
+objets(1..n).
+% On définit les positions des objets dans les listes de préférences.
+% Pour chaque agent A, pour chaque objet O, on définit l'indice p dans
+% la liste de préférence:
+position(A, O, p).
+[...]
+\end{lstlisting}
+Après résolution, les valeurs vérifiant le prédicat \texttt{aff/2} donnent les affectations possibles pour chaque modèle. On peut ainsi récupérer le \textbf{nombre total de solutions} pour une instance. Certaines de ses solutions sont complètement dominées au sens de Pareto par celles trouvées via l'algorithme de backtracking mais il est tout de même important de les prendre en compte car elles donnent une indication sur la difficulté à vérifier les contraintes du problème.
+
+	\paragraph{Nombre de variables dites "frozen"}{Des concepts de la programmation logique découlent les frozen variables. Ce sont les variables qui ne peuvent prendre qu'une seule valeur dans l'ensemble des solutions. Un grand nombre de ces variables implique généralement un faible nombre de solution et donc un problème très contraint. Cela est peut-être bénéfique pour un joueur car la seule position possible est potentiellement déductible de la façon décrite dans le paragraphe sur les positions possibles d'un objet (voir la sous-section précédente).}
 	
-	\subsection{Basin d'attraction}
+	\subsection{Analyse de Fitness Landscape}
+	Lors des recherches bibliographiques dédiées à ce projet, beaucoup de résultats concernant l'analyse de \textit{fitness landscape} sont apparus \cite{?, ?}. Le but est souvent de jauger la difficulté de résolution d'une instance pour un algorithme donné et de pouvoir ainsi déterminer quel algorithme ou composante d'algorithme est la plus à même de résoudre le problème rapidement. Par la suite on considère le problème d'optimisation combinatoire qui correspond à la relaxation du problème \textsc{LEF}. Une fonction de fitness $f : solution \rightarrow \mathbb{N}$ évidente est alors le nombre d'agents jaloux dans une allocation donnée et le problème consiste en la minimisation de cette fonction. 
+	
+	\begin{observation}
+	\label{obs-swap}
+	Lorsqu'une allocation complète est atteinte mais qu'un ou plusieurs agents sont jaloux, certains joueurs ont tendance à échanger les objets de deux agents dans l'espoir de réduire le nombre de jaloux.
+	\end{observation}
+	
+	L'analyse qui va suivre se concentre sur la méthode de résolution de l'~\Cref{obs-swap}. On peut définir une fonction de distance entre deux solutions $d : s_1 \times s_2 \rightarrow \mathbb{N}$ qui correspond au nombre minimum d'échanges nécessaires pour passer de $s_1$ à $s_2$. Soit $\mathcal{S}$ l'espace des solutions candidates, le fitness landscape $\mathcal{F}$ est alors la structure:
+	\begin{equation*}
+	    \mathcal{F} = (\mathcal{S}, f, d)
+	\end{equation*}
+	
+	\paragraph{Bassin d'attraction}{Depuis les optima trouvées grâce au programme ASP, il est possible de calculer leur bassins d'attraction. Il convient tout d'abord de définir la notion de \textquote{chemin descendant}. Un tel chemin est une séquence de solutions candidates présentant chacune une fitness moins grande que la précédente (comme définit dans \cite{?}, un chemin descendant $P$ entre $x_0$ et $x_n$ est $\{x_i\}_{i=0}^n$ avec $(\forall i < j)\text{ }f(x_i) \geq f(x_j), f(x_0) > f(x_n) \text{ et } d(x_{i+1}, x_i) = 1$). Alors on note le bassin d'attraction faible d'un optimum $o$:
+	\begin{equation*}
+	    B(o) = \{x | x \in S, P(x, o)\}
+	\end{equation*}
+La taille d'un tel bassin donne une idée de la probabilité de convergence vers un optimum depuis une solution candidate quelconque.
+	}
+	\begin{definition}
+	\label{def-walk}
+	La notion de \textbf{Landscape Walk} \cite{?} est un outil très utilisé dans l'analyse de fitness landscape. Dans ce projet on s'intéresse à deux types distincts: 
+	\begin{itemize}
+	    \item \textbf{Random walk} dans lequel on se déplace au sein de l'espace des solutions de manière aléatoire, passant de voisin en voisin,
+	    \item \textbf{Adaptative walk} où à chaque pas de temps une solution de meilleure fitness est choisie pour poursuivre l'exploration.
+	\end{itemize}
+	
+	\end{definition}
+	\paragraph{Auto-corrélation}{
+	
+	}
+	\paragraph{Fitness Distance Correlation}
 	\subsection{Apprentissage de la difficulté}
 	
 \end{document}

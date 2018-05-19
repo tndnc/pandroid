@@ -37,8 +37,8 @@ literate=%
 }
 
 \begin{document}
-	\paragraph{}L'application Android  été développée sous l'IDE Android Studio 3, avec l'API Android 26, mais supportant les versions plus vieilles jusqu'à la version 16 de l'api, ce qui nous permet de l'installer sur 99\% des appareils Android en circulation. Le code de l'application a été entièrement geré avec Git, il est d'ailleurs  disponible à l'adresse suivante :  \url{https://github.com/tndnc/pandroid/tree/master/equity}. 
-	\paragraph{}Le but de l'application est le suivant : l'utilisateur doit pouvoir sélectionner un niveau, jouer une partie et noter le niveau en question. Quand à nous, il faut qu'il soit possible de mettre à jour la liste des niveaux facilement lors des mises a jour de l'application, et que les notes et donnés utilisateurs provenant du déroulement d'une partie soit récupérables via internet sur un document Google sheets(via Google Sheets API v4).  
+	\paragraph{}L'application Android a été développée sous l'IDE Android Studio 3, avec l'API Android 26, mais supportant les versions plus vieilles jusqu'à la version 16 de l'api, ce qui nous permet de l'installer sur 99\% des appareils Android en circulation. Le code de l'application a été entièrement geré avec Git, il est d'ailleurs  disponible à l'adresse suivante :  \url{https://github.com/tndnc/pandroid/tree/master/equity}. 
+	\paragraph{}Le but de l'application est le suivant : l'utilisateur doit pouvoir sélectionner un niveau, jouer une partie et noter le niveau en question. Quand à nous, il faut qu'il soit possible de mettre à jour la liste des niveaux facilement lors des mises a jour de l'application, et que les notes et données utilisateurs provenant du déroulement d'une partie soit récupérables via internet sur un document Google sheets(via Google Sheets API v4).  
 	
 	\subsection{Composant Android}
 	\paragraph{} Une application Android s'organise en plusieurs composants , nous allons en présenter certains dans la section suivante pour pouvoir présenter l'application et ses fonctionnalités avec plus d'aisance. Nous allons notamment nous concentrer sur le concept d'activité qui est nécessaire pour pouvoir présenter l'interface.
@@ -61,22 +61,22 @@ Notre application est donc composée de six activités que nous allons présente
  
 \begin{figure}[h!]
     \centering
-    \begin{subfigure}[a]{0.23\textwidth}
+    \begin{subfigure}{0.23\textwidth}
         \centering
         \includegraphics[height=2.5in]{abou}
-        \caption{sélection}
+        \caption{About}
     \end{subfigure}
-        \begin{subfigure}[b]{0.23\textwidth}
+    \begin{subfigure}{0.23\textwidth}
         \centering
         \includegraphics[height=2.5in]{infor}
         \caption{sélection}
     \end{subfigure}%
-        \begin{subfigure}[c]{0.23\textwidth}
+    \begin{subfigure}{0.23\textwidth}
         \centering
         \includegraphics[height=2.5in]{main}
-        \caption{affichag}
+        \caption{affichage}
     \end{subfigure}%
-    \begin{subfigure}[d]{0.23\textwidth}
+    \begin{subfigure}{0.23\textwidth}
         \centering
         \includegraphics[height=2.5in]{tuto}
         \caption{victoire}
@@ -152,22 +152,22 @@ La possibilité d’afficher en rouge les colonnes des agents jaloux, notons que
 L'interface centrale de  l'application, l'ère de jeu de equity est un des composants principaux du projet, le canevas utilisé pour dessiner les agents et leur préférence s'organise de la façon suivante : les agents sont placé en haut de la surface sur une ligne horizontale, et leurs préférences sont arrangés verticalement, leur objet préféré étant le premier en partant du haut, derrière chaque agent est dessiné une bande verticale sur laquelle sont aligné les préférences 
 \begin{figure}[h!]
     \centering
-    \begin{subfigure}[a]{0.23\textwidth}
+    \begin{subfigure}{0.23\textwidth}
         \centering
         \includegraphics[height=2.5in]{g1}
         \caption{sélection}
     \end{subfigure}
-        \begin{subfigure}[b]{0.23\textwidth}
+        \begin{subfigure}{0.23\textwidth}
         \centering
         \includegraphics[height=2.5in]{g2}
         \caption{sélection}
     \end{subfigure}%
-        \begin{subfigure}[c]{0.23\textwidth}
+        \begin{subfigure}{0.23\textwidth}
         \centering
         \includegraphics[height=2.5in]{g3}
-        \caption{affichag}
+        \caption{affichage}
     \end{subfigure}%
-    \begin{subfigure}[d]{0.23\textwidth}
+    \begin{subfigure}{0.23\textwidth}
         \centering
         \includegraphics[height=2.5in]{g4}
         \caption{victoire}
@@ -183,7 +183,7 @@ L'interface centrale de  l'application, l'ère de jeu de equity est un des compo
 Une fois l’application mobile réalisée, nous avions donc décidé de la faire tester sur un public de taille variante et diverse, pour recueillir assez de données. Mais nous avions besoin d’un moyen de les écrire quelque part , la contrainte étant que l’utilisateur allait jouer sur son téléphone. Il nous fallait donc envoyer ces informations sur une sorte de base de données. Notre regard s’est alors porté sur l’API Google Sheets qui nous offrait une relaxation de cette contrainte.
 
 \paragraph{Googlesheets}
-Nous avons donc intégré dans l’application mobile, une solution permettant l’envois de diverses données joueurs qui étaient enregistrées lors de la résolution d’une instance : l’API Google Sheets permet l’écriture/lecture de données sur une Google Sheet via différentes plateformes : application mobile, site web, programme python, etc….. 
+Nous avons donc intégré dans l’application mobile, une solution permettant l’envois de diverses données joueurs qui étaient enregistrées lors de la résolution d’une instance. l’API Google Sheets permet l’écriture/lecture de données sur une Google Sheet via différentes plateformes : application mobile, site web, programme python, etc… 
 En ce qui nous concerne, notre but est d’envoyer les différentes métriques abordées précédemment sur une Google Sheet avec diverses informations sur l’utilisateur pour ensuite les analyser et appliquer une régression dessus.
 
 \paragraph{}
@@ -221,30 +221,30 @@ Ces trois classes implémentent ainsi la méthode protected doInBackground , qui
 Nous appelons donc à l'intérieure les méthodes de l’API de Google Sheets pour update (pour modifyUserInfoAsync) 
 ou écrire de nouvelles données (pour WriteUserEvalAsyncTask et ModifyUserInfoAsyncTask) dans notre feuille en utilisant l’instance de la classe Sheets que l’on avait créé au préalable.
 \hfill \break 
-\begin{lstlisting}
-    private static class WriteUserInfoAsyncTask extends AsyncTask<String, Void, Void> {
-        @Override
-        protected Void doInBackground(String... data) {
-
-            ValueRange body = new ValueRange()
+\begin{lstlisting}[tabsize=3]
+private static class WriteUserInfoAsyncTask extends 
+AsyncTask<String, Void, Void>{
+	@Override
+	protected Void doInBackground(String... data) {
+		ValueRange body = new ValueRange()
                     .setValues(Arrays.<List<Object>>asList(
                             new List[]{Arrays.asList(data)}
                     ));
-            try {
-            	AppendValuesResponse result = sheetsService.spreadsheets().values()
-                        .append(SPREADSHEET_ID, "User_Info_2!A1", body)
-                        .setValueInputOption("USER_ENTERED")
-                        .execute();
-            	Object userPos = result.getUpdates().get("updatedRange");
-                prefs.edit().putString("userPos", (String) userPos).apply();
-            } catch (IOException e) {
-                Log.w("GoogleSheet", "Error during user info write; rescheduling");
-                failedUserInfo = data;
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
+		try {
+			AppendValuesResponse result = sheetsService.spreadsheets()
+			.values().append(SPREADSHEET_ID, "User_Info_2!A1", body)
+			.setValueInputOption("USER_ENTERED")
+			.execute();
+			Object userPos = result.getUpdates().get("updatedRange");
+			prefs.edit().putString("userPos", (String) userPos).apply();
+		} catch (IOException e) {
+			Log.w("GoogleSheet", "Error during user info write; rescheduling");
+			failedUserInfo = data;
+			e.printStackTrace();
+		 }
+		return null;
+	}
+}
 \end{lstlisting}
 Fonction WriteUserInfoAsyncTask
 \paragraph{}
@@ -255,11 +255,11 @@ failedUserInfo si l’écriture/modification du profil utilisateur échoue
 Avant toute nouvelles écritures, il faut donc vérifier s’il n’en existe pas qui ont échouées.
 Pour cette raison, nous avons créé trois méthodes : WriteUserInfo(String data), ModifyUserInfo(String data) , WriterUserEval(String data), qui appelle toujours au début une méthode “CheckFailures” qui verifie si failedEvaluation et failedUserInfo sont vide ou non. Si elles ne le sont pas, alors on crée de nouvelles asyncTask pour renvoyer ces données. Et dans tous les cas, on crée de nouvelles AsyncTask correspondant à la méthode qui est appelé (par exemple WriteUserInfoAsyncTask pour la méthode WriteUserInfo) pour les nouvelles données passées en paramètre de ces méthodes.
 \hfill \break
-\begin{lstlisting}
-	public void writeUserEvaluation(String... data) {
-        	this.checkFailures();
-        	new WriteUserEvaluationAsyncTask().execute(data);
-    	}
+\begin{lstlisting}[tabsize=3]
+public void writeUserEvaluation(String... data) {
+	this.checkFailures();
+	new WriteUserEvaluationAsyncTask().execute(data);
+}
 \end{lstlisting}
 Méthode WriteUserEvaluation
 	

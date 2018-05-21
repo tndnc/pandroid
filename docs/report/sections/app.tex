@@ -3,11 +3,79 @@
 \begin{document}
 	\paragraph{}L'application Android a été développée sous l'IDE Android Studio 3, avec l'API Android 16, supportant ainsi près de 99\% des appareils Android en circulation. Le code de l'application a été entièrement géré avec Git et est d'ailleurs disponible à l'adresse suivante : \url{https://github.com/tndnc/pandroid/tree/master/equity}. 
 	
-	L'application devait répondre aux spécifications suivantes: permettre aux utilisateurs de sélectionner des niveaux, de les résoudre et d'en noter la difficulté. Pour les administrateurs il était également important de pouvoir facilement mettre à jour la liste des niveaux ainsi que de pouvoir récupérer les notes et meta-données issues de l'utilisation de l'application par les utilisateurs. Ces données devaient pouvoir être exportées vers une base données Google Sheets.
+	L'application devait répondre aux spécifications suivantes: permettre aux utilisateurs de sélectionner des niveaux, de les résoudre et d'en noter la difficulté. Pour les administrateurs il était également important de pouvoir facilement mettre à jour la liste des niveaux ainsi que de pouvoir récupérer les notes et meta-données issues de son utilisation par les utilisateurs. Ces données devaient pouvoir être exportées vers une base de données.
 	% Google sheets API v4 à ajouter dans partie sur google sheet.
 	
+	\subsection{Conception de l'interface}
+	
+L'interface centrale de l'application, l'aire de jeu d'Equity, est un des composants principaux du projet et a donc suivit un certain nombre d'itérations qui seront décrites dans la partie suivante. Le premier objectif de cette interface était de pouvoir représenter le jeu sur un écran de smartphone en mode portrait. En outre, il était important de réfléchir aux différents menus de l'application et au tutoriel permettant d'expliquer le jeu.
+
+Ayant suivi en parallèle l'UE d'IHM pendant ce semestre, nous avons pu acquérir les connaissances et pratiques appropriées pour la conception de notre interface. Ces connaissance nouvellement acquises ont été appliquées tout au long du processus de réalisation de notre interface.
+
+Il fallait tout d'abord identifier l'utilisateur qui était visé par notre application, mais nous nous sommes très rapidement rendu compte que cette notion était intrinsèque au sujet de notre projet. En effet, rappelons nous qu'il fallait évaluer la difficulté de nos niveaux et comparer nos prédictions à de vraies données. Or la notion de difficulté est subjective à n'importe quel être humain. Il nous fallait donc des données comprenant un maximum de diversité c'est-à-dire des utilisateurs de tous âges, de toutes formations, etc, afin de minimiser le biais de nos résultats. Nous nous sommes donc donnés pour but de créer une application pour tout type d'utilisateur et l'interface devait aller dans ce sens aussi. Notre premier objectif était d'établir les besoins utilisateurs et tâches de notre système.
+
+	\subsubsection{Les besoins utilisateur}
+
+Afin de définir les besoins, il est de convention d'interviewer des utilisateurs potentiels pour comprendre leur réaction face au jeu. Un petit nombre de personne ont été consultées et confrontée au problème, initialement sous la forme visualisée en~\Cref{sec-analyse} (c'est-à-dire un graphe liant les agents avec des listes de préférences triées de haut en bas). Puisqu'aucune problème de compréhension n'était apparent à ce stade, les premiers prototypes de l'interface se sont donc vu largement inspiré par cette visualisation. Nous avons aussi étudié les interfaces de jeux mobiles populaires telle que Candy Crush ou encore 2048 pour mieux comprendre les caractéristiques d'une bonne interface. Ces données une fois regroupées nous ont permis de dégager plusieurs lignes directrices pour notre interface.
+
+Lors de nos interviews nous avons demandé quelles étaient les caractéristiques d'un bon jeu d'après nos utilisateurs potentiels et l'un des points positifs le plus souvent pointé du doigt était la facilité avec laquelle un utilisateur comprenait les règles. Beaucoup se sont en effet plaint de la difficulté à \textquote{entrer} dans un jeu dès lors que la prise en main devenait difficile et que les règles du jeu étaient complexes. Or la notion de jalousie évoquée précédemment n'est pas forcément naturelle, il était donc crucial pour notre application d'avoir une interface la plus claire possible pour la compréhension du jeu. Toujours en rapport avec le premier souci, nous avons également remarqué au cours de nos recherches, que la quantité d'information à l'écran était un facteur important. Il apparaît que le sentiment de confusion est amplifié lorsqu'un nombre important de données s'affiche en même temps: il fallait prendre en compte ce critère pendant le développement de notre application. Enfin les personnes interviewées nous ont souvent mentionné le coté fluide et rapide qu'ils trouvaient nécessaire à une application de ce type. L'optimisation de l'interface a donc été une préoccupation certaine durant le développement.
+
+Tout au long du processus, nous nous sommes surtout concentrés sur les critères d'usabilité suivants qui était à nos yeux les plus importants: la facilité d'apprentissage (easy to learn), la facilité d'usage (easy to use), la satisfaction (qui reste tout de même une notion très subjective), et la robustesse. Après tout, il ne faut pas oublier que le but final est que l'utilisateur passe un moment agréable en jouant à notre application.
+
+	\subsubsection{Les fonctionnalités de notre système}
+
+Une fois ce travail en amont fait, nous devions établir notre système et puisqu'il est relativement facile de produire des prototypes Android, nous nous sommes directement attelés au développement de la première itération d'interface. La visualisation en forme de grille a été déterminée très tôt: chaque case de la grille représente une préférence d'un des agents. Il a ensuite été décidé que les agents, représentés par des carrés de couleurs différentes, seraient placés sur la gauche de la grille et leur préférences, représentées par des cercles de couleurs différentes, sur la même ligne que l'agent. Les préférences se lisaient de gauche à droite donc l'objet préféré se trouvait le plus à gauche. Cette première interface est visible en~\Cref{fig-prototype1}.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.3\linewidth]{prototype1}
+\caption{Premier prototype d'interface de jeu}
+\label{fig-prototype1}
+\end{figure}
+
+La sélection d'une préférence pour un des agents (l'allocation d'un objet à un agent) dessine un cercle de la couleur de l'agent derrière le cercle représentant la préférence en question. L'utilisateur peut donc choisir de sélectionner une certaine préférence en touchant le cercle correspondant. On note que le processus de sélection des ressources empêche de sélectionner plusieurs ressources pour un seul agent. À ce stade l'application est fonctionnelle.
+
+Dans un soucis d'optimisation de l'espace et de lisibilité, la dernière modification structurelle de l'IHM consistait en la rotation de la grille de façon à ce que les agents se trouvent en haut et les préférences soient lues de haut en bas. Ce changement a permis l'utilisation d'une plus grande partie de la hauteur de l'écran et de pouvoir afficher de manière optimale les instances de plus grandes tailles (jusqu'à 7 agents) sur un grand nombre d'appareils.
+
+L'étape suivante était de rendre l'interface agréable à l'œil et prête pour une distribution. Tous les changements sont visibles en~\Cref{fig-finalgameview}. En premier lieu une harmonisation des couleurs a été opérée offrant une palette réduite pour favoriser la lisibilité du problème. Les données de l'instance en revanche ont pu revêtir une palette plus complète de couleurs et de formes pour que les joueurs puissent facilement distinguer entre les différents objets. Plusieurs symboles, variants en formes et en couleurs, ont été dessinés avec un faible niveau de détail pour ne pas fatiguer l'œil. Des barres verticales ont été ajouté pour chacun des agents ce qui facilite la distinction des préférences par agent et l'identifiant du niveau est montré en haut de l'écran. Nous avons voulu ainsi minimiser la quantité d'information à assimiler. Par exemple les agents ne montrent plus des couleurs différentes, ils sont déjà différenciés par leur position dans l'interface.
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}{0.34\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{g1}
+        \caption{Écran d'accueil}
+        \label{fig-finalgameview}
+    \end{subfigure}
+    ~
+    \begin{subfigure}{0.34\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{g2}
+        \caption{Deux fois le même objet}
+        \label{fig-twotimes}
+    \end{subfigure}
+    ~
+    \begin{subfigure}{0.34\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{g3}
+        \caption{Affichage de jalousie}
+        \label{fig-envy}
+    \end{subfigure}
+    ~
+    \begin{subfigure}{0.34\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{g4}
+        \caption{Écran de victoire}
+    \end{subfigure}
+    \caption{Interface de jeu finale}
+\end{figure}
+
+    Afin d'évaluer notre application, nous avons fait tester cette interface à nos proches. De multiples retours nous ont cité l'incompréhension d'une solution erronée. Il était donc évident que pour améliorer l'expérience de jeu nous devions rendre la détection d'affectation non recevable plus aisée. Deux solutions ont été implémentées pour pallier ce problème. L'affichage d'une couleur différente lorsqu'une ressource est sélectionnée par deux agents permet au joueur de remarquer immédiatement qu'une telle assignation des ressources est impossible (\Cref{fig-twotimes}). La possibilité d'afficher en rouge les colonnes des agents jaloux améliore le potentiel d'amusement (\Cref{fig-envy}). Les joueurs passent moins de temps à rechercher pourquoi une solution n'est pas valide et plus de temps à chercher une meilleure solution. Notons que cette fonctionnalité facilite grandement le jeu, elle est donc désactivée par défaut et le joueur a la possibilité d'appuyer sur un bouton pour activer cet affichage.
+
+    Ces deux fonctionnalités rendent les résolutions plus aisées mais nous pensons que ces compromis permettent une expérience de jeu plus fluide, agréable et sans sentiment de confusion pour l'utilisateur, un point qui nous le rappelons, semble essentiel pour la distribution de l'application. 
+	
 	\subsection{Composants Android}
-	Une application Android s'organise en plusieurs composants, nous allons en présenter certains dans la~\Cref{sec-struct} pour pouvoir décrire l'application et ses fonctionnalités aisément. Nous allons notamment nous concentrer sur le concept d'activité, nécessaire pour pouvoir présenter l'interface.
+	Une application Android s'organise en plusieurs composants et nous allons en présenter certains pour pouvoir décrire l'application et ses fonctionnalités aisément. Nous allons notamment concentrer notre attention sur le concept d'activité, nécessaire à la présentation de l'interface.
 	
 	Une activité Android correspond à une fenêtre d'application et chaque application est donc composée d'au moins une activité. La navigation à l'intérieur d'une application se fait en changeant d'activité. Leur apparence visuelle est principalement définie par leur \textit{layout} qui structure l'agencement des vues (images, boutons, etc) et peut lier certains événements, initiés par l'utilisateur (comme par exemple un \textquote{clic} de bouton), à des actions prédéfinies (par exemple, lancer un niveau). Le layout, chargé par une activité à sa création, est décrit dans un fichier XML.
 	
@@ -24,7 +92,7 @@ Notre application est composée de six activités que nous allons présenter ici
  \item \texttt{GameActivity} : l'activité où se déroule la partie. Elle est composée principalement d'un canevas sur lequel est affiché l'interface de jeu. Deux autres vues permettent d'afficher le nom du niveau et un bouton activant la visualisation de l'envie chez les agents.
  \end{itemize}  
  
-\begin{figure}[h!]
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}{0.34\textwidth}
         \centering
@@ -58,12 +126,13 @@ Notre application est composée de six activités que nous allons présenter ici
 \paragraph{}
 Le package \texttt{models} contient les classes nécessaires à la représentation du jeu dans l'application. On y trouve la classe \texttt{Model}, appelée dès lors qu'il est demandé de faire une modification du modèle (assignation d'un objet à un des agents par exemple) ou encore de récupérer des informations du jeu comme le nombre d'agents d'un niveau. Cette classe stocke en effet la grille qui représente un niveau, comprenant les agents et les préférences. Le package contient également la définition de l'interface \texttt{IPiece}, implémentée par les classes \texttt{Preference} et \texttt{Actor} qui représentent respectivement les préférences et les agents.
 
- \begin{itemize}
-\item définition d'une Pièce (Interface \texttt{IPiece}) : L’interface IPiece est composé de deux méthodes, la méthode getId qui retourne l'identifiant de la pièce et la méthode getPosition qui permet de retourner la position de la pièce sous forme d’un objet position qui contient les indices de la ligne et de la colonne dans lesquelles se trouve la pièce.   
-\item définition d’un Acteur (Classe \texttt{Actor}) : La classe Actor implémente l'interface IPiece et toute ses méthodes, elle représente les agents du jeu.                                                                                                                                                                                                                                                                                                                                      
-\item définition d’une Préférence (Classe \texttt{Préférence}) : La classe Préférence implémente également l’interface IPiece, on y ajoute cependant là deux entier, value : qui permet de déterminer de quel type est cette préférence et selectedby : qui permet de savoir si cette préférence est sélectionnée par un des agents et par quel agent elle l’est. 
+\begin{itemize}
+\item Définition d'une Pièce (interface \texttt{IPiece}) : cette interface est composé de deux méthodes; la méthode \texttt{getId} retourne l'identifiant de la pièce et la méthode \texttt{getPosition} permet de retourner la position de la pièce sous forme d'un objet position qui contient les indices de la ligne et de la colonne dans lesquelles se trouve la pièce.
+\item Définition d'un Acteur (classe \texttt{Actor}) : cette classe implémente l'interface \texttt{IPiece} et toute ses méthodes. Elle représente les agents du jeu.                                                                                                                                                                                                                                                                                                                                      
+\item Définition d'une Préférence (Classe \texttt{Préférence}) : cette classe implémente également l’interface \texttt{IPiece}. On y ajoute cependant là deux entiers: \texttt{value} (qui permet de déterminer de quel type est cette préférence) et \texttt{selectedby} (qui permet de savoir si cette préférence est sélectionnée par un des agents et par qui). 
 \end{itemize}
-\hfill \break
+
+\begin{figure}[ht!]
 \begin{lstlisting}
 private boolean isJealous(Preference[] P1,Preference[] P2){
     if (P1[0] == null){
@@ -94,76 +163,17 @@ private boolean isJealous(Preference[] P1,Preference[] P2){
     return false;
 }
 \end{lstlisting}
-Fonction de détection de la jalousie 
+\caption{Fonction de détection de la jalousie}
+\label{detection-jalousie}
+\end{figure}
 
-	\subsection{Design interface}
 	
-\paragraph{}
-L’interface centrale de  l’application, l’aire de jeu de equity est un des composants principaux du projet et a donc suivit un certain nombre d'itérations qui seront décrites dans la partie suivante. Le premier objectif de cette interface était de pouvoir représenter le jeu sur un écran de smartphone en mode portrait.
-
-\paragraph{}
-Ayant suivi en paralèle l'UE d'IHM pendant ce semestre, nous avons acquéris des connaissances quant à la démarche appropriée pour la conception de notre interface. Ainsi nous avons jouis de ces connaissance nouvellement acquises et les avons appliqué tout au long du processus de réalisation de notre interface.
-
-\paragraph{}
-Il fallait donc tout d'abord identifier l'utilisateur qui était visé par notre application, mais nous nous sommes très rapidement rendu compte que cette notion etait intrasèque au sujet de notre projet. En effet, rappelons nous qu'il nous fallait evaluer la difficulté de nos niveaux et comparer nos prédictions à de vraies données. Or la notion de difficulté est subjective à n'importe quel être humain. Il nous fallait donc un maximum de données diverses, de tout âges, de toute formations, de tout type, pour ainsi ne pas biaser nos résultats. Nous nous sommes donc donnés pour but de créer une application pour tout type d'utilisateur. L'interface devait donc aller dans ce sens aussi. Notre premier objectif était donc d'établir les besoins utilisateurs et tâches de notre système.
-
-	\subsubsection{Les besoins utilisateur}
-
-\paragraph{}
-Diverses méthodes avaient donc été abordé dans cette UE d'IHM, mais malheureusement nous n'avons interviewé qu'une poignée de personnes pour comprendre les besoins de nos utilisateurs. En effet, la contrainte de temps étant omniprésente, il nous fallait une application opérationnelle dans les plus prefs délais pour obtenir des données. Nous avons donc interrogé nos proches, nous avons aussi étudier l'interfaces de jeux mobiles populaires telle que Candy Crush ou encore 2048 pour mieux comprendre les caractéristiques d'une bonne interface. Ces données une fois regroupées nous ont permis de dégager plusieurs lignes directrices pour notre interface.
-\paragraph{}
-L'une des caracteristiques qui revenait le plus souvent dans nos interview était la facilité de compréhension du jeu auquel l'utilisateur jouait. En effet , beaucoup se sont plaint de la difficulté à "entrer" dans un jeu dès lors que la prise en main devenait difficile et que les règles du jeu en elles même étaient complexes. Or la notion de jalousie évoquée précédemment n'étant pas forcément naturelle, il etait donc crucial pour notre application d'avoir une interface qui était le plus clair possible pour la comprehension du jeu. Toujours en rapport avec le premier soucis, nous avons aussi remarqué grâce aux application que nous avions testé que la quantité d'information à l'écran était aussi un important facteur. En effet, le sentiment de "confusion" était" amplifié lorsque plusieurs données s'affichées en même temps à l'écran.Il fallait donc prendre en compte ce critère pendant le développement de notre application. Enfin nos proches nous ont souvent mentionnés le coté fluide et rapide qu'ils trouvaient nécessaire à une application. Nous avons donc mis un point d'honneur sur l'optimisation en backend de notre application pour rendre l'interface fluide et rapide.
-\paragraph{}
-Tout au long du processus, nous nous sommes surtout concentrés sur les critères d'utilisabilités suivant qui, était à nos yeux, les plus important : la facilité d'apprentissage (easy to learn) , la facilité d'usage (easy to use), la satisfaction (qui reste tout de même une notion très subjective) , et la robustesse.
-Après tout, ll ne faut pas oublier que le but final est que l'utilisateur passe un moment agréable en jouant à notre application tout en nous fournissant des données pour notre analyse. Une pierre deux coup.
-
-	\subsubsection{Les fonctionnalités de notre système}
-
-\paragraph{}
-Une fois ce travail en amont fait, nous devions donc établir notre système. Encore une fois, toujours poursuivi par la contrainte de temps, nous nous sommes directement attelés à la mise en place de notre protype informatique. En effet certains choix de design avaientt été décidé très tôt pour notre application. Car certe , les besoins utilisateurs sont cruciaux, mais il faut aussi harmoniser le tout avec les attentes de nos clients. 
-\paragraph{}
-Il a donc été déterminé très tôt dans le projet qu’une visualisation sous forme de grille serait nécessaire, chaque case de la grille représentant une préférence d’un des agents. Il a ensuite été décidé que les agents, représentés par des carrés, serait placé sur la gauche de la grille et leur préférences, représenté par des cercles, sur la même ligne que l’agent avec son objet préféré sur la gauche le plus proche de lui.
-\paragraph{}
-Il a ensuite été décidé que pour afficher la sélection d’une préférences par un des agents, un cercle de la couleur de l’agent serait dessiné derrière le cercle représentant la préférence en question, l'utilisateur peut donc choisir de sélectionner une certaine préférence en touchant l'icône correspondante. On note que le processus de sélection des ressources empêche de sélectionner plusieurs ressources pour un seul agent. A ce stade l’application est fonctionnelle.
-\paragraph{}
-La dernière modification structurelle de l’IHM consiste à optimiser l’espace qui est alloué à l’affichage des préférences des agents : L'affichage de la grille de jeu a été pivoté pour que les agents se trouvent en haut de l'écran, l'alignement des préférences se faisait donc de haut en bas, ce changement a donc permis d'utiliser une plus grande partie de la hauteur de l'écran du smartphone. En effet cette rotation de la grille a permis d'économiser une colonne en ajoutant une ligne ce qui est plus adapté à l’affichage en mode portrait.
-\paragraph{}
-En prenant en compte nos besoins utilisateurs, les modifications suivantes de l'interface ont été soit esthétiques soit relevant de l’ajout de feature : tout d’abord l’interface a suivis un redesign complet, une harmonisation des couleurs et des formes pour la représentation de la plupart des éléments à dessiner. L’ajout de barres verticales pour chacun des agents, ce qui facilite la lisibilité et l’ajout de l’identifiant du niveau. Le resultat étant un affichage épuré où le nombre d'information à assimiler considerablement faible ce qui était un des points clés de nos besoins vu précédemment. 
-\paragraph{}
-    Afin d'évaluer notre application, nous avons fait tester cette interface à nos proches. Nous avons par la suite décidé, après de multiples retours citant l'incompréhension d'une solution érroné,  que pour améliorer l'expérience de jeu nous devions rendre la détection d’affectation erroné plus aisée. Nous avons donc implémenté les solutions suivantes :
- l’affichage d’une couleur différente sur les ressources sélectionnés par deux agents ce qui permet au joueur de remarquer immédiatement si une assignation des ressources est impossible.
-La possibilité d’afficher en rouge les colonnes des agents jaloux, notons que cette fonctionnalité facilite grandement le jeu, elle est donc désactivée par défaut et le joueur a la possibilité d’appuyer sur un bouton pour activer cet affichage.
-\paragraph{}
-    Ces deux fonctionnalités facilitent grandement le gameplay mais nous pensons que ce compromis permet une expérience de jeu plus fluide, agréable et sans sentiment de "confusion"  pour l’utilisateur, un point qui nous le rappelons, semble essentiel pour la distribution de l’application. 
 
 
 	\subsubsection{Interface GameView}
 	
 L'interface centrale de  l'application, l'ère de jeu de equity est un des composants principaux du projet, le canevas utilisé pour dessiner les agents et leur préférence s'organise de la façon suivante : les agents sont placé en haut de la surface sur une ligne horizontale, et leurs préférences sont arrangés verticalement, leur objet préféré étant le premier en partant du haut, derrière chaque agent est dessiné une bande verticale sur laquelle sont aligné les préférences 
-\begin{figure}[h!]
-    \centering
-    \begin{subfigure}{0.23\textwidth}
-        \centering
-        \includegraphics[height=2.5in]{g1}
-        \caption{sélection}
-    \end{subfigure}
-        \begin{subfigure}{0.23\textwidth}
-        \centering
-        \includegraphics[height=2.5in]{g2}
-        \caption{sélection}
-    \end{subfigure}%
-        \begin{subfigure}{0.23\textwidth}
-        \centering
-        \includegraphics[height=2.5in]{g3}
-        \caption{affichage}
-    \end{subfigure}%
-    \begin{subfigure}{0.23\textwidth}
-        \centering
-        \includegraphics[height=2.5in]{g4}
-        \caption{victoire}
-    \end{subfigure}
-    \caption{Exemple Gameview}
-\end{figure}
+
 
 	\subsection{Récupération des données}
 	

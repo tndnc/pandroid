@@ -17,8 +17,10 @@
 \usepackage{tkz-graph}
 \usepackage{listings}
 \usepackage{subcaption}
-\usepackage[backend=biber,style=ieee]{biblatex}
+\usepackage[backend=biber,style=numeric,citestyle=numeric]{biblatex}
 \usepackage{csquotes}
+\usepackage{changepage}
+\usepackage{appendix}
 %-----------------------------------------------
 % DOCUMENT CONFIG
 %-----------------------------------------------
@@ -63,18 +65,36 @@ language=Octave
 %	DOCUMENT BODY
 %--------------------------------------------------
 \begin{document}	
-	\maketitle
+	\begin{center}
+	    \includegraphics[width=0.3\linewidth]{sorbonne}\\[0.8cm]
+	    \textsf{\large\bfseries Rapport de Projet Tuteuré - PANDROIDE}\\[0.25cm]
+	    \textsf{\Large\bfseries Pas de jaloux, un jeu de partage équitable}\\[0.5cm]
+	    \textbf{Auteurs}\\
+	    Alexandre Bontems\\Gualtiero Mottola\\Hans Thirunavukarasu\\[0.25cm]
+	    \textbf{Superviseurs}\\
+	    Nicolas Maudet\\Aurélie Beynier\\[0.5cm]
+	    \textit{Université Pierre et Marie Curie, Paris 6, Département Informatique\\4 place Jussieu 75252 Paris cedex 05, France}\\[0.5cm]
+	\end{center}
+	\begin{adjustwidth}{.5in}{.5in}\small
+	    Dans le cadre du master informatique \textsf{ANDROIDE} de l'UPMC, un projet tuteuré doit être effectué par les étudiants et ce rapport en détaille les résultats. Le problème de partage équitable LEF, présenté en \cite{lef}, est étudié et un jeu puzzle en est dérivé. Pour répondre aux problématiques d'analyse de difficulté pour l'humain, des résolutions \textquote{à la main} sont observées et des outils sont développés pour tenter d'expliquer les ressentis. Le développement d'une application jeu pose également les problématiques liées à l'expérience utilisateur et de conception de tutoriel. 
+	\end{adjustwidth}
 	\tableofcontents
-	\newpage
+%	\newpage
 
 	\section{Introduction}
 		\subfile{sections/intro.tex}
 	\section{Analyse d'instances}
+	    \label{sec-analyse}
         \subfile{sections/analyse.tex}
 	\section{Application mobile}
+	    \label{app}
 	    \subfile{sections/app.tex}
 	\section{Conclusion}
 	
+%	\bibliography{bibliography}
     \printbibliography[heading=bibintoc]
-%	\bibliographystyle{unsrt}
+    \begin{appendix}
+        \section{LEF Solver}
+        \section{Diagramme de classe d'Equity}
+    \end{appendix}
 \end{document}

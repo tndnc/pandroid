@@ -17,6 +17,8 @@
 \usepackage{tkz-graph}
 \usepackage{listings}
 \usepackage{subcaption}
+\usepackage[backend=biber,style=ieee]{biblatex}
+\usepackage{csquotes}
 %-----------------------------------------------
 % DOCUMENT CONFIG
 %-----------------------------------------------
@@ -29,7 +31,6 @@
 \newcommand{\bb}[1]{\colorbox{blue!30}{#1}}
 \newcommand{\rr}[1]{\colorbox{red!30}{#1}}
 \newcommand{\gr}[1]{\colorbox{green!30}{#1}}
-\newcommand{\textquote}[1]{«#1»}
 % Tikz
 \tikzstyle{vertex}=[circle, draw, inner sep=2pt, minimum size=8pt]
 \newcommand{\vertex}{\node[vertex]}
@@ -56,6 +57,8 @@ language=Octave
 \newtheorem{definition}{\it\bfseries Définition}
 %images storage 
 \graphicspath{ {./images/} {./sections/images/}}
+% Bibliography
+\addbibresource{bibliography.bib}
 %--------------------------------------------------
 %	DOCUMENT BODY
 %--------------------------------------------------
@@ -72,7 +75,6 @@ language=Octave
 	    \subfile{sections/app.tex}
 	\section{Conclusion}
 	
-	
-	%\bibliography{bibliography.bib}
-	%\bibliographystyle{unsrt}
+    \printbibliography[heading=bibintoc]
+%	\bibliographystyle{unsrt}
 \end{document}

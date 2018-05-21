@@ -21,6 +21,8 @@ asp_py_parsetab.py
 *.bbl
 *.blg
 *.dvi
+*.bcf
+*.run.xml
 !main.pdf
 
 ## GoogleSheetSecret

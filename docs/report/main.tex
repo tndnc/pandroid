@@ -6,11 +6,9 @@
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage[margin=1in]{geometry}
-\usepackage{hyperref}
 \usepackage{amsmath, amssymb, mathtools, amsthm}
 \usepackage{graphicx}
 \usepackage{subfiles}
-\usepackage{cleveref}
 \usepackage[table]{xcolor}
 \usepackage{titlesec}
 \usepackage{tikz}
@@ -21,6 +19,8 @@
 \usepackage{csquotes}
 \usepackage{changepage}
 \usepackage{appendix}
+\usepackage{hyperref}
+\usepackage{cleveref}
 %-----------------------------------------------
 % DOCUMENT CONFIG
 %-----------------------------------------------
@@ -58,7 +58,7 @@ language=Octave
 \newtheorem{observation}{\it\bfseries Observation}
 \newtheorem{definition}{\it\bfseries Définition}
 %images storage 
-\graphicspath{ {./images/} {./sections/images/}}
+\graphicspath{ {./images/} {./sections/images/} }
 % Bibliography
 \addbibresource{bibliography.bib}
 %--------------------------------------------------

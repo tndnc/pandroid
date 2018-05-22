@@ -1,7 +1,7 @@
 \documentclass[../main.tex]{subfiles}
 
 \begin{document}
-	L'application Android a été développée sous l'IDE Android Studio 3, avec l'API Android 16, supportant ainsi près de 99\% des appareils Android en circulation. Le code de l'application a été entièrement géré avec Git et est d'ailleurs disponible à l'adresse suivante : \url{https://github.com/tndnc/pandroid/tree/master/equity}. 
+	L'application Android, nommée Equity, a été développée sous l'IDE Android Studio 3, avec l'API Android 16, supportant ainsi près de 99\% des appareils Android en circulation. Le code de l'application a été entièrement géré avec Git et est d'ailleurs disponible à l'adresse suivante : \url{https://github.com/tndnc/pandroid/tree/master/equity}. 
 	
 	L'application devait répondre aux spécifications suivantes: permettre aux utilisateurs de sélectionner des niveaux, de les résoudre et d'en noter la difficulté. Pour les administrateurs il était également important de pouvoir facilement mettre à jour la liste des niveaux ainsi que de pouvoir récupérer les notes et meta-données issues de son utilisation par les utilisateurs. Ces données devaient pouvoir être exportées vers une base de données.
 	% Google sheets API v4 à ajouter dans partie sur google sheet.
@@ -10,19 +10,19 @@
 	
 L'interface centrale de l'application, l'aire de jeu d'Equity, est un des composants principaux du projet et a donc suivit un certain nombre d'itérations qui seront décrites dans la partie suivante. Le premier objectif de cette interface était de pouvoir représenter le jeu sur un écran de smartphone en mode portrait. En outre, il était important de réfléchir aux différents menus de l'application et au tutoriel permettant d'expliquer le jeu.
 
-Ayant suivi en parallèle l'UE d'IHM pendant ce semestre, nous avons pu acquérir les connaissances et pratiques appropriées pour la conception de notre interface. Ces connaissance nouvellement acquises ont été appliquées tout au long du processus de réalisation de notre interface.
+Ayant suivi en parallèle l'UE d'IHM pendant ce semestre, nous avons pu acquérir les connaissances et pratiques appropriées pour la conception de notre interface. Ces connaissance nouvellement acquises ont été appliquées tout au long du processus.
 
-Il fallait tout d'abord identifier l'utilisateur qui était visé par notre application, mais nous nous sommes très rapidement rendu compte que cette notion était intrinsèque au sujet de notre projet. En effet, rappelons nous qu'il fallait évaluer la difficulté de nos niveaux et comparer nos prédictions à de vraies données. Or la notion de difficulté est subjective à n'importe quel être humain. Il nous fallait donc des données comprenant un maximum de diversité c'est-à-dire des utilisateurs de tous âges, de toutes formations, etc, afin de minimiser le biais de nos résultats. Nous nous sommes donc donnés pour but de créer une application pour tout type d'utilisateur et l'interface devait aller dans ce sens aussi. Notre premier objectif était d'établir les besoins utilisateurs et tâches de notre système.
+Il fallait tout d'abord identifier l'utilisateur qui était visé par notre application, mais nous nous sommes très rapidement rendu compte que cette notion était intrinsèque au sujet de notre projet. En effet, rappelons nous qu'il fallait évaluer la difficulté de nos niveaux et comparer nos prédictions à de vraies données. Or la notion de difficulté est subjective à n'importe quel être humain. Il nous fallait donc des données comprenant un maximum de diversité c'est-à-dire des utilisateurs de tous âges, de toutes formations, etc. L'idée était de minimiser le biais de nos résultats. Nous nous sommes donc donnés pour but de créer une application pour tout type d'utilisateur et l'interface devait aller dans ce sens aussi. Notre premier objectif était d'établir les besoins utilisateurs et tâches de notre système.
 
 	\subsubsection{Les besoins utilisateur}
 
-Afin de définir les besoins, il est de convention d'interviewer des utilisateurs potentiels pour comprendre leur réaction face au jeu. Un petit nombre de personne ont été consultées et confrontée au problème, initialement sous la forme visualisée en~\Cref{sec-analyse} (c'est-à-dire un graphe liant les agents avec des listes de préférences triées de haut en bas). Puisqu'aucune problème de compréhension n'était apparent à ce stade, les premiers prototypes de l'interface se sont donc vu largement inspiré par cette visualisation. Nous avons aussi étudié les interfaces de jeux mobiles populaires telle que Candy Crush ou encore 2048 pour mieux comprendre les caractéristiques d'une bonne interface. Ces données une fois regroupées nous ont permis de dégager plusieurs lignes directrices pour notre interface.
+Afin de définir les besoins, il est de convention d'interviewer des utilisateurs potentiels pour comprendre leur réaction face au jeu. Un petit nombre de personne ont été consultées et confrontée au problème, initialement sous la forme visualisée en~\Cref{sec-analyse} (c'est-à-dire un graphe liant les agents avec des listes de préférences triées de haut en bas). Puisqu'aucune problème de compréhension n'était apparent à ce stade, les premiers prototypes de l'interface se sont donc vu largement inspirés par cette visualisation. Nous avons aussi étudié les interfaces de jeux mobiles populaires telle que Candy Crush ou encore 2048 pour mieux comprendre les caractéristiques d'une bonne interface. Ces données une fois regroupées nous ont permis de dégager plusieurs lignes directrices pour notre interface.
 
-Lors de nos interviews nous avons demandé quelles étaient les caractéristiques d'un bon jeu d'après nos utilisateurs potentiels et l'un des points positifs le plus souvent pointé du doigt était la facilité avec laquelle un utilisateur comprenait les règles. Beaucoup se sont en effet plaint de la difficulté à \textquote{entrer} dans un jeu dès lors que la prise en main devenait difficile et que les règles du jeu étaient complexes. Or la notion de jalousie évoquée précédemment n'est pas forcément naturelle, il était donc crucial pour notre application d'avoir une interface la plus claire possible pour la compréhension du jeu. Toujours en rapport avec le premier souci, nous avons également remarqué au cours de nos recherches, que la quantité d'information à l'écran était un facteur important. Il apparaît que le sentiment de confusion est amplifié lorsqu'un nombre important de données s'affiche en même temps: il fallait prendre en compte ce critère pendant le développement de notre application. Enfin les personnes interviewées nous ont souvent mentionné le coté fluide et rapide qu'ils trouvaient nécessaire à une application de ce type. L'optimisation de l'interface a donc été une préoccupation certaine durant le développement.
+Lors de nos interviews nous avons demandé quelles étaient les caractéristiques d'un bon jeu d'après nos utilisateurs potentiels et l'un des points positifs le plus souvent pointé du doigt était la facilité avec laquelle un utilisateur comprenait les règles. Beaucoup se sont en effet plaint de la difficulté à \textquote{entrer} dans un jeu dès lors que la prise en main devenait difficile et que les règles étaient complexes. Or la notion de jalousie évoquée précédemment n'est pas forcément naturelle, il était donc crucial pour notre application d'avoir une interface la plus claire possible pour la compréhension du jeu. Toujours en rapport avec le premier souci, nous avons également remarqué au cours de nos recherches, que la quantité d'information à l'écran était un facteur important. Il apparaît que le sentiment de confusion est amplifié lorsqu'un nombre important de données s'affiche en même temps: il fallait prendre en compte ce critère pendant le développement de notre application. Enfin les personnes interviewées nous ont souvent mentionné le coté fluide et rapide qu'ils trouvaient nécessaire à une application de ce type. L'optimisation de l'interface a donc été une préoccupation certaine durant le développement.
 
 Tout au long du processus, nous nous sommes surtout concentrés sur les critères d'usabilité suivants qui était à nos yeux les plus importants: la facilité d'apprentissage (easy to learn), la facilité d'usage (easy to use), la satisfaction (qui reste tout de même une notion très subjective), et la robustesse. Après tout, il ne faut pas oublier que le but final est que l'utilisateur passe un moment agréable en jouant à notre application.
 
-	\subsubsection{Les fonctionnalités de notre système}
+	\subsubsection{Interface de jeu}
 
 Une fois ce travail en amont fait, nous devions établir notre système et puisqu'il est relativement facile de produire des prototypes Android, nous nous sommes directement attelés au développement de la première itération d'interface. La visualisation en forme de grille a été déterminée très tôt: chaque case de la grille représente une préférence d'un des agents. Il a ensuite été décidé que les agents, représentés par des carrés de couleurs différentes, seraient placés sur la gauche de la grille et leur préférences, représentées par des cercles de couleurs différentes, sur la même ligne que l'agent. Les préférences se lisaient de gauche à droite donc l'objet préféré se trouvait le plus à gauche. Cette première interface est visible en~\Cref{fig-prototype1}.
 
@@ -37,7 +37,7 @@ La sélection d'une préférence pour un des agents (l'allocation d'un objet à 
 
 Dans un soucis d'optimisation de l'espace et de lisibilité, la dernière modification structurelle de l'IHM consistait en la rotation de la grille de façon à ce que les agents se trouvent en haut et les préférences soient lues de haut en bas. Ce changement a permis l'utilisation d'une plus grande partie de la hauteur de l'écran et de pouvoir afficher de manière optimale les instances de plus grandes tailles (jusqu'à 7 agents) sur un grand nombre d'appareils.
 
-L'étape suivante était de rendre l'interface agréable à l'œil et prête pour une distribution. Tous les changements sont visibles en~\Cref{fig-finalgameview}. En premier lieu une harmonisation des couleurs a été opérée offrant une palette réduite pour favoriser la lisibilité du problème. Les données de l'instance en revanche ont pu revêtir une palette plus complète de couleurs et de formes pour que les joueurs puissent facilement distinguer entre les différents objets. Plusieurs symboles, variants en formes et en couleurs, ont été dessinés avec un faible niveau de détail pour ne pas fatiguer l'œil. Des barres verticales ont été ajouté pour chacun des agents ce qui facilite la distinction des préférences par agent et l'identifiant du niveau est montré en haut de l'écran. Nous avons voulu ainsi minimiser la quantité d'information à assimiler. Par exemple les agents ne montrent plus des couleurs différentes, ils sont déjà différenciés par leur position dans l'interface.
+L'étape suivante était de rendre l'interface agréable à l'œil et prête pour une distribution à plus grande échelle. Tous les changements décrit sont visibles en~\Cref{fig-finalgameview}. En premier lieu une harmonisation des couleurs a été opérée offrant une palette réduite pour favoriser la lisibilité du problème. Les données de l'instance en revanche ont pu revêtir une palette plus complète de couleurs et de formes pour que les joueurs puissent facilement distinguer entre les différents objets. Plusieurs symboles, variants en formes et en couleurs, ont été dessinés avec un faible niveau de détail pour ne pas fatiguer l'œil. Des barres verticales ont été ajouté pour chacun des agents ce qui facilite la distinction des préférences par agent et l'identifiant du niveau est montré en haut de l'écran. Nous avons voulu ainsi minimiser la quantité d'information à assimiler. Par exemple les agents ne montrent plus des couleurs différentes car ils sont déjà différenciés par leur position dans l'interface.
 
 \begin{figure}[ht!]
     \centering
@@ -66,77 +66,112 @@ L'étape suivante était de rendre l'interface agréable à l'œil et prête pou
         \centering
         \includegraphics[width=\linewidth]{g4}
         \caption{Écran de victoire}
+        \label{fig-victory}
     \end{subfigure}
     \caption{Interface de jeu finale}
 \end{figure}
 
-    Afin d'évaluer notre application, nous avons fait tester cette interface à nos proches. De multiples retours nous ont cité l'incompréhension d'une solution erronée. Il était donc évident que pour améliorer l'expérience de jeu nous devions rendre la détection d'affectation non recevable plus aisée. Deux solutions ont été implémentées pour pallier ce problème. L'affichage d'une couleur différente lorsqu'une ressource est sélectionnée par deux agents permet au joueur de remarquer immédiatement qu'une telle assignation des ressources est impossible (\Cref{fig-twotimes}). La possibilité d'afficher en rouge les colonnes des agents jaloux améliore le potentiel d'amusement (\Cref{fig-envy}). Les joueurs passent moins de temps à rechercher pourquoi une solution n'est pas valide et plus de temps à chercher une meilleure solution. Notons que cette fonctionnalité facilite grandement le jeu, elle est donc désactivée par défaut et le joueur a la possibilité d'appuyer sur un bouton pour activer cet affichage.
+    Afin d'évaluer notre application, nous avons fait tester cette interface à nos proches. De multiples retours relataient ne pas comprendre quand et pourquoi une solution était erronée. Il était donc évident que pour améliorer l'expérience de jeu nous devions rendre la détection d'affectation non recevable plus aisée. Deux solutions ont été implémentées pour pallier ce problème. L'affichage d'une couleur différente lorsqu'une ressource est sélectionnée par deux agents ou plus permet au joueur de remarquer immédiatement qu'une telle assignation des ressources est impossible (\Cref{fig-twotimes}). La possibilité d'afficher en rouge les colonnes des agents jaloux améliore le potentiel d'amusement (\Cref{fig-envy}). Les joueurs passent moins de temps à rechercher pourquoi une solution n'est pas valide et plus de temps à chercher une meilleure solution. Notons que cette fonctionnalité facilite grandement le jeu, elle est donc désactivée par défaut et le joueur a la possibilité d'appuyer sur un bouton pour activer cet affichage.
 
-    Ces deux fonctionnalités rendent les résolutions plus aisées mais nous pensons que ces compromis permettent une expérience de jeu plus fluide, agréable et sans sentiment de confusion pour l'utilisateur, un point qui nous le rappelons, semble essentiel pour la distribution de l'application. 
+    Ces deux additions rendent les résolutions plus aisées mais nous pensons que ces compromis permettent une expérience de jeu plus fluide, agréable et sans sentiment de confusion pour l'utilisateur, un point qui nous le rappelons, semble essentiel pour la distribution de l'application. Lorsqu'un niveau est résolu une fenêtre flottante annonce la victoire accompagnée du temps de résolution et du nombre de coups réalisés (\Cref{fig-victory}). Elle demande également à l'utilisateur de noter la difficulté ressentie pour le niveau en question. Ces données sont sauvegardées en ligne lorsque le joueur quitte la fenêtre.
+    
+    \subsubsection{Autres pages}
+    
+    Le reste de l'application devait comprendre un menu de sélection des niveau, une page profil, un tutoriel et une page \textquote{à propos} expliquant le projet. Ainsi dans la version finale de l'application, le \textbf{menu principal} (\Cref{fig-mainmenu}) est la première page sur laquelle arrive un utilisateur en ouvrant l'application. Il permet d'accéder à la liste des niveaux et aux autres pages citées ci-dessus. Le \textbf{menu de sélection des niveaux} (\Cref{fig-levelmenu}) catégorise les niveaux par nombre d'agents. L'utilisateur a la possibilité de jouer à tous les niveaux présentés et une pastille de texte indique si un niveau a été terminé ou commencé. La \textbf{page de profil} s'affiche au lancement de l'application lors de la première utilisation et est accessible depuis le menu principal. Elle permet, au moyen de deux zones de texte, de spécifier ou modifier les informations relatives au profil d'un joueur (âge, formation). Si un utilisateur ne souhaite pas divulguer ses informations il lui est possible de laisser les champs vides. Enfin la \textbf{page \textquote{à propos}} présente un bref résumé de l'objectif du projet et des raisons pour lesquelles l'application a été développée.
 	
-	\subsection{Composants Android}
-	Une application Android s'organise en plusieurs composants et nous allons en présenter certains pour pouvoir décrire l'application et ses fonctionnalités aisément. Nous allons notamment concentrer notre attention sur le concept d'activité, nécessaire à la présentation de l'interface.
-	
-	Une activité Android correspond à une fenêtre d'application et chaque application est donc composée d'au moins une activité. La navigation à l'intérieur d'une application se fait en changeant d'activité. Leur apparence visuelle est principalement définie par leur \textit{layout} qui structure l'agencement des vues (images, boutons, etc) et peut lier certains événements, initiés par l'utilisateur (comme par exemple un \textquote{clic} de bouton), à des actions prédéfinies (par exemple, lancer un niveau). Le layout, chargé par une activité à sa création, est décrit dans un fichier XML.
-	
-	\subsection{Structure de l'application}
-	\label{sec-struct}
-Notre application est composée de six activités que nous allons présenter ici. Des impressions d'écrans sont visibles en~\Cref{fig-screen1}.
-\hfill \break
-\begin{itemize}
- \item \texttt{MainMenuActivity} : l'activité principale de l'application, lorsque celle-ci est ouverte, l'utilisateur arrive sur l'écran qui correspond au menu principal, il a ensuite la possibilité de sélectionner un des quatres boutons du layout pour effectuer les actions suivantes : ouvrir le menu de sélection des niveaux, lancer le tutoriel, modifier son profil utilisateur ou ouvrir la page \textquote{à propos}.
- \item \texttt{LevelSelectActivity} : l'activité de sélection des niveaux dans laquelle la liste des niveaux est affichée, catégorisée par le nombre d'agents de chacun des niveaux. L'utilisateur a la possibilité de lancer chacun des niveaux présentés.
- \item \texttt{UserProfileActivity} : Cette activité remplace la \texttt{MainMenuActivity} lors du premier lancement de l'application. Elle comporte deux zones d'entrées de texte qui permettent à l'utilisateur de rentrer sa formation et son âge, données utiles lors de l'analyse des niveaux. On note que l'utilisateur a la possibilité de revenir sur cette activité depuis le menu principal ou de ne pas remplir les champs de texte s'il ne désire pas partager ces informations. 
- \item\texttt{AboutActivity} : un bref résumé de l'objectif de notre projet et des raisons pour laquelle l'application a été développé est visible sur cette page.
- \item\texttt{TutorialActivity} : le tutoriel du jeu, on y trouve une description de l'interface de jeu, la définition de ce qu'est un agent jaloux, les modalités de victoire d'une partie ainsi que des captures d'écran pour illustration.
- \item \texttt{GameActivity} : l'activité où se déroule la partie. Elle est composée principalement d'un canevas sur lequel est affiché l'interface de jeu. Deux autres vues permettent d'afficher le nom du niveau et un bouton activant la visualisation de l'envie chez les agents.
- \end{itemize}  
- 
 \begin{figure}[ht!]
     \centering
-    \begin{subfigure}{0.34\textwidth}
+    \begin{subfigure}{0.3\textwidth}
         \centering
         \includegraphics[width=\linewidth]{mainmenu}
         \caption{Menu principal}
+        \label{fig-mainmenu}
     \end{subfigure}
     ~
-    \begin{subfigure}{0.34\textwidth}
+    \begin{subfigure}{0.3\textwidth}
         \centering
         \includegraphics[width=\linewidth]{infor}
         \caption{Profil}
+        \label{fig-profile}
+    \end{subfigure}
+    ~
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{tuto}
+        \caption{Tutoriel}
+        \label{fig-tuto}
     \end{subfigure}
     ~
     \begin{subfigure}{0.34\textwidth}
         \centering
         \includegraphics[width=\linewidth]{abou}
         \caption{About}
+        \label{fig-about}
     \end{subfigure}
     ~
     \begin{subfigure}{0.34\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{tuto}
-        \caption{Tutoriel}
+        \includegraphics[width=\linewidth]{levelmenu}
+        \caption{Sélection de niveau}
+        \label{fig-levelmenu}
     \end{subfigure}
     \caption{Design final des menus de l'application}
     \label{fig-screen1}
 \end{figure}
- 
-	\subsection{Le modèle du jeu}
 
-\paragraph{}
-Nous allons ici décrire la partie back-end de l'application, en particulier la méthode utilisé pour représenter le jeu. Le package \texttt{models} contient les classes nécessaires à la représentation du jeu dans l'application. On y trouve la classe \texttt{Model}, appelée dès lors qu'il est demandé de faire une modification du modèle (assignation d'un objet à un des agents par exemple) ou encore de récupérer des informations du jeu comme le nombre d'agents d'un niveau. Cette classe stocke en effet la grille qui représente un niveau, comprenant les agents et les préférences. Le package contient également la définition de l'interface \texttt{IPiece}, implémentée par les classes \texttt{Preference} et \texttt{Actor} qui représentent respectivement les préférences et les agents.
+    \subsubsection{Tutoriel}
+    
+    Une composante très importante de l'application était le tutoriel permettant d'expliquer les règles du jeu. Une version interactive a d'abord été considéré qui aurait expliqué les actions nécessaires pour vérifier les contraintes tout en demandant à l'utilisateur de les effectuer. Par manque de temps cependant, une version combinant texte et images d'exemple a finalement été implémentée (\Cref{fig-tuto}). Il se déroule en trois étapes. Tout d'abord le but du jeu est explicité : trouver une allocation des objets pour les agents, un unique objet par agent. Ensuite les préférences sont abordées et les joueurs apprennent quel est l'ordre pour chaque agent. Enfin la notion de jalousie est montrée et expliquée à l'aide d'un exemple sous forme d'image. Le niveau servant d'exemple peut être retrouvé dans la liste des niveaux et peut être joué pour parfaire la compréhension. 
+    
+    Expliquer la notion d'envie à l'aide d'un court texte s'est révélé être un défi et plusieurs itérations se sont succédées avant que le tutoriel puisse être  considéré fonctionnel. Bien sûr il est probablement très améliorable.
 
+	\subsection{Structure de l'application}
+	\label{sec-struct}
+	Une application Android s'organise en plusieurs composants et nous allons en présenter certains pour pouvoir décrire l'implémentation de l'application aisément. Nous allons notamment concentrer notre attention sur le concept d'activité, nécessaire à la présentation de l'interface.
+	
+	Une activité Android correspond à une fenêtre d'application et chaque application est donc composée d'au moins une activité. La navigation à l'intérieur d'une application se fait en changeant d'activité. Leur apparence visuelle est principalement définie par leur \textit{layout} qui structure l'agencement des vues (images, boutons, etc) et peut lier certains événements, initiés par l'utilisateur (comme par exemple un \textquote{clic} de bouton) à des actions prédéfinies (lancer un niveau par exemple). Le layout, chargé par une activité à sa création, est décrit dans un fichier XML.
+	
+Notre application est ainsi composée de six activités correspondant aux pages décrites plus haut: 
+\begin{itemize}
+    \item \texttt{MainMenuActivity},
+    \item \texttt{LevelSelectActivity},
+    \item \texttt{UserProfileActivity},
+    \item \texttt{AboutActivity},
+    \item \texttt{TutorialActivity},
+    \item \texttt{GameActivity}.
+\end{itemize}
+Un bref Schéma de Navigation d'Interface (SNI) est disponible en~\Cref{fig-sni} (les conventions MACAO ne sont pas suivies).
+\begin{figure}[ht!]
+\begin{tikzpicture}
+    \umlsimpleclass{MainMenuActivity}
+    \umlsimpleclass[x=6]{LevelMenuActivity}
+    \umlsimpleclass[x=12]{GameActivity}
+    \umlsimpleclass[y=2]{TutorialActivity}
+    \umlsimpleclass[y=-2]{UserProfileActivity}
+    \umlsimpleclass[y=-2, x=6]{AboutActivity}
+    
+    \umlassoc{MainMenuActivity}{TutorialActivity}
+    \umlassoc{MainMenuActivity}{UserProfileActivity}
+    \umlassoc{MainMenuActivity}{LevelMenuActivity}
+    \umlassoc{MainMenuActivity}{AboutActivity}
+    \umlassoc{LevelMenuActivity}{GameActivity}
+\end{tikzpicture}
+\caption{SNI}
+\label{fig-sni}
+\end{figure}
+
+	\subsection{Les modèles du jeu}
+
+Nous allons ici décrire la partie back-end de l'application, en particulier les objets et classes utilisées pour représenter le jeu. Toutes les instances sont stockées dans un fichier XML et une classe \texttt{LevelLoader} permet de le \textit{parser} et charger les niveaux en mémoire vive. Le menu de sélection des niveaux qui est implémenté grâce à un \texttt{RecyclerView} peut alors être peuplé.
+
+Le package \texttt{models} contient les classes nécessaires à la représentation du jeu dans l'application. On y trouve la classe \texttt{Level} construite à partir du XML et qui définit le nom d'un niveau, les préférences associées aux agents et sa taille. On y trouve aussi la classe \texttt{Model}, appelée dès lors qu'il est demandé de faire une modification du modèle (assignation d'un objet à un des agents par exemple). Cette classe est utilisée lorsqu'un joueur joue pour ne pas affecter la représentation en mémoire des niveaux. L'écran de jeu est rendu à partir d'un canevas pour faciliter l'ajout futur d'animations et autres éléments esthétiques. C'est pourquoi il a été nécessaire d'implémenter des classes pouvant être dessinées et représentant les différents éléments de la grille de jeu. Le package contient donc la définition de l'interface \texttt{IPiece}, implémentée par les classes \texttt{Preference} et \texttt{Actor} qui représentent respectivement les préférences et les agents.
 \begin{itemize}
 \item Définition d'une Pièce (interface \texttt{IPiece}) : cette interface est composé de deux méthodes; la méthode \texttt{getId} retourne l'identifiant de la pièce et la méthode \texttt{getPosition} permet de retourner la position de la pièce sous forme d'un objet position qui contient les indices de la ligne et de la colonne dans lesquelles se trouve la pièce.
 \item Définition d'un Acteur (classe \texttt{Actor}) : cette classe implémente l'interface \texttt{IPiece} et toute ses méthodes. Elle représente les agents du jeu.                                                                                                                                                                                                                                                                                                                                      
 \item Définition d'une Préférence (Classe \texttt{Préférence}) : cette classe implémente également l’interface \texttt{IPiece}. On y ajoute cependant là deux entiers: \texttt{value} (qui permet de déterminer de quel type est cette préférence) et \texttt{selectedby} (qui permet de savoir si cette préférence est sélectionnée par un des agents et par qui). 
 \end{itemize}
 
-\paragraph{}
-Nous utilisions ensuite ces trois classes dans la classe \texttt{Model} décrite précédemment,  en effet les on y trouve une Grille contentant des objets \texttt{IPiece} qui représente la grille de jeu. Cet objet \texttt{Grid} est organisé de la même façon que les premiers prototypes, on trouve les agents dans la première colonnes et les préférences dans les colonnes suivantes. ce n'est que lors de l'affichage que la grille est retourné pour que les agents se trouvent au dessus de leur préférences respectives.
-\paragraph{}
-Une des fonctionnalités que nous souhaitons mettre en valeur grâce a cette représentation est le calcul des de la jalousie entre les agents. On a en effet la possibilité de récupérer des lignes de la grille et de les comparer pour savoir si l'agent correspondant a cette ligne est jaloux. La fonction prends en arguments deux suites de préférences P1 et P2 et permet de détecter si l'agent P2 est jaloux de l'agent P1. On commence par récupérer les préférences de chaque lignes qui sont bien sectionné par un agent, puis on compare la position de la préférence de l'agent P1 avec celle de P2, si la préférence de l'agent P1 est préféré par l'agent P2 a celle qui lui es assigné alors cette fonction retourne true, sinon false. On note que cette méthode permet la détection de la victoire du jeu en calculant la jalousie de tout les agents.
-
+Nous utilisions ensuite ces trois classes dans la classe \texttt{Model} décrite précédemment. Une des fonctionnalités que nous souhaitons mettre en valeur grâce à cette représentation est le calcul de la jalousie entre les agents. Il est très facile de récupérer des colonnes de la grille et de les comparer pour savoir si l'agent correspondant à cette ligne est jaloux. La fonction prends en arguments deux suites de préférences \textsf{P1} et \textsf{P2} et permet de détecter si l'agent \textsf{P2} est jaloux de l'agent \textsf{P1}. On commence par récupérer les préférences de chaque colonne et on vérifie qu'un objet a été alloué. Puis on compare la position de l'objet alloué à l'agent \textsf{P1} avec celle de \textsf{P2}; si l'objet de l'agent \textsf{P1} est préférée par l'agent \textsf{P2} a celui qui lui est assigné alors cette fonction retourne vrai. On note que cette méthode permet la détection de la victoire du jeu en calculant la jalousie de toute les paires d'agents côte à côte.
 
 \begin{figure}[ht!]
 \begin{lstlisting}
@@ -173,54 +208,34 @@ private boolean isJealous(Preference[] P1,Preference[] P2){
 \label{detection-jalousie}
 \end{figure}
 
-
+Une fonctionnalité de sauvegarde était nécessaire pour l'application. En effet lorsqu'un joueur commence un niveau sans finir de le résoudre il était d'une part important de conserver le temps passé sur ce niveau et pour rendre l'expérience plus agréable, de sauvegarder l'avancement dans la résolution. Un tel système a été implémenté à l'aide du système de \texttt{SharedPreferences} présent dans les applications Android. Il permet d'enregistrer des données persistantes et ainsi de garder en mémoire certaines informations même si l'application est quittée/fermée.
 
 	\subsection{Récupération des données}
 	
-	\paragraph{}
-	L’analyse de diverses instances du problème nous a permis donc de dégager plusieurs métriques, qui peuvent être utilisées pour essayer de prédire la difficulté de nos niveaux. Cependant, il nous fallait confronter ces prédictions avec des données réelles , qui seraient justement basé sur ces critères, et ce afin de trouver si oui ou non, il existait une corrélation entre la difficulté d’un niveau et ces derniers. 
-	\paragraph{}
-Une fois l’application mobile réalisée, nous avions donc décidé de la faire tester sur un public de taille variante et diverse, pour recueillir assez de données. Mais nous avions besoin d’un moyen de les écrire quelque part , la contrainte étant que l’utilisateur allait jouer sur son téléphone. Il nous fallait donc envoyer ces informations sur une sorte de base de données. Notre regard s’est alors porté sur l’API Google Sheets qui nous offrait une relaxation de cette contrainte.
+	Une fois l'application mobile réalisée, il nous fallait la faire tester sur un public de grande taille et offrant une certaine diversité pour recueillir des données pertinentes. Pour pouvoir réaliser l'apprentissage de difficulté décrit en~\Cref{sec-analyse}, il était demandé de pouvoir sauvegarder des données de résolutions sur une base de donnée distante. Le processus devait être automatique et silencieux de façon à simplifier au plus l'utilisation de l'application. Les serveurs Google et plus précisément le service GoogleSheets a été choisi pour cette tâche. 
 
-\paragraph{Googlesheets}
-Nous avons donc intégré dans l’application mobile, une solution permettant l’envois de diverses données joueurs qui étaient enregistrées lors de la résolution d’une instance. l’API Google Sheets permet l’écriture/lecture de données sur une Google Sheet via différentes plateformes : application mobile, site web, programme python, etc… 
-En ce qui nous concerne, notre but est d’envoyer les différentes métriques abordées précédemment sur une Google Sheet avec diverses informations sur l’utilisateur pour ensuite les analyser et appliquer une régression dessus.
+Nous avons donc intégré dans l'application mobile, une solution permettant l'envoi de diverses données utilisateurs qui étaient enregistrées lors de la résolution d'une instance. L’API Google Sheets v4 permet l’écriture/lecture de données sur une feuille de calcul sur différentes plateformes : application mobile, site web, programme python, etc. La communication entre la feuille et notre application est géré et sécurisée via l’API. En effet elle utilise le protocole OAuth 2.0 pour autoriser les communications. Nous avons donc besoins d'identifiants, deux moyen sont disponibles :
+\begin{itemize}
+\item l’usage d’une Clé API,
+\item l’usage d’un compte de service Google.
+\end{itemize}
 
-\paragraph{}
-La communication entre la feuille et notre application est géré via l’API, et elle est sécurisé. En effet l’API utilise le protocole OAuth 2.0 pour autoriser les communications. Nous avons donc besoins d’identifiants , deux moyen sont disponibles :
- \begin{itemize}
-\item l’usage d’une Clé API
-\item l’usage d’un compte de service Google
-\end{itemize}
-Néanmoins, la première méthode requiert une confirmation de l’utilisateur à chaque fois qu’il envoie des données via son téléphone car l’application demandera la permission d'interagir avec la feuille sous le compte de l’utilisateur. Nous avons donc opté pour la seconde solution qui user d’un compte de service dédié à notre application. L’application interagira via ce compte sans demander la confirmation de l’utilisateur, ce qui est crucial pour l’envie de l’utilisateur à vouloir tester notre application sur une courte durée/longue durée.
-Dans les deux cas, un fichier JSON est créé et il contiendra les informations nécessaire pour créer nos identifiants.
+Néanmoins, la première méthode requiert une confirmation de l'utilisateur à chaque fois qu'il envoie des données via son téléphone. L'application demande alors la permission d'interagir avec la feuille sous le compte de l'utilisateur. Nous avons donc opté pour la seconde solution qui use d'un compte de service dédié à notre application. Celle-ci interagira via ce compte sans demander la confirmation de l'utilisateur, ce qui est crucial pour favoriser le côté \textquote{easy to use} de l'application. L'utilisateur est plus à même de vouloir tester notre application sur une courte durée/longue durée. Quelque soit la méthode, un fichier JSON contenant les identifiants est créé.\\
 
-\paragraph{}
-L’intégration de cette solution dans notre application se traduit donc par deux classes:
- \begin{itemize}
-\item La classe SheetsServiceUtil
-\item La classe GoogleSheetsWriteUtil
+L'intégration de cette solution dans notre application se traduit donc par deux classes: \texttt{SheetsServiceUtil} et \texttt{GoogleSheetsWriteUtil}. La première contient une unique méthode \texttt{getSheetsService} qui permet la création de l’objet \texttt{Sheet}. C'est l'intermédiaire pour écrire et lire avec l'API. Cet objet contiendra les identifiants nécessaire à l'autorisation de la communication entre l'application et la feuille.
+
+La deuxième classe \texttt{GoogleSheetsWriteUtil} contient toutes les méthodes qui seront appelées pour l'écriture de nos données. D'abord la méthode \texttt{setup} permet la création d'un objet \texttt{Credential} à partir de notre fichier JSON. Cette instance est ensuite utilisée dans la méthode \texttt{getSheetsService}.
+
+Puisque les opérations réseaux sont asynchrones par nature, Android prohibe ce type d'action sur le thread principal de l'application. Ce thread est généralement dédiée à la mise à jour et affichage de l'interface. C'est pourquoi Android propose une classe \texttt{AsyncTask} utile pour effectuer des actions courtes sur un thread séparé. C'est la solution que nous utilisons pour envoyer nos données. Cela reste invisible à l'œil de l'utilisateur ce qui est à nouveau crucial pour le côté agréable et fluide de son expérience.
+
+Nous avons donc trois classes dans \texttt{SheetsServiceUtil} qui héritent toutes de la classe \texttt{AsyncTask}:
+\begin{itemize}
+\item \texttt{WriteUserInfoAsyncTask},
+\item \texttt{ModifyUserInfoAsyncTask},
+\item \texttt{WriteUserEvalAsyncTask}.
 \end{itemize}
-\paragraph{}
-La première classe java SheetsServiceUtil contient une unique méthode getSheetsService qui permet la création d’une instance de l’objet Sheet qui est l'intermédiaire pour écrire et lire via l’API. Cette instance contiendra les identifiants nécessaire à l’autorisation de la communication entre l’application et la feuille.
-\paragraph{}
-La deuxième classe java GoogleSheetsWriteUtil contient toutes les méthodes qui seront appelées pour l’écritures de nos données. 
-La méthode setup() permet entre autre la création d’une instance de l’objet Credential, à partir de notre fichier JSON qui est contenu dans les ressources de notre applications (pour rappel, on accède aux ressources de nos applications via ctx.getRessourses();). Cette instance est ensuite passée en paramètre dans la méthode getSheetsService de notre classe SheetsServiceUtil qui retournera un objet Sheets, sur lequel toute nos méthodes agiront par la suite.
-Par ailleurs, nous récupérons aussi les données du profil utilisateur enregistré si elles existent pour permettre de détecter la modification d’un profil.
-\paragraph{}
-Nous utilisons des AsyncTask pour envoyer nos données. En effet il est impossible sous android de faire des opérations réseaux ( transfert de données ) , sous le thread principale, on utilise donc des AsyncTask pour le faire en background. Cela nous évite des lags au niveau de l’interface qui est entièrement gérée par le main thread.
-et ça reste invisible à l’oeil de l’utilisateur ce qui est à nouveau crucial quant au côté agréable et fluide de son expérience.
-\paragraph{}
-Nous avons donc trois static private Class dans SheetsServiceUtil qui héritent tous de la class AsyncTask , une classe d’Android qui permet de lancer des threads aisément : 
- \begin{itemize}
-\item WriteUserInfoAsyncTask
-\item ModifyUserInfoAsyncTask
-\item WriteUserEvalAsyncTask
-\end{itemize}
-Ces trois classes implémentent ainsi la méthode protected doInBackground , qui prend en paramètre un string data, c’est à dire les données à envoyer, et qui permet leur exécution en tâche de fond.
-Nous appelons donc à l'intérieure les méthodes de l’API de Google Sheets pour update (pour modifyUserInfoAsync) 
-ou écrire de nouvelles données (pour WriteUserEvalAsyncTask et ModifyUserInfoAsyncTask) dans notre feuille en utilisant l’instance de la classe Sheets que l’on avait créé au préalable.
-\hfill \break 
+Ces trois classes implémentent ainsi une méthode \texttt{doInBackground}, qui prend en paramètre une liste de chaîne de caractère, les données à envoyer, et qui réalise l'appel à l'API en tâche de fond. Nous appelons donc à l'intérieur les méthodes de l’API de Google Sheets pour mettre à jour (\texttt{ModifyUserInfoAsync}) ou écrire de nouvelles données (\texttt{WriteUserEvalAsyncTask} et \texttt{ModifyUserInfoAsyncTask}) dans notre feuille. Le code visible en~\Cref{fig-writeuser} montre un exemple d'utilisation de l'API.\\
+\begin{figure}[ht!]
 \begin{lstlisting}[tabsize=3]
 private static class WriteUserInfoAsyncTask extends 
 AsyncTask<String, Void, Void>{
@@ -232,7 +247,7 @@ AsyncTask<String, Void, Void>{
                     ));
 		try {
 			AppendValuesResponse result = sheetsService.spreadsheets()
-			.values().append(SPREADSHEET_ID, "User_Info_2!A1", body)
+			.values().append(SPREADSHEET_ID, "User_Info!A1", body)
 			.setValueInputOption("USER_ENTERED")
 			.execute();
 			Object userPos = result.getUpdates().get("updatedRange");
@@ -247,24 +262,22 @@ AsyncTask<String, Void, Void>{
 	}
 }
 \end{lstlisting}
-Fonction WriteUserInfoAsyncTask
-\paragraph{}
-Comme il est possible que l’écriture des données sur la feuille puisse échouer (problème de réseau, téléphone non connecté à internet, etc...) , il est nécessaire de sauvegarder les données non envoyées pour permettre une planification d’un renvois plus tard. Il existe donc deux variables dans notre classe SheetsServiceUtil pour cela : 
-failedEvaluation si l’écriture d’une évaluation échoue
-failedUserInfo si l’écriture/modification du profil utilisateur échoue
-\paragraph{}
-Avant toute nouvelles écritures, il faut donc vérifier s’il n’en existe pas qui ont échouées.
-Pour cette raison, nous avons créé trois méthodes : WriteUserInfo(String data), ModifyUserInfo(String data) , WriterUserEval(String data), qui appelle toujours au début une méthode “CheckFailures” qui verifie si failedEvaluation et failedUserInfo sont vide ou non. Si elles ne le sont pas, alors on crée de nouvelles asyncTask pour renvoyer ces données. Et dans tous les cas, on crée de nouvelles AsyncTask correspondant à la méthode qui est appelé (par exemple WriteUserInfoAsyncTask pour la méthode WriteUserInfo) pour les nouvelles données passées en paramètre de ces méthodes.
-\hfill \break
+\caption{Code permettant l'écriture des informations utilisateur}
+\label{fig-writeuser}
+\end{figure}
+
+Comme il est possible que l’écriture des données sur la feuille puisse échouer (problème de réseau, téléphone non connecté à internet, etc), il est nécessaire de sauvegarder les données non envoyées pour permettre la planification d'un renvoi plus tard. Il existe donc pour cela deux variables listes dans la classe \texttt{SheetsServiceUtil}: \texttt{failedEvaluation} si l'écriture des données relative à une résolution échoue et \texttt{failedUserInfo} si l'écriture/modification du profil utilisateur échoue. 
+
+Avant toute nouvelles écritures, il faut donc vérifier qu'il n'existe pas de données non envoyées. Pour cette raison, les trois méthodes gérant l'envoi de donnée font cette vérification. \texttt{writeUserInfo}, \texttt{modifyUserInfo} et \texttt{writerUserEval} appellent toutes, au début de leur exécution, une méthode \texttt{checkFailures} qui vérifie que les listes d'échecs soient bien vides. Si elles ne le sont pas, alors on crée de nouvelles \texttt{AsyncTask} pour renvoyer ces données avant de procéder à l'envoi des nouvelles données.
+
+\begin{figure}[ht!]
 \begin{lstlisting}[tabsize=3]
 public void writeUserEvaluation(String... data) {
 	this.checkFailures();
 	new WriteUserEvaluationAsyncTask().execute(data);
 }
 \end{lstlisting}
-Méthode WriteUserEvaluation
-	
+\caption{Méthode writeUserEvaluation}
+\label{fig-writeeval}
+\end{figure}	
 \end{document}
-
-
-

@@ -1,9 +1,10 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from copy import copy
-from random import shuffle, sample
-from itertools import combinations
+from random import shuffle, choice
+from itertools import combinations, permutations
 from package.modules.utils import *
+import math
 
 def compute_metadata(instance, solutions, wpos, stats, 
 	MIN_FREEZE_PROPORTION=1):
@@ -24,22 +25,21 @@ def compute_metadata(instance, solutions, wpos, stats,
 
 	# G = get_optima_graph(instance, solutions)
 
-	mean_regret = 0
 	mean_regret_wpos = 0
-	ext_regret = 0
 	min_regret = float('inf')
-	min_ext_regret = float('inf')
+	min_ext_r = float('inf')
+	min_ext_l = float('inf')
 	for solution in solutions:
 		r, ext1, ext2 = regret(instance, solution)
-		mean_regret += r
-		if r < min_regret: min_regret = r
-		if ext1 + ext2 < min_ext_regret: min_ext_regret = ext1 + ext2
+		if r < min_regret: 
+			min_regret = r
+		if ext1 < min_ext_l:
+			min_ext_l = ext1
+		if ext2 < min_ext_r:
+			min_ext_r = ext2
 		if solution in wpos: 
-			ext_regret += ext1 + ext2
 			mean_regret_wpos += r
-	mean_regret /= len(solutions)
 	mean_regret_wpos /= len(wpos)
-	ext_regret /= len(wpos)
 
 	# Compute average number of possible agents for variables
 	average_nb_of_possible_position = 0
@@ -56,20 +56,95 @@ def compute_metadata(instance, solutions, wpos, stats,
 	average_nb_of_possible_position /= len(instance)
 
 	return {
-		'number_of_wpos': len(wpos),
-		'number_of_solutions': len(solutions),
-		# 'proportions': proportions,
-		'average_niter': sum(s['niter'] for s in stats) / len(stats),
-		'number_of_frozen_variables': number_of_frozen_variables,
-		'attraction_basin_size': 0,
-		# 'optima_graph': G,
-		'mean_regret': mean_regret,
-		'ext_regret': ext_regret,
-		'mean_regret_wpos': mean_regret_wpos,
-		'average_number_of_possible_position': average_nb_of_possible_position,
-		'min_regret': min_regret,
-		'min_ext_regret': min_ext_regret
+		'avg_naff': sum(s['niter'] for s in stats) / len(stats),
+		'npo': len(wpos),
+		'minr': min_regret,
+		'avgr': mean_regret_wpos,
+		'minr_extr': min_ext_r,
+		'minr_extl': min_ext_l,
+		'npstn': average_nb_of_possible_position,
+		'nsols': len(solutions),
+		'nlo': get_nlo(instance),
+		'nfrozen': number_of_frozen_variables,
+		'bs': 0,
+		
+		#'min_ext_regret': min_ext_regret
 	}
+
+
+def adaptative_walk(instance, start_solution, n=50):
+	pairs = list(combinations(range(len(instance)), 2))
+	current_solution = start_solution
+	current_cost = start_solution.cost
+	walk_sols = list()
+	walk_costs = list()
+
+	for _ in range(n):
+		walk_sols.append(current_solution)
+		walk_costs.append(current_cost)
+		neighbor_solutions = [swap(current_solution, pair) for pair in pairs]
+		neighbor_solutions = list(filter(lambda s: s.cost >= current_cost and s not in walk_sols, neighbor_solutions))
+
+		if len(neighbor_solutions) == 0:
+			break
+
+		current_solution = choice(neighbor_solutions)
+		current_cost = current_solution.cost
+
+		if current_cost == len(instance):
+			break
+
+	return walk_sols, walk_costs
+
+
+def estimate_basin(instance, optimum, n=50):
+	basin = nx.Graph()
+
+	for _ in range(n):
+		walk_sols, walk_costs = adaptative_walk(instance, optimum)
+		for i in range(len(walk_sols)-1):
+			basin.add_edge(walk_sols[i], walk_sols[i+1])
+
+	return basin
+
+
+
+def estimate_nlo_rndm(instance):
+	lo = set()
+	pairs = list(combinations(range(len(instance)), 2))
+	n = int(math.factorial(len(instance))*1)
+	print("Sampling {} solutions".format(n))
+
+	for _ in range(n):
+		solution = list(range(len(instance)))
+		shuffle(solution)
+		sol_cost = cost(instance, solution)
+		m = 0
+		for pair in pairs:
+			neighbor_solution = swap(solution, pair)
+			neighbor_cost = cost(instance, neighbor_solution)
+			if neighbor_cost < sol_cost: m += 1
+		if m == 0: lo.add(tuple(solution))
+
+	return len(lo)
+
+
+def get_nlo(instance):
+	lo = list()
+	all_sols = permutations(range(len(instance)))
+	pairs = list(combinations(range(len(instance)), 2))
+
+	for sol in all_sols:
+		solution = list(sol)
+		sol_cost = cost(instance, solution)
+		m = 0
+		for pair in pairs:
+			neighbor_solution = swap(solution, pair)
+			neighbor_cost = cost(instance, neighbor_solution)
+			if neighbor_cost < sol_cost: m += 1
+		if m == 0: lo.append(solution)
+
+	return len(lo)
 
 
 def regret(instance, solution):
@@ -178,7 +253,7 @@ def show_optima_graph(G):
 	# pos = nx.random_layout(G)
 	# nx.draw_networkx_edge_labels(G, pos=pos)
 	# nx.draw_networkx_labels(G, pos=pos)
-	nx.draw(G, pos=pos, node_size=50, node_color=colors, edge_color="#BDBDBD")
+	nx.draw(G, pos=pos, node_size=40, node_color=colors, edge_color="#BDBDBD")
 	plt.show()
 
 
@@ -192,7 +267,7 @@ class Solution:
 
 	def __repr__(self):
 		# return "c={} {}".format(self.cost_, tuple(self.sol.values()))
-		return str(self.cost)
+		return str(self.sol.values())
 
 	def __hash__(self):
 		return hash(tuple(self.sol.values()))

@@ -5,18 +5,17 @@ import numpy as np
 
 def pprint_metadata(metadata):
     buffer = str()
-    buffer += "Number of solutions: {}\n".format(metadata['number_of_solutions'])
-    buffer += "WPO solutions: {}\n".format(metadata['number_of_wpos'])
-    buffer += "Average number of iterations: {:.2f}\n".format(metadata['average_niter'])
+    buffer += "Number of solutions: {}\n".format(metadata['nsols'])
+    buffer += "Number of PO solutions: {}\n".format(metadata['npo'])
+    buffer += "Average number of aff: {:.2f}\n".format(metadata['avg_naff'])
     # buffer += repr(metadata['proportions']) + "\n"
-    buffer += "Number of frozen variables: {}\n".format(metadata['number_of_frozen_variables'])
-    buffer += "Size of attraction basins: {}\n".format(metadata['attraction_basin_size'])
-    buffer += "Average regret: {:.2f}\n".format(metadata['mean_regret'])
-    buffer += "Average regret in wpos: {:.2f}\n".format(metadata['mean_regret_wpos'])
-    buffer += "Average regret in ext for wpos: {:.2f}\n".format(metadata['ext_regret'])
-    buffer += "Average number of possible obj position: {:.2f}\n".format(metadata['average_number_of_possible_position'])
-    buffer += "Min regret: {:.2f}\n".format(metadata['min_regret'])
-    buffer += "Min ext regret: {:.2f}\n".format(metadata['min_ext_regret'])
+    buffer += "Number of frozen variables: {}\n".format(metadata['nfrozen'])
+    buffer += "Size of attraction basins: {}\n".format(metadata['bs'])
+    buffer += "Average regret in wpos: {:.2f}\n".format(metadata['avgr'])
+    buffer += "Min regret ext left: {}\n".format(metadata['minr_extl'])
+    buffer += "Min regret ext right: {}\n".format(metadata['minr_extr'])
+    buffer += "Average number of possible obj position: {:.2f}\n".format(metadata['npstn'])
+    buffer += "Min regret: {:.2f}\n".format(metadata['minr'])
 
     return buffer
 

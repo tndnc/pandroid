@@ -103,9 +103,9 @@ class MainWindow(QMainWindow):
 		gbutton.clicked.connect(self.generate_new_instance)
 		left_layout.addWidget(gbutton)
 
-		graph_button = QPushButton('Show graph', self)
-		graph_button.clicked.connect(lambda: show_optima_graph(self.metadata['optima_graph']))
-		left_layout.addWidget(graph_button)
+		# graph_button = QPushButton('Show graph', self)
+		# graph_button.clicked.connect(lambda: show_optima_graph(self.metadata['optima_graph']))
+		# left_layout.addWidget(graph_button)
 
 		# solbutton = QPushButton('Show all solutions', self)
 		# solbutton.clicked.connect(self.show_all_solutions)

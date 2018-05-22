@@ -55,6 +55,12 @@ def compute_metadata(instance, solutions, wpos, stats,
 		average_nb_of_possible_position += n
 	average_nb_of_possible_position /= len(instance)
 
+	H = nx.Graph()
+	for solution in solutions:
+		print("Estimating basin for {}".format(solution))
+		G = estimate_basin(instance, Solution(solution, instance))
+		H = nx.compose(H, G)
+
 	return {
 		'avg_naff': sum(s['niter'] for s in stats) / len(stats),
 		'npo': len(wpos),
@@ -66,7 +72,7 @@ def compute_metadata(instance, solutions, wpos, stats,
 		'nsols': len(solutions),
 		'nlo': get_nlo(instance),
 		'nfrozen': number_of_frozen_variables,
-		'bs': 0,
+		'bs': len(H),
 		
 		#'min_ext_regret': min_ext_regret
 	}

@@ -8,14 +8,14 @@ def pprint_metadata(metadata):
     buffer += "Number of solutions: {}\n".format(metadata['nsols'])
     buffer += "Number of PO solutions: {}\n".format(metadata['npo'])
     buffer += "Average number of aff: {:.2f}\n".format(metadata['avg_naff'])
-    # buffer += repr(metadata['proportions']) + "\n"
     buffer += "Number of frozen variables: {}\n".format(metadata['nfrozen'])
-    buffer += "Size of attraction basins: {}\n".format(metadata['bs'])
+    buffer += "Estimated size of basin: {}\n".format(metadata['bs'])
     buffer += "Average regret in wpos: {:.2f}\n".format(metadata['avgr'])
     buffer += "Min regret ext left: {}\n".format(metadata['minr_extl'])
     buffer += "Min regret ext right: {}\n".format(metadata['minr_extr'])
     buffer += "Average number of possible obj position: {:.2f}\n".format(metadata['npstn'])
     buffer += "Min regret: {:.2f}\n".format(metadata['minr'])
+    buffer += "Number of local optimums: {}\n".format(metadata['nlo'])
 
     return buffer
 

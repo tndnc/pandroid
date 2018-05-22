@@ -90,12 +90,76 @@ language=Octave
 	\section{Application mobile}
 	    \label{app}
 	    \subfile{sections/app.tex}
+	    
+	\section{Travail futur}
+	
+	
 	\section{Conclusion}
 	
 %	\bibliography{bibliography}
     \printbibliography[heading=bibintoc]
     \begin{appendix}
         \section{LEF Solver}
+Pour aider le développement et les tests des outils d'analyse, une application avec GUI a été développée grâce à \texttt{PyQt5} (\Cref{fig-lefsolver}). Elle permet le calcul de toutes les mesures présentées en~\Cref{sec-analyse} et de visualiser les différentes solutions trouvées par ASP. Des fonctionnalités d'exportations sont également présentes, très utiles pour l'intégration de nouveaux niveaux dans l'application pour ou pour la partie apprentissage.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.7\linewidth]{lefsolver}
+\caption{Capture d'écran du LEF solver}
+\label{fig-lefsolver}
+\end{figure}
+        
         \section{Diagramme de classe d'Equity}
-    \end{appendix}
+\begin{figure}[ht!]
+\centering
+\begin{tikzpicture}
+    \umlsimpleclass{GameApplication}
+    \umlsimpleclass[x=4.5]{LevelLoader}
+    \umluniassoc{GameApplication}{LevelLoader}
+    \begin{umlpackage}[x=8]{Models}
+        \umlsimpleclass{Grid}
+        \umlsimpleclass[y=-2]{Model}
+        \umlassoc[mult2=1, mult1=1]{Model}{Grid}
+        \umlsimpleclass[y=-4]{Level}
+        \umlassoc[mult2=1, mult1=1]{Model}{Level}
+        \umlsimpleinterface[x=3,y=-2]{IPiece}
+        \umlassoc[mult1=1,mult2=*]{Model}{IPiece}
+        \umlsimpleclass[x=2.5, y=-4]{Actor}
+        \umlsimpleclass[x=5, y=-4]{Preference}
+        \umlimpl{Actor}{IPiece}
+        \umlimpl{Preference}{IPiece}
+        \umlsimpleclass[x=4, y=-6.5]{Position}
+        \umlassoc[mult1=1, mult2=1]{Actor}{Position}
+        \umlassoc[mult1=1, mult2=1]{Preference}{Position}
+    \end{umlpackage}
+    \umluniassoc[geometry=-|-]{LevelLoader}{Level}
+    \begin{umlpackage}[fill=red!20, y=-2]{Activities}
+        \umlsimpleclass{MainMenuActivity}
+        \umlsimpleclass[y=-1.5]{LevelMenuActivity}
+        \umlassoc{MainMenuActivity}{LevelMenuActivity}
+    \end{umlpackage}
+    \umluniassoc[anchor2=50]{GameApplication}{Activities}
+    \begin{umlpackage}[fill=red!20, y=-6]{Views}
+        \umlsimpleclass{RecyclerView}
+    \end{umlpackage}
+    \umlassoc[mult1=1, mult2=*, anchors=-35 and 35]{LevelMenuActivity}{RecyclerView}
+    \umlassoc[geometry=-|-]{RecyclerView}{Level}
+    \begin{umlpackage}[y=-9]{GoogleSheets}
+        \umlsimpleclass{GoogleSheetsWriteUtil}
+        \umlsimpleclass[y=-1.5]{SheetsServiceUtil}
+        \umluniassoc{GoogleSheetsWriteUtil}{SheetsServiceUtil}
+        \umlsimpleclass[x=6, type=abstract]{AsyncTask}
+        \umluniassoc{GoogleSheetsWriteUtil}{AsyncTask}
+        \umlsimpleclass[y=-2, x=4]{WriteUserInfo}
+        \umlimpl{WriteUserInfo}{AsyncTask}
+        \umlsimpleclass[y=-2, x=8]{WriteUserEvaluation}
+        \umlimpl{WriteUserEvaluation}{AsyncTask}
+        \umlsimpleclass[x=10]{ModifyUserProfile}
+        \umlimpl{ModifyUserProfile}{AsyncTask}
+    \end{umlpackage}
+    \umluniassoc[geometry=-|, anchor2=70]{Activities}{GoogleSheets}
+\end{tikzpicture}
+\caption{Diagramme de classe non exhaustif}
+\end{figure}
+\end{appendix}
 \end{document}

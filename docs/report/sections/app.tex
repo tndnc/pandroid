@@ -124,13 +124,19 @@ Notre application est composée de six activités que nous allons présenter ici
 	\subsection{Le modèle du jeu}
 
 \paragraph{}
-Le package \texttt{models} contient les classes nécessaires à la représentation du jeu dans l'application. On y trouve la classe \texttt{Model}, appelée dès lors qu'il est demandé de faire une modification du modèle (assignation d'un objet à un des agents par exemple) ou encore de récupérer des informations du jeu comme le nombre d'agents d'un niveau. Cette classe stocke en effet la grille qui représente un niveau, comprenant les agents et les préférences. Le package contient également la définition de l'interface \texttt{IPiece}, implémentée par les classes \texttt{Preference} et \texttt{Actor} qui représentent respectivement les préférences et les agents.
+Nous allons ici décrire la partie back-end de l'application, en particulier la méthode utilisé pour représenter le jeu. Le package \texttt{models} contient les classes nécessaires à la représentation du jeu dans l'application. On y trouve la classe \texttt{Model}, appelée dès lors qu'il est demandé de faire une modification du modèle (assignation d'un objet à un des agents par exemple) ou encore de récupérer des informations du jeu comme le nombre d'agents d'un niveau. Cette classe stocke en effet la grille qui représente un niveau, comprenant les agents et les préférences. Le package contient également la définition de l'interface \texttt{IPiece}, implémentée par les classes \texttt{Preference} et \texttt{Actor} qui représentent respectivement les préférences et les agents.
 
 \begin{itemize}
 \item Définition d'une Pièce (interface \texttt{IPiece}) : cette interface est composé de deux méthodes; la méthode \texttt{getId} retourne l'identifiant de la pièce et la méthode \texttt{getPosition} permet de retourner la position de la pièce sous forme d'un objet position qui contient les indices de la ligne et de la colonne dans lesquelles se trouve la pièce.
 \item Définition d'un Acteur (classe \texttt{Actor}) : cette classe implémente l'interface \texttt{IPiece} et toute ses méthodes. Elle représente les agents du jeu.                                                                                                                                                                                                                                                                                                                                      
 \item Définition d'une Préférence (Classe \texttt{Préférence}) : cette classe implémente également l’interface \texttt{IPiece}. On y ajoute cependant là deux entiers: \texttt{value} (qui permet de déterminer de quel type est cette préférence) et \texttt{selectedby} (qui permet de savoir si cette préférence est sélectionnée par un des agents et par qui). 
 \end{itemize}
+
+\paragraph{}
+Nous utilisions ensuite ces trois classes dans la classe \texttt{Model} décrite précédemment,  en effet les on y trouve une Grille contentant des objets \texttt{IPiece} qui représente la grille de jeu. Cet objet \texttt{Grid} est organisé de la même façon que les premiers prototypes, on trouve les agents dans la première colonnes et les préférences dans les colonnes suivantes. ce n'est que lors de l'affichage que la grille est retourné pour que les agents se trouvent au dessus de leur préférences respectives.
+\paragraph{}
+Une des fonctionnalités que nous souhaitons mettre en valeur grâce a cette représentation est le calcul des de la jalousie entre les agents. On a en effet la possibilité de récupérer des lignes de la grille et de les comparer pour savoir si l'agent correspondant a cette ligne est jaloux. La fonction prends en arguments deux suites de préférences P1 et P2 et permet de détecter si l'agent P2 est jaloux de l'agent P1. On commence par récupérer les préférences de chaque lignes qui sont bien sectionné par un agent, puis on compare la position de la préférence de l'agent P1 avec celle de P2, si la préférence de l'agent P1 est préféré par l'agent P2 a celle qui lui es assigné alors cette fonction retourne true, sinon false. On note que cette méthode permet la détection de la victoire du jeu en calculant la jalousie de tout les agents.
+
 
 \begin{figure}[ht!]
 \begin{lstlisting}
@@ -167,12 +173,6 @@ private boolean isJealous(Preference[] P1,Preference[] P2){
 \label{detection-jalousie}
 \end{figure}
 
-	
-
-
-	\subsubsection{Interface GameView}
-	
-L'interface centrale de  l'application, l'ère de jeu de equity est un des composants principaux du projet, le canevas utilisé pour dessiner les agents et leur préférence s'organise de la façon suivante : les agents sont placé en haut de la surface sur une ligne horizontale, et leurs préférences sont arrangés verticalement, leur objet préféré étant le premier en partant du haut, derrière chaque agent est dessiné une bande verticale sur laquelle sont aligné les préférences 
 
 
 	\subsection{Récupération des données}

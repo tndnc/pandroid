@@ -103,7 +103,7 @@ Un exemple d'instance générée se trouve en~\Cref{fig-exgen}. Les objets corre
 		\label{fig-exemple1}
 	\end{table}
 	
-	De cette mesure de regret on peut tirer plusieurs métriques intéressantes:
+	De cette mesure de regret (qui s'apparente à calculer le score de Borda de l'allocation) on peut tirer plusieurs métriques intéressantes:
 	\begin{itemize}
 	    \item Le regret minimum à atteindre pour trouver une solution (\texttt{minr}),
 	    \item Le regret moyen dans les solutions Pareto-optimales (\texttt{avgr}),
@@ -139,7 +139,7 @@ Un exemple d'instance générée se trouve en~\Cref{fig-exgen}. Les objets corre
 }
 	
 	\subsection{Modélisation ASP}
-	Acquérir l'ensemble des solutions possibles d'une instance était intéressant pour comprendre ses contraintes ainsi que pour certaines métriques détaillées dans la suite de cette section. Pour cela, le problème a été modélisé sous la forme d'un programme d'\textbf{Answer Set Programming} (ASP), particulièrement efficace pour la résolution de problèmes NP-difficiles. La génération de modèle ainsi que les contraintes écrites dans le formalisme ASP sont visibles en~\Cref{asp-pbm}.
+	Acquérir l'ensemble des solutions possibles d'une instance était intéressant pour comprendre ses contraintes ainsi que pour certaines métriques détaillées dans la suite de cette section. Pour cela, le problème a été modélisé sous la forme d'un programme d'\textbf{Answer Set Programming} (ASP) \cite{asp}, particulièrement efficace pour la résolution de problèmes NP-difficiles. La génération de modèle ainsi que les contraintes écrites dans le formalisme ASP sont visibles en~\Cref{asp-pbm}.
 \begin{figure}[ht!]
 \begin{lstlisting}[language=Prolog]
 % Génération:
@@ -179,7 +179,7 @@ Après résolution, les valeurs vérifiant le prédicat \texttt{aff/2} donnent l
 	\paragraph{Nombre de variables dites "frozen" (\texttt{nfrozen})}{Des concepts de la programmation logique découlent les frozen variables. Ce sont les variables qui ne peuvent prendre qu'une seule valeur dans l'ensemble des solutions. Un grand nombre de ces variables implique généralement un faible nombre de solution et donc un problème très contraint. Cela peut-être bénéfique pour un joueur car la seule position possible est potentiellement déductible de la façon décrite dans le paragraphe sur les positions possibles d'un objet (voir sous-section précédente).}
 	
 	\subsection{Analyse de Fitness Landscape}
-	Lors des recherches bibliographiques dédiées à ce projet, beaucoup de résultats concernant l'analyse de \textit{fitness landscape} sont apparus \cite{pitzer, garnier, stadler}. Le but est souvent de jauger la difficulté de résolution d'un problème et de pouvoir ainsi déterminer quel algorithme ou composante d'algorithme est la plus à même de résoudre le problème rapidement. Un certain nombre d'outils tirés de cette littérature ont été explorés dans l'espoir d'expliquer les ressentis humains. Ici le problème n'est pas de sélectionner un algorithme comme dans ces articles mais de déterminer les algorithmes utilisés par un joueur. Par la suite on considère le problème d'optimisation combinatoire correspondant à la relaxation du problème \textsc{LEF} et le paysage étudié découle de l'\Cref{obs-swap}.
+	Lors des recherches bibliographiques dédiées à ce projet, beaucoup de résultats concernant l'analyse de \textit{fitness landscape} sont apparus \cite{pitzer, garnier, stadler}. Le but est souvent de jauger la difficulté de résolution d'un problème et de pouvoir ainsi déterminer quel algorithme ou composante d'algorithme est la plus à même de résoudre le problème rapidement. Un certain nombre d'outils tirés de cette littérature ont été explorés dans l'espoir d'expliquer les ressentis humains. Ici le problème n'est pas de sélectionner un algorithme comme dans ces articles mais de déterminer les méthodes de résolution utilisées par un joueur. Par la suite on considère le problème d'optimisation combinatoire correspondant à la relaxation du problème \textsc{LEF} et le paysage étudié découle de l'\Cref{obs-swap}.
 	
 	\begin{observation}
 	\label{obs-swap}
@@ -208,13 +208,20 @@ Après résolution, les valeurs vérifiant le prédicat \texttt{aff/2} donnent l
 	
 \end{definition}
 	
-	\paragraph{Bassin d'attraction (\texttt{bs})}{Depuis les optimums trouvés grâce au programme ASP, il est possible de calculer des bassins d'attraction. Cela implique le calcul des \textquote{chemin descendants} jusqu'à un optimum: un tel chemin est une séquence de solutions candidates présentant chacune une fitness moins grande que la précédente (comme définit dans \cite{pitzer}, un chemin descendant $P$ entre $x_0$ et $x_n$ est $\{x_i\}_{i=0}^n$ avec $(\forall i < j)\text{ }f(x_i) \geq f(x_j), f(x_0) > f(x_n) \text{ et } d(x_{i+1}, x_i) = 1$). Alors on note le bassin d'attraction faible d'un optimum $o$:
+	\paragraph{Bassin d'attraction (\texttt{bs})}{Depuis les optimums trouvés grâce au programme ASP, il est possible de calculer des bassins d'attraction. Cela implique le calcul des \textquote{chemin descendants} jusqu'à un optimum: un tel chemin est une séquence de solutions candidates présentant chacune une fitness moins grande que la précédente (comme défini dans \cite{pitzer}, un chemin descendant $P$ entre $x_0$ et $x_n$ est $\{x_i\}_{i=0}^n$ avec $(\forall i < j)\text{ }f(x_i) \geq f(x_j), f(x_0) > f(x_n) \text{ et } d(x_{i+1}, x_i) = 1$). Alors on note le bassin d'attraction faible d'un optimum $o$:
 	\begin{equation*}
 	    B(o) = \{x | x \in S, P(x, o)\}
 	\end{equation*}
-La taille d'un tel bassin donne une idée de la probabilité de convergence vers un optimum depuis une solution candidate quelconque. Un petit bassin autour d'un optimum global entraîne un temps de recherche probablement plus long.
+La taille d'un tel bassin donne une idée de la probabilité de convergence vers un optimum depuis une solution candidate quelconque. Un petit bassin autour d'un optimum global entraîne un temps de recherche probablement plus long. Si on considère l'opérateur de recherche locale SWAP supposé par l'\Cref{obs-swap}, un joueur cherchant exclusivement à améliorer sa solution aurait plus de facilité à naviguer dans un espace de recherche à grand bassin d'attraction. Il devrait sinon passer par des solutions de plus grand coût, ce qui paraît moins rationnel.
 
-Calculer ces bassins exhaustivement peut se révéler coûteux dans certaines instances et on pourra donc procéder à une estimation via des parcours adaptatifs \cite{garnier} (longueur des parcours). La complexité est alors $O(\text{nombre de parcours} \times \text{longueur max} \times |\mathcal{N}|)$.
+Calculer ces bassins exhaustivement peut se révéler coûteux dans certaines instances et on pourra donc procéder à une estimation via des parcours adaptatifs (inspiré par \cite{garnier}). La complexité est alors $O(\text{nombre de parcours} \times \text{longueur max} \times |\mathcal{N}|)$. À chaque étape d'un parcours, une solution de meilleure fitness est choisie uniformément aléatoirement parmi le voisinage courant. Un exemple de bassin estimé peut être trouvé en~\Cref{fig-basin}.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.7\linewidth]{basin-5-2}
+    \caption{Exemple de bassin d'attraction pour une instance de taille 5 et une seule solution possible. Le bassin trouvé est de taille $70$ pour un espace de recherche de taille $5! = 120$. On peut ainsi en déduire la probabilité pour un joueur de se trouver dans ce bassin d'attraction.}
+    \label{fig-basin}
+\end{figure}
 	}
 	
 \begin{definition}
@@ -225,12 +232,12 @@ Calculer ces bassins exhaustivement peut se révéler coûteux dans certaines in
 \end{definition}
 
     \paragraph{Nombre d'optimums locaux (\texttt{nlo})}{
-La modalité de l'espace de recherche donne une indication de la rugosité du paysage. Selon l'\Cref{obs-swap}, les joueurs peuvent exécuter des parcours adaptatif et cette mesure se révèle alors intéressante. Pour l'estimer plusieurs méthodes ont été considérées: échantillonnage aléatoire et échantillonnage via parcours adaptatifs. Dans la méthode proposée par \cite{alyahya}, des solutions candidates sont tirées uniformément aléatoirement et sont évaluées. On obtient ainsi une procédure de complexité $O(n \times |\mathcal{N}|)$ avec $n$ la taille de l'échantillon souhaité. La fiabilité de cet estimateur est largement dépendant de la taille choisie. Dans la méthode basée sur des parcours adaptatifs des solutions candidates sont choisies uniformément aléatoire mais on procède à un parcours adaptatif dessus afin de trouver un optimum. Ce rapport n'étudie que des instances de taille n'excédant pas $7$ agents ce qui veut dire un maximum de $7! = 5040$ solutions possibles. Ce faible nombre permet de compter exhaustivement le nombre d'optimums locaux.
+La modalité de l'espace de recherche donne une indication de la rugosité du paysage. Selon l'\Cref{obs-swap}, les joueurs peuvent exécuter des parcours adaptatif et cette mesure se révèle alors intéressante. Pour l'estimer plusieurs méthodes ont été considérées: échantillonnage aléatoire et échantillonnage via parcours adaptatifs. Dans la méthode proposée par \cite{alyahya}, des solutions candidates sont tirées uniformément aléatoirement et sont évaluées. On obtient ainsi une procédure de complexité $O(n \times |\mathcal{N}|)$ avec $n$ la taille de l'échantillon souhaité. La fiabilité de cet estimateur est largement dépendant de la taille choisie. Dans la méthode basée sur des parcours adaptatifs des solutions candidates sont choisies uniformément aléatoirement mais on procède à un parcours adaptatif dessus afin de trouver un optimum. Ce rapport n'étudie que des instances de taille n'excédant pas $7$ agents ce qui veut dire un maximum de $7! = 5040$ solutions possibles. Ce faible nombre permet de compter exhaustivement le nombre d'optimums locaux.
     }
 	
 	\paragraph{Auto-corrélation (\texttt{ac})}{Une autre mesure permettant l'estimation de la rugosité est l'auto-corrélation de la fonction fitness dans des parcours de l'espace de recherche. Si elle est haute alors la fitness ne varie pas beaucoup de voisin en voisin: le paysage est dit \textquote{plat}. On s'est intéressé dans ce projet à mesurer cette corrélation dans le voisinage des optimums. L'intuition est que si un optimum a un grand bassin d'attraction mais que la corrélation est grande, alors il sera difficile pour un joueur de naviguer jusqu'à l'optimum. On procède à des parcours aléatoires en partant d'optimums et la mesure \texttt{ac} est donnée par la formule suivante \cite{pitzer}
 	\begin{equation*}
-    \rho(n) = \frac{E\left[f(x_i) - \bar{f})(f(x_{i+n} - \bar{f})\right]}{
+    \rho(n) = \frac{E\left[f(x_i) - \bar{f})(f(x_{i+n}) - \bar{f})\right]}{
         \sigma_f^2    
     }
 	\end{equation*}
@@ -239,6 +246,66 @@ La modalité de l'espace de recherche donne une indication de la rugosité du pa
 	
 	\subsection{Apprentissage de la difficulté}
 	
-	Fort de ces mesures, il s'est agit ensuite d'établir la relation entre les caractéristiques d'une instance et la difficulté ressentie par les utilisateurs. Pour cela, l'application mobile (détaillée en~\Cref{app}) était très utile et il a été demandé à un grand nombre de personne de résoudre des instances. À chaque niveau résolu l'application enregistre les informations suivantes: le \textit{nombre de coups}, le \textit{temps de résolution} et une \textit{note de difficulté} donnée par le joueur. Un \textquote{coup} correspond à l'action de donner un objet à un agent.
+	Fort de ces mesures, il s'est agit ensuite d'établir la relation entre les caractéristiques d'une instance et la difficulté ressentie par les utilisateurs. Pour cela, l'application mobile (détaillée en~\Cref{app}) était très utile et il a été demandé à un grand nombre de personne de résoudre des instances. À chaque niveau résolu l'application enregistre les informations suivantes: le \textit{nombre de coups}, le \textit{temps de résolution} et une \textit{note de difficulté} donnée par le joueur. Un \textquote{coup} correspond à l'action de donner un objet à un agent. Les instances choisies pour ces collectes de données ainsi que leurs features sont visibles en~\Cref{tab-trainset}.
 	
+	Aucune corrélation directe entre les mesures développées dans ce projet et les difficultés reportées n'a pu être établie. Même la mesure simple de la taille du niveau n'est pas d'une grande aide (voir~\Cref{fig-size-diff}). Les notes sont distribuées quasiment également quelle que soit la taille des niveaux. Nous avons donc dû envisager des modèles de décision plus complexes.
+	
+	\begin{figure}[ht!]
+	    \centering
+	    \includegraphics[width=0.7\linewidth]{size-diff-violin}
+	    \caption{Difficulté en fonction de la taille}
+	    \label{fig-size-diff}
+	\end{figure}
+	
+	\subsubsection{Régression multiple, polynomiale et logistique}
+	
+	Disposant d'une expertise limitée dans le domaine de l'optimisation stochastique, nous avons d'abord opté pour une simple régression linéaire multiple permettant de prédire le niveau de difficulté d'une instance. On pourra donc utiliser toutes les mesures détaillées précédemment comme \textit{features} et tenter de prédire une des trois données récupérées des utilisateurs. Chacune cependant présente certains défauts: la difficulté ressentie semble être la plus intéressante pour définir la difficulté réelle d'un niveau mais est par définition subjective et sujette aux antécédents du joueur (formation, affinités mathématiques, etc). De plus, les joueurs gagnent de l'expérience à chaque instance résolue et leur ressenti en est impacté. Ceux qui commencent le jeu auront tendance à noter les premières instances jouées (souvent de moindre taille) hautes en difficulté et ceux plus experts noteront les dernières (de grande taille) moins difficiles. Il est difficile de savoir à quel point l'ordre dans lequel sont présentées les instances influe sur les ressentis. L'approche de ce projet demande des expériences plus poussées que ce qui a pu être fait.
+	
+	Le temps passé sur une instance également peut être facilement faussé si un joueur est dérangé pendant le jeu ou n'est tout simplement pas concentré dessus pendant toute la résolution. Enfin certains joueurs auront tendance à réfléchir mentalement uniquement et d'autres à utiliser abondamment le support à leur disposition, augmentant le nombre de coups. 
+	
+	Nous avons mis en place un ensemble d'apprentissage qui tente d'avoir le plus de diversité possible dans les features tout en évitant les instances à solution évidente. Une régression linéaire multiple a tout d'abord été testée sans grands espoirs (prédiction d'une valeur réelle à partir de plusieurs features) \cite{lr}. Dans ce premier modèle on dispose d'une matrice de features $X$ qui pour toute résolution reporte les caractéristiques de l'instance résolue. On dispose également d'un vecteur $Y$ qui pour chaque résolution associe la difficulté notée. Le but est de trouver la fonction la plus probable pour expliquer $Y$ à partir de $X$ et on utilise pour cela la méthode des moindres carrés. 
+	
+	On souhaite trouver un vecteur de poids $w$ de façon à ce que $\hat{Y} = wX + b$ soit le plus proche possible de $Y$. Pour cela l'erreur $E$ de l'\Cref{eq-error} est minimisée; Le \textquote{bias term} est inclu dans $w$ et une colonne de $1$ est ajoutée aux features de $X$.
+\begin{equation}
+\label{eq-error}
+E = \sum_i (y_i - w^Tx_i)^2
+\end{equation}
+Mettre les erreurs \textit{au carré} nous permet de dériver l'erreur par rapport à toutes les composantes de $w$ et de chercher les valeurs pour lesquelles ces dérivées s'annulent. On peut écrire l'erreur sous forme matricielle (\Cref{eq-mat}).
+\begin{align}
+E &= \sum_i (y_i - w^Tx_i)^2 \nonumber\\
+E &= (Y - Xw)^T(Y - Xw) \nonumber\\
+E &= Y^TY - Y^TXw - (Xw)^TY + (Xw)^T(Xw) \nonumber\\
+E &= Y^TY - Y^TXw - w^Tx^TY + w^TX^TXw \label{eq-mat}
+\end{align}
+On peut alors calculer la dérivée partielle par rapport à $w$ (grâce à \cite{petersen}).
+\begin{equation*}
+\frac{\partial{E}}{\partial{w}} = -2X^TY + 2X^TXw
+\end{equation*}
+Chercher $w$ tel que cette dérivée s'annule revient alors à résoudre l'équation suivante.
+\begin{align*}
+\frac{\partial{E}}{\partial{w}} = 0 &\rightarrow X^TXw = X^TY \\
+&\rightarrow w = (X^TX)^{-1}X^TY
+\end{align*}
+
+Les calculs sont délégués à la librairie \texttt{sklearn} et le modèle \texttt{LinearRegression} est utilisé sur l'ensemble des données. À la date d'écriture de ce rapport cet ensemble comprend $182$ exemples et $13$ features différentes. Il est partagé en ensemble d'apprentissage et ensemble de test dans les proportions 80\%/20\% aléatoirement. Pour mesurer la fiabilité du modèle la mesure $r^2$ est utilisée, définie comme suit.
+\begin{equation*}
+    r^2 = 1 - \frac{E}{\sum_i (y_i - \bar{y})^2}
+\end{equation*}
+On l'interprète comme une mesure d'erreur du modèle par rapport à la prédiction de la moyenne. Un $r^2$ de $1$ indique un modèle sans erreur, un $r^2$ à $0$ indique un modèle qui ne prédit pas mieux que la moyenne. Un $r^2$ inférieur à $0$ veut généralement dire un modèle mauvais car prédisant moins bien que la moyenne. 
+
+Dans notre projet, le meilleur score trouvé est de $0.25$ pour une erreur carrée moyenne (MSE) de $0.84$. Étant donnée le faible nombre d'exemples ce score est grandement impacté par la répartition dans les ensembles d'apprentissage et de test. Néanmoins, tester d'autres modèles nous semblait important et l'étape logique suivante était un apprentissage via régression polynomiale. Pour cela on augmente artificiellement la dimensionnalité des features en ajoutant des termes dans la matrice $X$. Ils correspondent aux features existantes avec un degré supérieur. Ainsi notre modèle précédent $y = w_0x_0 + w_1x_1 + ... + w_nx_n$ se trouve transformé en $y = w_0x_0 + w_1x_1 + w_2x_2 + w_{11}x_1^2 + w_{22}x_2^2 + w_{12}x_1x_2$ pour un modèle à deux features et un degré maximal de $2$ (\cite{sinha}). Puisque le passage à un modèle polynomial peut entraîner des poids élevés dans $w$ dans les domaines où il n'existe pas beaucoup de donnée, une régularisation de type Ridge est utilisée (\Cref{eq-ridge}).
+\begin{equation}
+\label{eq-ridge}
+E_{RIDGE} = \sum_i (y_i - \hat{y}_i)^2 + \alpha|w|^2
+\end{equation}
+On pénalise les grands poids en ajoutant leur magnitude (norme L2 de $w$) au carré au coût. Cela permet de réduire les risques de sur-apprentissage. Malgré ces changements malheureusement, même en montant jusqu'à un degré $5$ on obtient un $r^2$ de $0.30$ et une MSE de $0.79$. Au vu de ces résultats peu intéressants, une dernier type de régression a été testé.
+
+Dans la régression logistique il n'est plus question de prédire une valeur réelle mais un entier qui correspond à la classe de difficulté. Dans l'application les joueurs peuvent la noter en choisissant une valeur entre $1$ et $5$ et c'est cette valeur qui servira donc de classe dans ce modèle. Par manque de temps les calculs sous-jacents n'ont pas été étudiés et le modèle a été testé directement en s'inspirant des exemples trouvés dans la documentation de \texttt{sklearn}. Ce modèle est par ailleurs un classifier et on calcule donc son score comme le pourcentage de bonne réponses. D'après nos tests, le plus haut score que nous puissions obtenir est de $0.48$ pour une MSE de $1.08$.
+
+\subsubsection{Arbres de décision}
+
+La dernière approche abordée a été de faire appel aux classifiers arbres de décision souvent abordés dans notre formation \cite{dt}. L'idée y est de construire un arbre dont les feuilles correspondent aux classes à prédire. Chaque nœud correspond ensuite à une décision concernant une des features. Lorsque les nœuds sont construits, l'algorithme d'apprentissage tente de trouver les features et valeurs associées promettant le plus de discrimination au sein des exemples (l'entropie de Shannon est souvent utilisée). On utilise ici aussi la librairie \texttt{sklearn} pour produire l'arbre.
+
+Les premières constructions montrent des scores élevées mais après plus proche examination semblent ne pas pouvoir se généraliser convenablement. En effet, la plupart des feuilles ne concernent que quelques exemples (un ou deux) et l'arbre est généralement très profond. On en déduit un sur-apprentissage et un nombre minimal d'exemples par feuille est posé à 10\% de l'ensemble d'apprentissage. Malheureusement le score trouvé est alors seulement de $0.40$ au mieux (l'arbre correspondant est visible en~\Cref{tree}). Il serait peut être bon d'explorer les forêts aléatoires.
+
 \end{document}

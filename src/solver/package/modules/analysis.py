@@ -1,4 +1,5 @@
 import networkx as nx
+import numpy as np
 import matplotlib.pyplot as plt
 from copy import copy
 from random import shuffle, choice
@@ -22,8 +23,6 @@ def compute_metadata(instance, solutions, wpos, stats,
 			proportions[var_idx][k] /= len(solutions)
 			if proportions[var_idx][k] >= MIN_FREEZE_PROPORTION:
 				number_of_frozen_variables += 1
-
-	# G = get_optima_graph(instance, solutions)
 
 	mean_regret_wpos = 0
 	min_regret = float('inf')
@@ -56,10 +55,14 @@ def compute_metadata(instance, solutions, wpos, stats,
 	average_nb_of_possible_position /= len(instance)
 
 	H = nx.Graph()
+	acs = list()
 	for solution in solutions:
-		print("Estimating basin for {}".format(solution))
-		G = estimate_basin(instance, Solution(solution, instance))
+		# print("Estimating basin for {}".format(solution))
+		G, ac = estimate_basin(instance, Solution(solution, instance))
 		H = nx.compose(H, G)
+		acs.append(ac)
+
+	avg_ac = np.array(acs).mean()
 
 	return {
 		'avg_naff': sum(s['niter'] for s in stats) / len(stats),
@@ -73,8 +76,7 @@ def compute_metadata(instance, solutions, wpos, stats,
 		'nlo': get_nlo(instance),
 		'nfrozen': number_of_frozen_variables,
 		'bs': len(H),
-		
-		#'min_ext_regret': min_ext_regret
+		'ac': avg_ac
 	}
 
 
@@ -98,6 +100,8 @@ def adaptative_walk(instance, start_solution, n=50):
 		current_cost = current_solution.cost
 
 		if current_cost == len(instance):
+			walk_sols.append(current_solution)
+			walk_costs.append(current_cost)
 			break
 
 	return walk_sols, walk_costs
@@ -105,13 +109,28 @@ def adaptative_walk(instance, start_solution, n=50):
 
 def estimate_basin(instance, optimum, n=50):
 	basin = nx.Graph()
+	all_costs = list()
 
 	for _ in range(n):
 		walk_sols, walk_costs = adaptative_walk(instance, optimum)
+		# basin.update(walk_sols)
 		for i in range(len(walk_sols)-1):
 			basin.add_edge(walk_sols[i], walk_sols[i+1])
+		all_costs.append(walk_costs)
 
-	return basin
+	acs = list()
+	for walkc in all_costs:
+		costs = np.array(walkc)
+		f_mean = costs.mean()
+		f_std = costs.std()
+
+		cs = np.array([((walkc[i] - f_mean)*(walkc[i+1]-f_mean)) for i in range(len(walkc)-1)])
+		esp_corr = cs.mean()
+		ac = esp_corr / pow(f_std, 2)
+
+		acs.append(ac)
+
+	return basin, np.array(acs).mean()
 
 
 
@@ -276,7 +295,9 @@ class Solution:
 		return str(self.sol.values())
 
 	def __hash__(self):
-		return hash(tuple(self.sol.values()))
+		# h = hash(tuple(self.sol.values()))
+		# return h
+		return hash(frozenset(self.sol.items()))
 
 	def __copy__(self):
 		return Solution(copy(self.sol), self.instance)
@@ -296,6 +317,9 @@ class Solution:
 
 	def __eq__(self, other):
 		return other.sol == self.sol
+
+	def __ne__(self, other):
+		return other.sol != self.sol
 
 	@property
 	def cost(self):

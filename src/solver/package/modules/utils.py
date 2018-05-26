@@ -16,6 +16,7 @@ def pprint_metadata(metadata):
     buffer += "Average number of possible obj position: {:.2f}\n".format(metadata['npstn'])
     buffer += "Min regret: {:.2f}\n".format(metadata['minr'])
     buffer += "Number of local optimums: {}\n".format(metadata['nlo'])
+    buffer += "Autocorrelation: {:.2f}\n".format(metadata['ac'])
 
     return buffer
 

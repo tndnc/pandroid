@@ -7,25 +7,29 @@ if __name__ == '__main__':
 	else:
 		from package.modules.tests import *
 		from instances.inst import *
-		# for instance_id in instances.keys():
-		# 	instance = instances[instance_id]
-		# 	solutions = asp_solve(instance=instance)
-		# 	wpos, stats = compute_optimal_solutions(instance)
 
-		# 	metadata = compute_metadata(instance, solutions, wpos, stats)
-		# 	metadata['id'] = instance_id
-		# 	print(metadata)
-		instance = instances["5-4"]
-		#print(get_nlo(instance))
-		solutions = asp_solve(instance=instance)
-		H = nx.Graph()
-		for solution in solutions:
-			print("Estimating basin for {}".format(solution))
-			G = estimate_basin(instance, Solution(solution, instance))
-			H = nx.compose(H, G)
-		print(len(H))
+		features = ('id', 'npo', 'nsols', 'avg_naff', 'nfrozen', 'minr', 'avgr', 'minr_extr', 'minr_extl', 'npstn', 'nlo', 'bs', 'ac')
+		f = open('stats2.csv', 'w')
+		f.write(",".join(features) + "\n")
+		f.flush()
 
-		for node in H.nodes:
-			if node.cost == 0: print(node)
-		# H = estimate_basin(instance, Solution(solutions[0], instance))
-		show_optima_graph(H)
+		for instance_id in test_instances.keys():
+			instance = instances[instance_id]
+			solutions = asp_solve(instance=instance)
+			wpos, stats = compute_optimal_solutions(instance)
+
+			metadata = compute_metadata(instance, solutions, wpos, stats)
+			metadata['id'] = instance_id
+			print(metadata)
+			f.write(",".join(map(str, [metadata[f] for f in features])) + "\n")
+			f.flush()
+		# instance = instances["7"]
+		# #print(get_nlo(instance))
+		# solutions = asp_solve(instance=instance)
+		# H = nx.Graph()
+		# for solution in solutions:
+		# 	print("Estimating basin for {}".format(solution))
+		# 	G, ac = estimate_basin(instance, Solution(solution, instance))
+		# 	print("Autocorrelation in basin: {}".format(ac))
+		# 	H = nx.compose(H, G)
+		# print(len(H))

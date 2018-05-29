@@ -1,0 +1,154 @@
+%--------------------------------------------------
+%	DOCUMENT IMPORTS
+%--------------------------------------------------
+\documentclass{beamer}
+\usetheme{CambridgeUS}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{tkz-graph}
+\usepackage{amsmath, amssymb, mathtools, amsthm}
+%-----------------------------------------------
+% DOCUMENT CONFIG
+%-----------------------------------------------
+\graphicspath{ {figures/} }
+\useinnertheme{rectangles}
+\setbeamertemplate{blocks}[default]
+\usefonttheme[onlymath]{serif}
+% Tikz
+\tikzstyle{vertex}=[circle, draw, inner sep=2pt, minimum size=8pt, thick]
+\newcommand{\vertex}{\node[vertex]}
+\usetikzlibrary{arrows,petri,topaths,calc}
+% Commands
+\newcommand{\yy}[1]{\colorbox{yellow!70}{#1}}
+\newcommand{\bb}[1]{\colorbox{blue!30}{#1}}
+\newcommand{\rr}[1]{\colorbox{red!30}{#1}}
+\newcommand{\gr}[1]{\colorbox{green!30}{#1}}
+
+\title[Pas de jaloux]{Pas de jaloux, un jeu de partage équitable}
+\author[Bontems, Mottola, Thirunavukarasu]{Alexandre Bontems \and Gualtiero Mottola \and Hans Thirunavukarasu}
+\institute[]{Faculté des Sciences, Sorbonne Université\\Université Pierre et Marie Curie}
+\date{5 juin 2018}
+
+\setcounter{tocdepth}{1}
+\AtBeginSection[]
+{
+    \begin{frame}
+        \frametitle{Table des matières}
+        \tableofcontents[currentsection]
+    \end{frame}
+}
+
+\begin{document}
+\frame{\maketitle}
+\section{Introduction}
+\begin{frame}
+    \frametitle{Présentation du problème LEF}
+	\begin{center}
+	Problème de satisfaction NP-complet.\\[1cm]
+	    \begin{tikzpicture}
+    	    % Agents
+	        \vertex (a1) at (0,0) {$a_1$};
+	        \vertex (a2) at (1.5,0) {$a_2$};
+	        \vertex (a3) at (3,0) {$a_3$};
+	        \vertex (a4) at (4.5,0) {$a_4$};
+	        % Prefs
+	        \node (a1o1) at (0,2.2) {$o_2$};
+	        \node (a1o2) at (0,1.7) {$o_4$};
+	        \node (a1o3) at (0,1.2) {\yy{$o_1$}};
+	        \node (a1o4) at (0,0.7) {$o_3$};
+	        \node (a2o1) at (1.5,2.2) {\yy{$o_3$}};
+	        \node (a2o2) at (1.5,1.7) {$o_4$};
+	        \node (a2o3) at (1.5,1.2) {$o_2$};
+	        \node (a2o4) at (1.5,0.7) {$o_1$};
+	        \node (a3o1) at (3.0,2.2) {\yy{$o_2$}};
+	        \node (a3o2) at (3.0,1.7) {$o_1$};
+	        \node (a3o3) at (3.0,1.2) {$o_4$};
+	        \node (a3o4) at (3.0,0.7) {$o_3$};
+	        \node (a4o1) at (4.5,2.2) {$o_3$};
+	        \node (a4o2) at (4.5,1.7) {\yy{$o_4$}};
+	        \node (a4o3) at (4.5,1.2) {$o_2$};
+	        \node (a4o4) at (4.5,0.7) {$o_1$};
+	        \path
+	        (a1) edge[thick] (a2)
+            (a2) edge[thick] (a3)
+            (a3) edge[thick] (a4)       
+	        ;
+	    \end{tikzpicture}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Objectifs}
+Développement d'un jeu puzzle basé sur le problème et offrant une progression de difficulté.
+
+\begin{block}{Solutions}
+\begin{itemize}
+    \item Application Android
+    \item Outils d'analyse de difficulté
+    \item Taille des instances bornée
+\end{itemize}
+\end{block}
+\end{frame}
+
+\section{Application}
+\subsection{Conception de l'interface}
+\begin{frame}
+\frametitle{Conception de l'interface}
+\begin{itemize}
+    \item Processus itératif
+    \item Public visé large
+    \item Ne pas introduire de biais 
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Interface de jeu}
+\end{frame}
+
+\begin{frame}
+\frametitle{Tutoriel}
+\end{frame}
+
+\subsection{Architecture}
+\begin{frame}
+\frametitle{Diagramme de classe ?}
+\end{frame}
+
+\subsection{Récupération des données}
+\begin{frame}
+\frametitle{Intégration GoogleSheets}
+\end{frame}
+
+\section{Analyse}
+\begin{frame}
+\frametitle{Génération d'instances solvables}
+\end{frame}
+
+\begin{frame}
+\frametitle{Résolution par backtrack}
+\end{frame}
+
+\begin{frame}
+\frametitle{Résolution ASP}
+\end{frame}
+
+\begin{frame}
+\frametitle{Analyse de fitness landscape}
+\end{frame}
+
+\begin{frame}
+\frametitle{Apprentissage}
+\end{frame}
+
+\section{Conclusion}
+\begin{frame}
+\frametitle{Problèmes rencontrés}
+\end{frame}
+
+\begin{frame}
+\frametitle{Travail futur}
+\end{frame}
+\end{document}

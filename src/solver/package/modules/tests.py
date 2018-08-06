@@ -8,6 +8,7 @@ from package.modules.analysis import *
 from package.modules.asp_solve import solve as asp_solve
 import networkx as nx
 
+
 def test_(number_of_tries=20, number_of_agents=3):
     import time
 
@@ -84,6 +85,7 @@ def test_generation(number_of_tries=100):
 
     print()
     print("Number of fails: {}".format(fails))
+
 
 def test_graph():
     instance = generate_solvable(4)

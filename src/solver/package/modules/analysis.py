@@ -214,9 +214,6 @@ def cost(instance, solution):
 				jealous = True
 		if jealous: ret += 1
 
-	# print(pprint_instance(instance, allocation=solution))
-	# print("Cost: {}".format(ret))
-
 	return ret
 
 
